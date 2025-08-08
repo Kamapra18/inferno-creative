@@ -15,7 +15,7 @@ export default function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}>
         <Image
-          src="/logo/asset-2.png"
+          src="/logo/Asset-2.png"
           alt="Inferno Creative Logo"
           width={160}
           height={160}
