@@ -37,9 +37,9 @@ export default function FooterContact() {
       <div className="flex space-x-4 mt-4">
         <SocialIcon
           Icon={FaInstagram}
-          href="https://www.instagram.com/mario_prayoga46/"
+          href="https://www.instagram.com/mdwisnuu_/"
         />
-        <SocialIcon Icon={FaTiktok} href="https://www.tiktok.com/@kamapra18" />
+        <SocialIcon Icon={FaTiktok} href="https://www.tiktok.com/@wisnu" />
         <SocialIcon Icon={FaWhatsapp} href="https://wa.me/081547473104" />
       </div>
     </div>
