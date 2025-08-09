@@ -71,16 +71,18 @@ export const metadata: Metadata = {
     "undangan digital Bali",
   ],
   robots: "index, follow",
-  authors: [{ name: "Inferno Creative", url: "https://infernocreative.com" }],
+  authors: [
+    { name: "Inferno Creative", url: "https://inferno-creative.vercel.app/" },
+  ],
   creator: "Inferno Creative",
   publisher: "Inferno Creative",
   themeColor: "#1c2a58",
-  metadataBase: new URL("https://infernocreative.com"),
+  metadataBase: new URL("https://inferno-creative.vercel.app/"),
   openGraph: {
     title: "Inferno Creative",
     description:
       "Penyedia jasa fotografi, videografi, dan web undangan digital profesional dan kreatif.",
-    url: "https://infernocreative.com",
+    url: "https://inferno-creative.vercel.app/",
     siteName: "Inferno Creative",
     images: [
       {
@@ -98,7 +100,7 @@ export const metadata: Metadata = {
     title: "Inferno Creative",
     description:
       "Jasa fotografi, videografi, dan website undangan digital modern.",
-    images: ["/og-image.jpg"],
+    images: ["/logo/Asset-2.png"],
     creator: "@infernocreative",
   },
 };
