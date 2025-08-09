@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 // Font utama
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Inferno Creative", url: "https://infernocreative.com" }],
   creator: "Inferno Creative",
   publisher: "Inferno Creative",
-  themeColor: "#1c2a58", // atau warna utamamu
+  themeColor: "#1c2a58",
   metadataBase: new URL("https://infernocreative.com"),
   openGraph: {
     title: "Inferno Creative",
@@ -83,7 +84,7 @@ export const metadata: Metadata = {
     siteName: "Inferno Creative",
     images: [
       {
-        url: "/og-image.jpg", // <- pastikan ini ada di /public
+        url: "/logo/Asset-2.png",
         width: 1200,
         height: 630,
         alt: "Inferno Creative - Jasa Foto Video & Web Undangan",
@@ -118,6 +119,7 @@ export default function RootLayout({
           antialiased
         `}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
