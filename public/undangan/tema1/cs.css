@@ -26,7 +26,7 @@ body::before {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  z-index: -1;
+  z-index: -1; /* supaya di belakang konten */
 }
 
 /* SECTION: Openner (Opening) */
@@ -104,15 +104,17 @@ body::before {
   font-family: "Great Vibes", cursive;
   font-size: 3.5rem;
   color: white;
+  margin-top: 20px;
 }
 .nama-pengantin {
   font-family: "Great Vibes", cursive;
   font-size: 2rem;
+  margin-top: 20px;
   text-align: center;
 }
 .pembuka {
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /* wajib */
@@ -125,7 +127,7 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: calc(100% - 430px);
+  width: calc(100% - 430px); /* sisakan ruang untuk kanan */
   height: 100%;
   background: linear-gradient(
       180deg,
@@ -152,11 +154,12 @@ body::before {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* padding: 40px 20px; */
+  padding: 40px 20px;
 }
 
 .pembuka h4 {
   display: flex;
+  text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
   gap: 10px;
@@ -193,6 +196,7 @@ span.garis {
 /* informasi pengantin */
 .pengantin {
   display: flex;
+  min-height: 100%;
 }
 
 .content {
@@ -219,19 +223,15 @@ span.garis {
   text-align: left;
 }
 
-/* FIXED: #hari-bahagia - Auto height instead of 100vh */
 #hari-bahagia {
   display: flex;
-  min-height: auto;
-  /* padding: 40px 0; */
+  /* min-height: 100%; */
 }
 #hari-bahagia .content {
   padding: 40px 20px;
   text-align: center;
   background: rgba(0, 0, 0, 0.6);
   color: white;
-  width: 100%;
-  margin: auto;
 }
 
 #hari-bahagia h2 {
@@ -259,7 +259,7 @@ span.garis {
 
 .waktu-box {
   text-align: center;
-  min-width: 60px;
+  min-width: 20px;
 }
 
 h2.angka-waktu {
@@ -278,6 +278,7 @@ h2.angka-waktu {
 /* Informasi */
 .informasi {
   display: flex;
+  min-height: 100%;
 }
 
 .informasi .content {
@@ -375,7 +376,7 @@ h2.angka-waktu {
 /* galeri foto */
 #foto-nikah {
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .container-foto {
@@ -403,7 +404,7 @@ h2.angka-waktu {
 /* RSVP */
 .rsvp {
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .rsvp .content {
@@ -495,7 +496,8 @@ h2.angka-waktu {
   font-size: 14px;
 }
 
-/* Guest List Styling */
+/* Guest List Styling - sesuai gambar */
+
 #guestListContainer {
   max-height: 400px;
   overflow-y: auto;
@@ -584,6 +586,7 @@ h2.angka-waktu {
 /* kado digital */
 .kado-digital {
   display: flex;
+  min-height: 100%;
 }
 
 .kado-digital .content {
@@ -619,7 +622,7 @@ h2.angka-waktu {
   overflow: hidden;
 }
 
-/* Bank Colors */
+/* Bank Colors (tetap sama) */
 .bank-card.bca {
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
 }
@@ -648,7 +651,7 @@ h2.angka-waktu {
   position: absolute;
   top: -50%;
   right: -50%;
-  width: 80px;
+  width: 80px; /* circle lebih kecil */
   height: 80px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
@@ -662,7 +665,7 @@ h2.angka-waktu {
 }
 
 .bank-logo {
-  width: 50px;
+  width: 50px; /* logo lebih kecil */
   height: 35px;
   background: white;
   border-radius: 8px;
@@ -671,11 +674,11 @@ h2.angka-waktu {
   justify-content: center;
   font-weight: bold;
   color: #1e3c72;
-  font-size: 12px;
+  font-size: 12px; /* font size logo lebih kecil */
 }
 
 .bank-name {
-  font-size: 16px;
+  font-size: 16px; /* sedikit diperkecil */
   font-weight: bold;
 }
 
@@ -685,13 +688,13 @@ h2.angka-waktu {
 }
 
 .account-name {
-  font-size: 14px;
+  font-size: 14px; /* diperkecil */
   margin-bottom: 6px;
   opacity: 0.9;
 }
 
 .account-number {
-  font-size: 20px;
+  font-size: 20px; /* lebih kecil */
   font-weight: bold;
   letter-spacing: 2px;
   margin-bottom: 12px;
@@ -702,10 +705,10 @@ h2.angka-waktu {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
-  padding: 10px 20px;
+  padding: 10px 20px; /* padding dikurangi */
   border-radius: 25px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 13px; /* font lebih kecil */
   font-weight: bold;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
@@ -777,25 +780,20 @@ h2.angka-waktu {
   animation: toastSlide 0.3s ease-out;
 }
 
-/* FIXED: Penutup - Auto height instead of 100vh */
+/* Penutup */
 .penutup {
   display: flex;
-  min-height: auto;
-  /* padding: 40px 0; */
+  min-height: 100%;
 }
 
 .penutup .content {
-  /* padding: 40px 30px; */
-  display: flex;
-  flex-direction: column;
-}
-
-.penutup .container {
+  padding: 30px;
   background: rgba(80, 80, 80, 0.6);
   color: white;
   text-align: center;
-  width: 100%;
-  margin: auto;
+}
+
+.container {
   max-width: 500px;
   margin: 0 auto;
 }
@@ -830,17 +828,12 @@ h2.angka-waktu {
   letter-spacing: 0.05em;
 }
 
-/* footer */
-
-.tutup {
-  margin: 20px;
+.penutup .tutup {
   padding: 1rem;
-  background: rgba(150, 150, 150, 0.7);
+  background: rgba(150, 150, 150, 0.8);
   border-radius: 10px;
 }
-.footer-text {
-  text-align: center;
-  font-weight: bold;
+.penutup .footer-text {
   font-size: 1rem;
   color: black;
   opacity: 0.7;
@@ -874,358 +867,29 @@ h2.angka-waktu {
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Desktop - Music icon position */
 @media (min-width: 1024px) {
   .music-icon {
     right: auto;
     left: 20px;
   }
 }
-
-/* Tablet Layout */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .left .bg {
-    width: calc(100% - 350px);
-  }
-
-  .right {
-    width: 350px;
-    padding: 15px;
-  }
-
-  .mempelai img {
-    width: 250px;
-  }
-
-  .foto-vertical {
-    width: 200px;
-  }
-
-  .nama-pengantin1 {
-    font-size: 3rem;
-  }
-
-  .top-heading-openner {
-    font-size: 3vmax;
-    letter-spacing: 8px;
-  }
-}
-
-/* Mobile Layout */
+/* Layout untuk Mobile */
 @media (max-width: 768px) {
   body {
     background-position: top center;
   }
 
-  /* Reset layout untuk mobile */
-  .pengantin,
-  #hari-bahagia,
-  .informasi,
-  #foto-nikah,
-  .rsvp,
-  .kado-digital,
-  .penutup {
+  .container {
     flex-direction: column;
-    min-height: auto;
   }
 
   .left {
-    display: none;
-  }
-
-  .left .bg {
-    display: none;
+    height: 60vh;
   }
 
   .right {
     width: 100%;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: none;
-  }
-
-  /* Opening section mobile */
-  .top-heading-openner {
-    font-size: 4vw;
-    letter-spacing: 3px;
-  }
-
-  .nama-pengantin1 {
-    font-size: 2.5rem;
-  }
-
-  .text-group-bottom p {
-    font-size: 1rem;
-  }
-
-  /* Pembuka section mobile */
-
-  .pembuka h4 {
-    font-size: 1.2rem;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  /* Pengantin section mobile */
-  .pengantin .content {
-    padding: 20px 15px;
-  }
-
-  .mempelai img {
-    width: 280px;
-    max-width: 85%;
-  }
-
-  .nama-pengantin {
-    font-size: 1.5rem;
-  }
-
-  .and {
-    margin: 20px 0;
-    /* flex-direction: column; */
-    gap: 10px;
-  }
-
-  /* FIXED: Save the date mobile */
-  #hari-bahagia .content {
-    padding: 30px 15px;
-  }
-
-  #hari-bahagia h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-
-  #hari-bahagia p {
-    font-size: 14px;
-    margin-bottom: 25px;
-    max-width: 100%;
-  }
-
-  .waktu-container {
-    gap: 15px;
-    justify-content: space-around;
-  }
-
-  .waktu-box {
-    min-width: 60px;
-  }
-
-  h2.angka-waktu {
-    font-size: 28px;
-  }
-
-  .waktu-box p {
-    font-size: 11px;
-  }
-
-  /* Informasi mobile */
-  .informasi .content {
-    padding: 20px 15px;
-  }
-
-  .event-card {
-    width: 100%;
-    margin: 10px 0;
-  }
-  .event-card.left {
-    border-left: 3px solid white;
-    border-right: none;
-    margin-right: auto;
-    margin-left: 0;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .event-card.right {
-    border-right: 3px solid white;
-    border-left: none;
-    margin-left: auto;
-    margin-right: 0;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .event-card h3 {
-    font-size: 1rem;
-    gap: 5px;
-  }
-
-  .event-card p {
-    font-size: 0.9rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* FIXED: Gallery mobile - Much larger photos */
-  .container-foto {
-    padding: 20px 15px;
-  }
-
-  .heading-foto {
-    font-size: 22px;
-    margin-bottom: 25px;
-  }
-
-  .galeri {
-    gap: 20px;
-  }
-
-  /* RSVP mobile */
-  .rsvp .content {
-    margin: 20px auto;
-    padding: 15px;
-    max-width: none;
-  }
-
-  /* Kado digital mobile */
-  .kado-digital .content {
-    margin: 20px auto;
-    padding: 20px 15px;
-    max-width: none;
-  }
-
-  .bank-card {
-    padding: 15px;
-  }
-
-  .account-number {
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-
-  .copy-btn {
-    padding: 8px 15px;
-    font-size: 12px;
-  }
-
-  /* FIXED: Penutup mobile */
-  /* .penutup {
-    padding: 30px 0;
-  }
-
-  .penutup .content {
-    padding: 30px 15px;
-  } */
-
-  .penutup h2 {
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .penutup .foto img {
-    max-width: 100%;
-    margin-bottom: 1.5rem;
-  }
-
-  .penutup p {
-    font-size: 0.9rem;
-    margin: 1rem 0;
-    line-height: 1.5;
-  }
-
-  .penutup .tanda-tangan {
-    font-size: 1.1rem;
-    margin-top: 2.5rem;
-  }
-
-  .penutup .tanda-tangan strong {
-    font-size: 1.8rem;
-  }
-
-  .penutup .tutup {
-    padding: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .penutup .footer-text {
-    font-size: 0.9rem;
-  }
-
-  /* Music icon mobile */
-  .music-icon {
-    bottom: 15px;
-    right: 15px;
-    padding: 10px;
-  }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-  .nama-pengantin1 {
-    font-size: 2rem;
-  }
-
-  .top-heading-openner {
-    font-size: 5vw;
-    letter-spacing: 2px;
-  }
-
-  .mempelai img {
-    width: 220px;
-  }
-
-  /* FIXED: Save the date small mobile */
-
-  #hari-bahagia .content {
-    padding: 25px 15px;
-  }
-
-  h2.angka-waktu {
-    font-size: 24px;
-  }
-
-  .waktu-box {
-    min-width: 50px;
-  }
-
-  .waktu-box p {
-    font-size: 10px;
-  }
-
-  .account-number {
-    font-size: 14px;
-  }
-
-  /* FIXED: Penutup small mobile */
-  /* .penutup {
-    padding: 25px 0;
-  }
-
-  .penutup .content {
-    padding: 25px 15px;
-  } */
-
-  .penutup h2 {
-    font-size: 1.8rem;
-  }
-
-  .penutup p {
-    font-size: 0.8rem;
-  }
-
-  .penutup .tanda-tangan strong {
-    font-size: 1.6rem;
-  }
-}
-
-/* Landscape orientation fix */
-@media (max-width: 768px) and (orientation: landscape) {
-  .pembuka .content {
-    min-height: auto;
-    padding: 20px 15px;
-  }
-
-  #hari-bahagia .content {
-    padding: 20px 15px;
-  }
-
-  .penutup .content {
-    padding: 20px 15px;
+    overflow-y: auto;
+    max-height: none;
   }
 }
