@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return data < 10 ? "0" + data : data;
   }
 
-  let countDownDate = new Date("Aug 17, 2025 00:00:00").getTime();
+  let countDownDate = new Date("Aug 28, 2025 00:00:00").getTime();
 
   let countdownInterval = setInterval(() => {
     let now = new Date().getTime();

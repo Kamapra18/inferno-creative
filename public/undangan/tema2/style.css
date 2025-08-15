@@ -749,7 +749,7 @@ body {
   font-size: 1rem;
   box-sizing: border-box;
   background-color: white;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .status-select:focus {
@@ -954,6 +954,10 @@ footer {
 @media (max-width: 768px) {
   body {
     gap: 30px;
+  }
+  #openner {
+    height: 100vh;
+    width: 100vw;
   }
   .pembuka {
     background-image: url("asset/img/wedding-atas.png");
