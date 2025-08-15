@@ -1,0 +1,1101 @@
+:root {
+  --primary-color: #b0d0d3;
+  --primary-color-transparent: rgba(176, 208, 211, 0.3);
+  --corner-size: clamp(150px, 25vw, 250px);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Cormorant Garamond", serif;
+  background-color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* SECTION: Openner (Opening) */
+#openner {
+  position: fixed;
+  /* position: relative; */
+  overflow: hidden;
+  background-color: var(--primary-color);
+  height: 100vh;
+  width: 100vw;
+  z-index: 12;
+  transition: 0.5s;
+}
+
+/* Atas kiri */
+#openner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--corner-size);
+  height: var(--corner-size);
+  background: url("asset/icon/corner.svg") no-repeat center/contain;
+  z-index: 15;
+  transform: rotate(180deg);
+  pointer-events: none;
+}
+
+/* Atas kanan */
+#openner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--corner-size);
+  height: var(--corner-size);
+  background: url("asset/icon/corner.svg") no-repeat center/contain;
+  transform: rotate(-90deg);
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* Bawah kiri */
+#openner .container::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: var(--corner-size);
+  height: var(--corner-size);
+  background: url("asset/icon/corner.svg") no-repeat center/contain;
+  transform: rotate(90deg);
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* Bawah kanan */
+#openner .container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: var(--corner-size);
+  height: var(--corner-size);
+  background: url("asset/icon/corner.svg") no-repeat center/contain;
+  transform: rotate(0deg);
+  z-index: 15;
+  pointer-events: none;
+}
+.text-group-top {
+  padding-bottom: 10px;
+}
+.top-heading-openner {
+  font-family: "Dancing Script", cursive;
+  font-size: 2vmax;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 10px;
+}
+
+#openner h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 3rem;
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.text-group-bottom {
+  color: white;
+  max-width: 500px;
+}
+
+.text-group-bottom p {
+  font-size: 1.2rem;
+}
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1.5px solid white;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.btn-outline-white i {
+  font-size: 1.2rem;
+}
+
+/* pembuka */
+.pembuka {
+  position: relative;
+  background: url("asset/img/wedding-bawah.png") no-repeat center center;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pembuka::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 192, 203, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 218, 185, 0.1) 0%,
+      transparent 50%
+    );
+}
+
+.pembuka::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.8), transparent);
+  pointer-events: none;
+}
+
+.pembuka-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.wedding-title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.curved-text {
+  position: relative;
+  width: 500px;
+  height: 200px;
+}
+
+.curved-text svg {
+  width: 100%;
+  height: 100%;
+}
+
+.curved-text text {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-size: 1.3rem;
+  fill: #fff;
+  letter-spacing: 3px;
+}
+
+.names h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 0.8;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tanggal {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.decorative-line {
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+/* Section Pengantin */
+.pengantin .wedding-card {
+  background: white;
+  width: 100%;
+  padding: 60px 40px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(176, 208, 211, 0.2);
+  border: 1px solid rgba(176, 208, 211, 0.1);
+  border-radius: 20px;
+}
+
+.wedding-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.wedding-title h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 3.5em;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bride-groom-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.bride-groom {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-photo-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 30px;
+}
+
+.profile-border {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 290px;
+  height: 290px;
+  background: url("asset/icon/border.png") no-repeat center;
+  background-size: cover;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.profile-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  box-shadow: 0 10px 30px rgba(176, 208, 211, 0.3);
+}
+
+.person-name {
+  font-family: "Dancing Script", cursive;
+  font-size: 2.2em;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  text-transform: capitalize;
+  letter-spacing: 2px;
+}
+
+.family-info {
+  color: #7f8c8d;
+  font-size: 1.1em;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.union-symbol {
+  font-family: "Dancing Script", cursive;
+  font-size: 4em;
+  color: #b0d0d3;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.venue-info {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 1.2em;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-top: 30px;
+}
+
+/* Section Informasi - Acara & Lokasi */
+.informasi .invitation-container {
+  background-color: var(--primary-color-transparent);
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.title {
+  font-family: "Dancing Script", cursive;
+  font-size: 3.5rem;
+  color: var(--primary-color);
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+  color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 50px;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.events-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.event-section {
+  margin-bottom: 40px;
+}
+
+.event-header {
+  font-family: "Dancing Script", cursive;
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.event-card {
+  border: 2px solid var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  min-width: 280px;
+  max-width: 350px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.event-content {
+  display: flex;
+  min-height: 150px;
+}
+
+.date-section {
+  border-right: 2px solid var(--primary-color);
+  padding: 25px 20px;
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.month {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.day {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.5rem;
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 300;
+  line-height: 0.9;
+  margin-bottom: 5px;
+}
+
+.year {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 400;
+}
+
+.details-section {
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  border-bottom: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+}
+
+.location {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 400;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  border-left: 2px solid var(--primary-color);
+}
+
+#lokasi-acara h3 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: "Dancing Script", cursive;
+}
+
+#lokasi-acara p {
+  margin-top: 15px;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.btn-map {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn-map:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Section Hari Bahagia */
+#hari-bahagia {
+  background: var(--primary-color);
+  padding: 40px 20px;
+}
+
+.heading-title-2 {
+  font-family: "Dancing Script", cursive;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.box-waktu {
+  padding: 10px;
+}
+
+.waktu-wrapper {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.atas {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.bawah {
+  background: var(--primary-color-transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.angka-waktu {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.ket-waktu {
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+/* Foto Nikah */
+#foto-nikah {
+  background: var(--primary-color-transparent);
+}
+
+.decor-foto-nikah {
+  width: 380px;
+}
+.rotate-1 .decor-foto-nikah {
+  rotate: 180deg;
+}
+
+.heading-foto {
+  text-align: center;
+  font-family: "Dancing Script", cursive;
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 2.6rem;
+  color: var(--primary-color);
+}
+.decor-atas {
+  width: 200px;
+}
+
+/* kadp */
+.kado {
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  background: var(--primary-color);
+  padding: 2rem;
+  color: #fff;
+  border-radius: 12px;
+  margin: auto;
+}
+
+.kado-container {
+  max-width: 500px;
+}
+
+.kado-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.kado-container p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.bank-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: white;
+  text-align: left;
+}
+
+/* Bank Colors */
+.bank-card.bca {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+.bank-card.bri {
+  background: linear-gradient(135deg, #003d82 0%, #0066cc 100%);
+}
+
+.bank-card.bni {
+  background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+}
+
+.bank-card.mandiri {
+  background: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
+  color: #333;
+}
+
+.bank-info {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+}
+
+.bank-logo {
+  height: 30px;
+}
+
+.bank-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.account-info {
+  margin-top: 1rem;
+}
+
+.account-name {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.account-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.copy-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.copy-btn.copied {
+  background: #4caf50;
+  border-color: #4caf50;
+  transform: scale(0.95);
+}
+/* RSVP */
+.rsvp {
+  background: var(--primary-color-transparent);
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.rsvp-container {
+  border: 2px dashed var(--primary-color);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.rsvp-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-family: serif;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.rsvp-form label {
+  display: block;
+  margin: 0.8rem 0 0.3rem;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.rsvp-form input,
+.rsvp-form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rsvp-form input:focus,
+.rsvp-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(90, 70, 50, 0.2);
+}
+
+.status-select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(90, 70, 50, 0.2);
+}
+
+.submit-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.5rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  border-radius: 24px;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+#guestListContainer {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+  padding-top: 10px;
+}
+
+#guestListContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+#guestListContainer::-webkit-scrollbar-button {
+  display: block;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--primary-color);
+}
+
+#guestListContainer::-webkit-scrollbar-button:hover {
+  background: var(--primary-color);
+}
+
+#guestListContainer::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+#guestListContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+#guestList {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 20px;
+}
+
+.guest-card {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #fff;
+}
+
+.guest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.guest-name {
+  font-weight: bold;
+  text-transform: capitalize;
+  font-size: 16px;
+  color: var(--primary-color);
+  flex-grow: 1;
+}
+
+.guest-status {
+  background: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.guest-status.tidak-hadir {
+  background: #f44336;
+}
+
+.guest-time {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.guest-message {
+  display: flex;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+  color: black;
+  margin: 0;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary-color);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  gap: 15px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-content img {
+  width: 50px;
+  height: auto;
+}
+
+.footer-content p {
+  color: white;
+  text-transform: capitalize;
+  margin: 0;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.icon-wrapper {
+  color: var(--primary-color);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.icon-wrapper i {
+  width: 15px;
+  height: 15px;
+}
+
+/* music icon */
+.music-icon {
+  position: fixed;
+  color: #333;
+  background-color: var(--primary-color);
+  padding: 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  transition: 0.4s;
+}
+
+.music-icon:hover {
+  background-color: #9cc4c7;
+  transform: scale(1.05);
+}
+
+.music-icon.disabled {
+  background-color: #d0d0d0;
+  color: #fff;
+  filter: grayscale(100%) brightness(0.9);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body {
+    gap: 30px;
+  }
+  .pembuka {
+    background-image: url("asset/img/wedding-atas.png");
+    background-size: cover;
+  }
+
+  .pengantin .wedding-card {
+    padding: 40px 20px;
+  }
+
+  .wedding-title h1 {
+    font-size: 2.5em;
+  }
+
+  .bride-groom-section {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .union-symbol {
+    font-size: 3em;
+    margin: 20px 0;
+  }
+
+  .profile-photo-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .profile-border {
+    width: 290px;
+    height: 290px;
+  }
+
+  .profile-image {
+    width: 180px;
+    height: 180px;
+  }
+
+  .person-name {
+    font-size: 1.8em;
+  }
+
+  .family-info {
+    font-size: 1em;
+  }
+
+  .informasi .invitation-container {
+    padding: 30px 20px;
+  }
+
+  .title {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  .events-container {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .event-section {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .event-card {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .event-content {
+    flex-direction: row;
+    min-height: 120px;
+  }
+
+  .date-section {
+    border-right: 2px solid rgba(255, 255, 255, 0.6);
+    border-bottom: none;
+    flex: 0 0 40%;
+    padding: 20px 15px;
+  }
+
+  .details-section {
+    flex: 1;
+  }
+
+  .day {
+    font-size: 3.5rem;
+  }
+  .angka-waktu {
+    font-size: 2rem;
+  }
+  .ket-waktu {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-photo-wrapper {
+    width: 160px;
+    height: 160px;
+  }
+
+  .profile-border {
+    width: 250px;
+    height: 250px;
+  }
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .informasi .invitation-container {
+    padding: 20px 15px;
+  }
+
+  .title {
+    font-size: 2.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .event-header {
+    font-size: 1.7rem;
+  }
+
+  .day {
+    font-size: 2.8rem;
+  }
+
+  .time,
+  .location {
+    padding: 20px 15px;
+  }
+}
