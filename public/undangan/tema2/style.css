@@ -17,16 +17,25 @@ body {
   width: 100vw;
   overflow-x: hidden;
 }
-
 /* SECTION: Openner (Opening) */
 #openner {
   position: fixed;
-  height: 100vh;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  /* height: 100vh; */
   width: 100vw;
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
-  /* overflow: hidden; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#openner .container-fluid {
+  margin: 0;
+  padding: 0;
 }
 
 /* Atas kiri */
@@ -58,7 +67,7 @@ body {
 }
 
 /* Bawah kiri */
-#openner .container::before {
+#openner .container-fluid::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -72,7 +81,7 @@ body {
 }
 
 /* Bawah kanan */
-#openner .container::after {
+#openner .container-fluid::after {
   content: "";
   position: absolute;
   bottom: 0;
