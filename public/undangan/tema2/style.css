@@ -13,7 +13,16 @@ body {
   font-family: "Cormorant Garamond", serif;
   min-height: 100vh;
   width: 100vw;
+  /* overflow-x: hidden; */
+}
+body > *:not(#openner) {
   overflow-x: hidden;
+}
+body.no-scroll {
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 /* SECTION: Openner (Opening) */
@@ -25,7 +34,7 @@ body {
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* Atas kiri */

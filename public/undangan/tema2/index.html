@@ -45,7 +45,7 @@
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   </head>
-  <body>
+  <body class="no-scroll">
     <!-- ======================== Section: Openner ======================== -->
     <section
       id="openner"
@@ -515,6 +515,15 @@
     <script src="script/countdown.js"></script>
     <script src="script/message.js"></script>
     <script src="script/salin.js"></script>
+
+    <script>
+      document
+        .querySelector(".btn-outline-white")
+        .addEventListener("click", () => {
+          document.body.classList.remove("no-scroll");
+          document.getElementById("openner").style.display = "none";
+        });
+    </script>
 
     <!-- AOS Initialization -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
