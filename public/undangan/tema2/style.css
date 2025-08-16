@@ -11,26 +11,17 @@
 
 body {
   font-family: "Cormorant Garamond", serif;
-  background-color: white;
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: none;
-}
-body.no-scroll {
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
 }
 
 /* SECTION: Openner (Opening) */
 #openner {
   position: fixed;
   inset: 0;
-  /* height: 100vh;
-  width: 100vw; */
+  height: 100vh;
+  width: 100vw;
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
@@ -40,7 +31,7 @@ body.no-scroll {
 /* Atas kiri */
 #openner::before {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: var(--corner-size);
@@ -54,7 +45,7 @@ body.no-scroll {
 /* Atas kanan */
 #openner::after {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   width: var(--corner-size);
@@ -68,7 +59,7 @@ body.no-scroll {
 /* Bawah kiri */
 #openner .container::before {
   content: "";
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   width: var(--corner-size);
@@ -82,7 +73,7 @@ body.no-scroll {
 /* Bawah kanan */
 #openner .container::after {
   content: "";
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   width: var(--corner-size);
