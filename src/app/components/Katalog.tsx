@@ -45,7 +45,9 @@ export default function KatalogSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}>
-          <h1 className="font-bold text-4xl md:text-5xl mb-4">
+          <h1
+            className="font-bold text-4xl md:text-5xl mb-4"
+            style={{ color: "var(--color-foreground)" }}>
             Katalog Website Undangan
           </h1>
           <p className="text-gray-700">

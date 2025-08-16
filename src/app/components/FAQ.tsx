@@ -25,7 +25,11 @@ const FAQ = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}>
-        <h1 className="text-3xl md:text-5xl font-bold mb-4">FAQ</h1>
+        <h1
+          className="text-3xl md:text-5xl font-bold mb-4"
+          style={{ color: "var(--color-foreground)" }}>
+          FAQ
+        </h1>
         <p className="text-gray-600">
           Punya pertanyaan? Mungkin jawabannya sudah ada di sini!
         </p>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Button from "../components/elements/Button";
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
@@ -28,7 +28,9 @@ export default function HeroSection() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.8 }}>
-        <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl leading-snug mb-4">
+        <h1
+          className="font-bold text-3xl sm:text-4xl md:text-5xl leading-snug mb-4"
+          style={{ color: "var(--color-foreground)" }}>
           Buat Undangan, Abadikan Momen, Dalam Satu Layanan
         </h1>
         <p className="text-base sm:text-md md:text-lg text-gray-700 mb-6">

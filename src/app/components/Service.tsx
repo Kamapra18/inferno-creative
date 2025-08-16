@@ -14,7 +14,9 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">
+          <h1
+            className="text-3xl md:text-5xl font-bold mb-4"
+            style={{ color: "var(--color-foreground)" }}>
             Kenapa memilih layanan kami?
           </h1>
           <p className="text-gray-600">
@@ -54,7 +56,11 @@ export default function Services() {
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="text-lime-700 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-lg">{title}</h3>
+                    <h3
+                      className="font-semibold text-lg"
+                      style={{ color: "var(--color-foreground)" }}>
+                      {title}
+                    </h3>
                     <p className="text-gray-600">{desc}</p>
                   </div>
                 </div>

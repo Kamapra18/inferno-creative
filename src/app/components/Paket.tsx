@@ -11,6 +11,7 @@ const Katalog = () => {
       <div className="text-center mb-12 px-4">
         <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
+          style={{ color: "var(--color-foreground)" }}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}>
@@ -35,7 +36,9 @@ const Katalog = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}>
             <div>
-              <h2 className="text-lg md:text-xl font-semibold mb-1">
+              <h2
+                className="text-lg md:text-xl font-semibold mb-1"
+                style={{ color: "var(--color-foreground)" }}>
                 {paket.title}
               </h2>
               <h3 className="text-sm text-gray-500 mb-2">{paket.subtitle}</h3>
@@ -45,7 +48,9 @@ const Katalog = () => {
                   <p className="text-gray-500 line-through">
                     {paket.originalPrice}
                   </p>
-                  <p className="text-2xl font-bold text-primary">
+                  <p
+                    className="text-2xl font-bold text-primary"
+                    style={{ color: "var(--color-foreground)" }}>
                     {paket.price}{" "}
                     <span className="text-sm font-normal text-gray-500">
                       (promo)
