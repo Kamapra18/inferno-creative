@@ -91,7 +91,9 @@ const Katalog = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 0.6 }}>
-        <Button href="/paket">Lihat Paket Lengkapnya</Button>
+        <Button href="/paket" style={{ color: "var(--color-foreground)" }}>
+          Lihat Paket Lengkapnya
+        </Button>
       </motion.div>
     </section>
   );
