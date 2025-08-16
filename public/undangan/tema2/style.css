@@ -14,15 +14,15 @@ body {
   background-color: white;
   min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* SECTION: Openner (Opening) */
 #openner {
   position: fixed;
   inset: 0;
-  /* height: 100vh;
-  width: 100vw; */
+  height: 100dvh;
+  width: 100vw;
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
@@ -955,7 +955,7 @@ footer {
 
 /* Responsive design */
 @media (max-width: 768px) {
-  #opener {
+  #openner {
     height: auto;
   }
   .pembuka {
