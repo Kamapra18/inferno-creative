@@ -29,6 +29,6 @@ btnOpen.addEventListener("click", () => {
   setTimeout(() => {
     openner.remove();
   }, 500);
-  openner.style.transform = "translateY(-100vh)";
+  openner.style.transform = "translateY(-100%)";
   music.play();
 });
