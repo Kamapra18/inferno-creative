@@ -15,14 +15,6 @@ body {
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: none;
-}
-body.no-scroll {
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
 }
 
 /* SECTION: Openner (Opening) */
@@ -963,6 +955,9 @@ footer {
 
 /* Responsive design */
 @media (max-width: 768px) {
+  #opener {
+    height: auto;
+  }
   .pembuka {
     background-image: url("asset/img/wedding-atas.png");
     background-size: cover;
