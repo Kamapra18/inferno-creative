@@ -12,26 +12,26 @@
 body {
   font-family: "Cormorant Garamond", serif;
   background-color: white;
-  min-height: 100vh;
-  width: 100vw;
+  /* height: 100vh;
+  width: 100vw; */
   overflow-x: hidden;
 }
 
 /* SECTION: Openner (Opening) */
 #openner {
   position: fixed;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* Atas kiri */
 #openner::before {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: var(--corner-size);
@@ -45,7 +45,7 @@ body {
 /* Atas kanan */
 #openner::after {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   width: var(--corner-size);
@@ -59,7 +59,7 @@ body {
 /* Bawah kiri */
 #openner .container::before {
   content: "";
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   width: var(--corner-size);
@@ -73,7 +73,7 @@ body {
 /* Bawah kanan */
 #openner .container::after {
   content: "";
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   width: var(--corner-size);
@@ -104,7 +104,7 @@ body {
 
 .text-group-bottom {
   color: white;
-  max-width: 500px;
+  /* max-width: 500px; */
 }
 
 .text-group-bottom p {
@@ -139,7 +139,7 @@ body {
   position: relative;
   background: url("asset/img/wedding-bawah.png") no-repeat center center;
   background-size: cover;
-  height: 100vh;
+  /* height: 100vh; */
   min-height: 100vh;
   display: flex;
   align-items: center;
