@@ -21,7 +21,7 @@ body {
 #openner {
   position: fixed;
   inset: 0;
-  height: 100dvh;
+  height: 100vh;
   width: 100vw;
   background-color: var(--primary-color);
   z-index: 12;
@@ -955,9 +955,6 @@ footer {
 
 /* Responsive design */
 @media (max-width: 768px) {
-  #openner {
-    height: auto;
-  }
   .pembuka {
     background-image: url("asset/img/wedding-atas.png");
     background-size: cover;
