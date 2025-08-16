@@ -14,7 +14,7 @@ body {
   font-family: "Cormorant Garamond", serif;
   background-color: white;
 
-  width: 100vw;
+  width: 100%;
   overflow-x: hidden;
 }
 /* SECTION: Openner (Opening) */
@@ -24,14 +24,14 @@ body {
   left: 0;
   height: 100dvh;
   /* height: 100vh; */
-  width: 100vw;
+  width: 100%;
   background-color: var(--primary-color);
   z-index: 12;
   transition: 0.5s;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 #openner .container-fluid {
   margin: 0;
