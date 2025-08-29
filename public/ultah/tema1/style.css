@@ -7,6 +7,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -37,7 +38,7 @@ h3 {
 
 /* hero */
 .hero {
-  height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,9 +52,10 @@ h3 {
   text-align: center;
 }
 .hero img {
-  width: 900px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 600px;
   height: auto;
+  object-fit: contain;
 }
 
 /* informasi */
