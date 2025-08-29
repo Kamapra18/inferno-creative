@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <meta
+      name="description"
+      content="Dengan penuh sukacita, saya mengundang Anda dalam acara Ulang Tahun saya. Sabtu, 15 September 2024 di Gedung Serbaguna, Jakarta." />
+
+    <!-- Open Graph Meta Tags (untuk WhatsApp, Facebook, Instagram, dll) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Undangan Ulang Tahun Saya" />
+    <meta
+      property="og:description"
+      content="Dengan penuh sukacita, saya mengundang Anda dalam acara Ulang Tahun Saya. Minggu, 17 Agustus 2025 🌸" />
+    <meta
+      property="og:image"
+      content="https://inferno-creative.vercel.app/ultah/tema1/asset/img/hero.png" />
+    <meta
+      property="og:url"
+      content="https://inferno-creative.vercel.app/ultah/tema1/index.html" />
+    <meta property="og:site_name" content="Wedding Panji & Sasa" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Undangan Ulang Tahun Saya" />
+    <meta
+      name="twitter:description"
+      content="Dengan penuh sukacita, Saya mengundang Anda dalam acara Ulang Tahun saya🌸" />
+    <meta
+      name="twitter:image"
+      content="https://inferno-creative.vercel.app/ultah/tema1/img/hero.png" />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous" />
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div>
+      <section class="hero">
+        <div class="text-heading">
+          <h1 class="section-title">Undangan Ulang Tahun</h1>
+          <h2 id="receiver">Nama</h2>
+        </div>
+
+        <div>
+          <img src="asset/img/hero.png" alt="ulang tahun" />
+        </div>
+      </section>
+
+      <section class="informasi">
+        <h2 class="section-title" data-aos="fade-down">Informasi Acara</h2>
+        <table class="event-table" data-aos="fade-down">
+          <tr>
+            <td rowspan="2" class="date">
+              <div class="month">AGUSTUS</div>
+              <div class="day">28</div>
+              <div class="year">2025</div>
+            </td>
+            <td class="time">14:00 WITA - SELESAI</td>
+          </tr>
+          <tr>
+            <td class="address">
+              JLN. KEMBANG,<br />LOREM IPSUM DOLOR<br />SIT, BALI
+            </td>
+          </tr>
+        </table>
+
+        <div class="map">
+          <h2 class="section-title" data-aos="fade-down">lokasi acara</h2>
+          <iframe
+            data-aos="flip-right"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d768.1335565085375!2d115.36817747896038!3d-8.499657777522874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd2172609cf4e89%3A0x780127ce656639c4!2sBALAI%20BANJAR%20PEKANDELAN!5e1!3m2!1sid!2sid!4v1756355202667!5m2!1sid!2sid"
+            width="600"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </section>
+
+      <section class="rsvp">
+        <div class="rsvp-container" data-aos="flip-right">
+          <h2 class="section-title">Kirim Doa</h2>
+          <form class="rsvp-form" id="rsvpForm">
+            <label for="nama">Nama Tamu</label>
+            <input type="text" id="nama" name="nama" required />
+
+            <label for="pesan">Doa & Pesan</label>
+            <textarea id="pesan" name="pesan" rows="4" required></textarea>
+
+            <label for="status">Status</label>
+            <select id="status" name="kehadiran" class="status-select">
+              <option value="Hadir" selected>Hadir</option>
+              <option value="Berhalangan Hadir">Tidak Hadir</option>
+            </select>
+
+            <button type="submit" class="submit-btn">Kirim Pesan</button>
+          </form>
+
+          <!-- Tambahkan element yang diperlukan -->
+          <div
+            id="loader"
+            style="display: none; text-align: center; margin: 20px">
+            <p>Loading...</p>
+          </div>
+
+          <div
+            id="popup"
+            style="
+              display: none;
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              background: #4caf50;
+              color: white;
+              padding: 15px;
+              border-radius: 5px;
+              z-index: 1000;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            ">
+            <span id="popupMsg"></span>
+          </div>
+
+          <div id="guestListContainer">
+            <div id="guestList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================== Section: Kado Digital & RSVP ======================== -->
+      <section class="kado">
+        <div class="kado-container">
+          <h2 class="section-title" data-aos="fade-down">Kado Digital</h2>
+          <p data-aos="fade-down" data-aos-delay="200">
+            Doa restu dari Anda sudah cukup, namun jika ingin memberikan kado
+            digital, silakan transfer ke rekening berikut:
+          </p>
+
+          <div class="bank-card bca" data-aos="flip-left" data-aos-delay="300">
+            <div class="bank-info">
+              <img src="asset/icon/bca.jpeg" alt="Logo BCA" class="bank-logo" />
+              <span class="bank-name">Bank BCA</span>
+            </div>
+            <div class="account-info">
+              <span class="account-name">A/N: JOHN DOE</span>
+              <span id="bcaNumber" class="account-number">1234567890</span>
+            </div>
+            <button
+              class="copy-btn"
+              onclick="copyAccountNumber('bcaNumber', this)">
+              <i data-feather="copy"></i> Salin Nomor Rekening
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Penutup -->
+      <section class="penutup">
+        <div class="section-title" data-aos="fade-down">
+          <h2>Terima Kasih</h2>
+          <p>Sampai jumpa di hari bahagia!</p>
+        </div>
+
+        <div data-aos="fade-up">
+          <div>
+            <img src="asset/icon/Asset-2.png" alt="" />
+          </div>
+          <h2>inferno creative</h2>
+        </div>
+      </section>
+    </div>
+
+    <script src="message.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        once: true,
+        duration: 2000,
+      });
+    </script>
+  </body>
+</html>

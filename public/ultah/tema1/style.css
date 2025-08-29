@@ -1,0 +1,447 @@
+:root {
+  --primary: #ffffff;
+  --secondary: #1c3a2f;
+  --elements: #c9a76a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url(asset/img/bg2.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+/* 
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+.section-title {
+  font-family: "Merriweather", serif;
+  font-size: 3rem;
+  color: var(--primary);
+  text-transform: capitalize;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Section Headings */
+h3 {
+  font-family: "Poppins", sans-serif;
+}
+
+/* hero */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 20px;
+}
+.hero .text-heading {
+  margin-top: 10px;
+  color: var(--secondary);
+  text-align: center;
+}
+.hero img {
+  width: 900px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* informasi */
+.informasi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.event-table {
+  border: 1px solid var(--secondary);
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 400px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.event-table td {
+  border: 1px solid var(--secondary);
+  padding: 20px;
+  vertical-align: middle;
+}
+
+.date {
+  font-family: "Poppins", sans-serif;
+}
+
+.date .month {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.date .day {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.date .year {
+  font-size: 12px;
+}
+
+.time {
+  font-size: 14px;
+}
+
+.address {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.map {
+  margin: 0 auto;
+  padding: 40px 30px;
+  text-align: center;
+}
+.map iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* RSVP */
+.rsvp {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  margin-top: 3rem;
+}
+
+.rsvp-container {
+  border: 2px dashed var(--secondary);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.rsvp-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-family: serif;
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+.rsvp-form label {
+  display: block;
+  margin: 0.8rem 0 0.3rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.rsvp-form input,
+.rsvp-form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rsvp-form input:focus,
+.rsvp-form textarea:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(90, 70, 50, 0.2);
+}
+
+.status-select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--elements);
+  box-shadow: 0 0 0 2px rgba(90, 70, 50, 0.2);
+}
+
+.submit-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.5rem;
+  border: 2px solid var(--elements);
+  background: transparent;
+  border-radius: 24px;
+  cursor: pointer;
+  color: var(--elements);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: var(--elements);
+  color: var(--primary);
+}
+
+#guestListContainer {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+  padding-top: 10px;
+}
+
+#guestListContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+#guestListContainer::-webkit-scrollbar-button {
+  display: block;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--elements);
+}
+
+#guestListContainer::-webkit-scrollbar-button:hover {
+  background: var(--elements);
+}
+
+#guestListContainer::-webkit-scrollbar-thumb {
+  background: var(--elements);
+  border-radius: 4px;
+}
+
+#guestListContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+#guestList {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 20px;
+}
+
+.guest-card {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #fff;
+}
+
+.guest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.guest-name {
+  font-weight: bold;
+  text-transform: capitalize;
+  font-size: 16px;
+  color: var(--primary-color);
+  flex-grow: 1;
+}
+
+.guest-status {
+  background: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.guest-status.tidak-hadir {
+  background: #f44336;
+}
+
+.guest-time {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.guest-message {
+  display: flex;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+  color: black;
+  margin: 0;
+}
+
+/* kadp */
+.kado {
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  padding: 2rem;
+  color: #fff;
+  border-radius: 12px;
+  margin: auto;
+}
+
+.kado-container {
+  max-width: 500px;
+}
+
+.kado-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.kado-container p {
+  color: var(--secondary);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.bank-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: white;
+  text-align: left;
+}
+
+/* Bank Colors */
+.bank-card.bca {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+.bank-card.bri {
+  background: linear-gradient(135deg, #003d82 0%, #0066cc 100%);
+}
+
+.bank-card.bni {
+  background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+}
+
+.bank-card.mandiri {
+  background: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
+  color: #333;
+}
+
+.bank-info {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+}
+
+.bank-logo {
+  height: 30px;
+}
+
+.bank-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.account-info {
+  margin-top: 1rem;
+}
+
+.account-name {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.account-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.copy-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.copy-btn.copied {
+  background: #4caf50;
+  border-color: #4caf50;
+  transform: scale(0.95);
+}
+
+/* penutup */
+.penutup {
+  padding: 80px 20px;
+  text-align: center;
+  color: #2f4f4f;
+  position: relative;
+}
+
+.penutup .section-title {
+  position: relative;
+  z-index: 1;
+}
+
+.penutup h2 {
+  text-transform: capitalize;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.penutup p {
+  font-size: 1.2rem;
+}
+
+.penutup img {
+  width: 100px;
+}
+
+@media (max-width: 768px) {
+  .hero img {
+    width: 100%;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .event-table {
+    width: 100%;
+    max-width: 350px;
+  }
+  .event-table td {
+    padding: 15px;
+  }
+  .map iframe {
+    aspect-ratio: 9/16;
+  }
+}
