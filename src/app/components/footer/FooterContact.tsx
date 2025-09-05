@@ -37,7 +37,7 @@ export default function FooterContact() {
       <div className="flex space-x-4 mt-4">
         <SocialIcon
           Icon={FaInstagram}
-          href="https://www.instagram.com/mdwisnuu_/"
+          href="https://www.instagram.com/inferno.creativee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
         />
         <SocialIcon Icon={FaTiktok} href="https://www.tiktok.com/@wisnu" />
         <SocialIcon Icon={FaWhatsapp} href="https://wa.me/081547473104" />

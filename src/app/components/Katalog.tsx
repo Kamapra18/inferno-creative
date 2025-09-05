@@ -97,7 +97,7 @@ export default function KatalogSection() {
                   alt="Katalog"
                   width={300}
                   height={500}
-                  className="rounded shadow-md mx-auto"
+                  className="rounded mx-auto"
                 />
               </div>
             ))}
