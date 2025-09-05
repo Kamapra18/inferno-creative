@@ -11,7 +11,7 @@ export const katalogWeb = [
   {
     image: "/katalog/web1.png",
     linkDemo:
-      "hhttps://inferno-creative.vercel.app/undangan/tema1/index.html?to=Kamu",
+      "https://inferno-creative.vercel.app/undangan/tema2/index.html?to=Kamu",
     linkWa:
       "https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20undangan",
   },
@@ -19,7 +19,7 @@ export const katalogWeb = [
     image: "/katalog/web2.png",
 
     linkDemo:
-      "https://inferno-creative.vercel.app/undangan/tema2/index.html?to=Kamu",
+      "https://inferno-creative.vercel.app/undangan/tema1/index.html?to=Kamu",
     linkWa:
       "https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20undangan",
   },
