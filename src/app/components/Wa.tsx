@@ -4,7 +4,7 @@ import { FaWhatsapp } from "react-icons/fa";
 const WhatsAppButton: React.FC = () => {
   const phoneNumber = "6281547473104";
   const message =
-    "Halo, boleh saya pesan untuk undangan pernikahan? nanti saya kasih 5jt";
+    "Halo, saya tertarik untuk memesan undangan pernikahan. Boleh minta informasi mengenai paket dan harganya?  ";
   const whatsappLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(
     message
   )}`;

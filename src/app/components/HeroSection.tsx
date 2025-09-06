@@ -43,7 +43,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}>
           <Button
-            href="https://wa.me/081547473104"
+            href="https://wa.me/6281547473104"
             target="_blank"
             rel="noopener noreferrer">
             Pesan Sekarang

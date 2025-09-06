@@ -92,7 +92,7 @@ const Katalog = () => {
 
             <div className="mt-6">
               <Order
-                href="https://wa.me/081547473104"
+                href="https://wa.me/6281547473104"
                 target="_blank"
                 rel="noopener noreferrer">
                 {paket.buttonText}
