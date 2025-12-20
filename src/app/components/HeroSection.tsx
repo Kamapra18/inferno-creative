@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Button from "../components/elements/Button";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
@@ -33,7 +33,7 @@ export default function HeroSection() {
           style={{ color: "var(--color-foreground)" }}>
           Buat Undangan, Abadikan Momen, Dalam Satu Layanan
         </h1>
-        <p className="text-base sm:text-md md:text-lg text-gray-700 mb-6">
+        <p className="text-base sm:text-md md:text-lg text-[var(--color-text-muted)] mb-6">
           Layanan dokumentasi & undangan digital eksklusif untuk hari spesialmu.
         </p>
 

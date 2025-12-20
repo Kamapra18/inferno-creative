@@ -29,7 +29,7 @@ const cardVariants = {
 
 const Katalog = () => {
   return (
-    <section id="katalog" className="py-16 bg-white">
+    <section id="katalog" className="py-16 bg-[]var(--color-white)]">
       <div className="text-center mb-12">
         <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
@@ -39,7 +39,7 @@ const Katalog = () => {
           Daftar Paket
         </motion.h1>
         <motion.p
-          className="text-gray-600"
+          className="text-[var(--color-text-muted)]"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}>
@@ -60,16 +60,18 @@ const Katalog = () => {
             style={{ backgroundColor: "var(--color-background)" }}>
             <div>
               <h2 className="text-xl font-semibold mb-1">{paket.title}</h2>
-              <h3 className="text-sm text-gray-500 mb-2">{paket.subtitle}</h3>
+              <h3 className="text-sm text-[var(--color-text-muted)] mb-2">
+                {paket.subtitle}
+              </h3>
 
               {paket.promo ? (
                 <div className="mb-2">
-                  <p className="text-gray-500 line-through">
+                  <p className="text-[var(--color-text-muted)] line-through">
                     {paket.originalPrice}
                   </p>
                   <p className="text-2xl font-bold text-primary">
                     {paket.price}{" "}
-                    <span className="text-sm font-normal text-gray-500">
+                    <span className="text-sm font-normal text-[var(--color-text-muted)]">
                       (promo)
                     </span>
                   </p>
@@ -80,7 +82,7 @@ const Katalog = () => {
 
               <hr className="my-4" />
 
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-sm text-[var(--color-text-muted)]">
                 {paket.features.map((fitur, i) => (
                   <li key={i} className="flex items-start">
                     <span className="text-green-500 mr-2">✔</span>

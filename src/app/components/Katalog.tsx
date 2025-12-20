@@ -50,7 +50,7 @@ export default function KatalogSection() {
             style={{ color: "var(--color-foreground)" }}>
             Katalog Website Undangan
           </h1>
-          <p className="text-gray-700">
+          <p className="text-[var(--color-text-muted)]">
             Tampilan elegan, fitur lengkap, dan desain yang bisa disesuaikan
             sesuai keinginan.
           </p>

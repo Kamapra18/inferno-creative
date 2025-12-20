@@ -19,7 +19,7 @@ export default function Fitur() {
             style={{ color: "var(--color-foreground)" }}>
             Fitur Unggulan
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[var(--color-text-muted)]">
             Kami menyediakan berbagai fitur untuk memastikan undangan digital
             Anda sempurna.
           </p>

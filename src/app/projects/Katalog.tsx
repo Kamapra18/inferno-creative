@@ -44,7 +44,7 @@ export default function KatalogSection() {
           <h1 className="font-bold text-4xl md:text-5xl mb-4">
             Katalog Website Undangan
           </h1>
-          <p className="text-gray-700">
+          <p className="text-[var(--color-text-muted)]">
             Tampilan elegan, fitur lengkap, dan desain yang bisa disesuaikan
             sesuai keinginan.
           </p>
@@ -80,7 +80,7 @@ export default function KatalogSection() {
           {data.map((item, idx) => (
             <motion.div
               key={idx}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              className="bg-[var(--color-white)] rounded-lg shadow-md overflow-hidden"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}

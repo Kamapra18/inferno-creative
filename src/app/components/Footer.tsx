@@ -25,10 +25,10 @@ export default function FooterSection() {
         <FooterContact />
       </div>
 
-      <div className="text-center text-black dark:text-white text-xs mt-11 px-4">
-        <div className="h-px bg-black dark:bg-white opacity-30 mb-4"></div>
+      <div className="text-center text-[var(--color-foreground)] text-xs mt-11 px-4">
+        <div className="h-px bg-[var(--color-foreground)] opacity-30 mb-4"></div>
         <p className="mb-1">&copy; 2025. All rights reserved.</p>
-        <p className="font-bold text-black dark:text-white">
+        <p className="font-bold text-[var(--color-foreground)]">
           Inferno Creative.
         </p>
       </div>

@@ -30,7 +30,7 @@ const FAQ = () => {
           style={{ color: "var(--color-foreground)" }}>
           FAQ
         </h1>
-        <p className="text-gray-600">
+        <p className="text-[var(--color-text-muted)]">
           Punya pertanyaan? Mungkin jawabannya sudah ada di sini!
         </p>
       </motion.div>
@@ -73,7 +73,7 @@ const FAQ = () => {
             <AnimatePresence>
               {openIndex === index && (
                 <motion.p
-                  className="mt-3 text-sm text-gray-700"
+                  className="mt-3 text-sm text-[var(--color-text-muted)]"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}

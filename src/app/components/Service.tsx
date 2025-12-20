@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function Services() {
   return (
-    <section id="services" className="py-16 bg-white px-4">
+    <section id="services" className="py-16 bg-[var(--color-white)] px-4">
       <div className="max-w-5xl mx-auto">
         {/* Heading */}
         <motion.div
@@ -19,7 +19,7 @@ export default function Services() {
             style={{ color: "var(--color-foreground)" }}>
             Kenapa memilih layanan kami?
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[var(--color-text-muted)]">
             Kami hadir untuk memberikan layanan dokumentasi & undangan digital
             terbaik untuk hari spesialmu
           </p>
@@ -61,7 +61,7 @@ export default function Services() {
                       style={{ color: "var(--color-foreground)" }}>
                       {title}
                     </h3>
-                    <p className="text-gray-600">{desc}</p>
+                    <p className="text-[var(--color-text-muted)]">{desc}</p>
                   </div>
                 </div>
               </motion.div>

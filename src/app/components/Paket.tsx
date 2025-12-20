@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 const Katalog = () => {
   return (
-    <section id="katalog" className="py-16 bg-neutral-50">
+    <section id="katalog" className="py-16 bg-[var(--color-background)]">
       <div className="text-center mb-12 px-4">
         <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
@@ -18,7 +18,7 @@ const Katalog = () => {
           Daftar Paket
         </motion.h1>
         <motion.p
-          className="text-gray-600"
+          className="text-[var(--color-text-muted)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}>
@@ -41,24 +41,28 @@ const Katalog = () => {
                 style={{ color: "var(--color-foreground)" }}>
                 {paket.title}
               </h2>
-              <h3 className="text-sm text-gray-500 mb-2">{paket.subtitle}</h3>
+              <h3 className="text-sm text-[var(--color-text-muted)] mb-2">
+                {paket.subtitle}
+              </h3>
 
               {paket.promo ? (
                 <div className="mb-2">
-                  <p className="text-gray-500 line-through">
+                  <p className="text-[var(--color-text-muted)] line-through">
                     {paket.originalPrice}
                   </p>
                   <p
                     className="text-2xl font-bold text-primary"
                     style={{ color: "var(--color-foreground)" }}>
                     {paket.price}{" "}
-                    <span className="text-sm font-normal text-gray-500">
+                    <span className="text-sm font-normal text-[var(--color-text-muted)]">
                       (promo)
                     </span>
                   </p>
                 </div>
               ) : (
-                <p className="text-2xl font-bold text-primary">{paket.price}</p>
+                <p className="text-2xl  font-bold text-primary">
+                  {paket.price}
+                </p>
               )}
 
               <hr className="my-4" />
@@ -67,7 +71,9 @@ const Katalog = () => {
                 {paket.features.map((fitur, i) => (
                   <li key={i} className="flex items-start">
                     <span className="text-green-500 mr-2">✔</span>
-                    <span>{fitur}</span>
+                    <span className="text-[var(--color-text-muted)]">
+                      {fitur}
+                    </span>
                   </li>
                 ))}
               </ul>
