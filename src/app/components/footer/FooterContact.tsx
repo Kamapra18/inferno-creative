@@ -39,7 +39,10 @@ export default function FooterContact() {
           Icon={FaInstagram}
           href="https://www.instagram.com/inferno.creativee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
         />
-        <SocialIcon Icon={FaTiktok} href="https://www.tiktok.com/@wisnu" />
+        <SocialIcon
+          Icon={FaTiktok}
+          href="https://www.tiktok.com/@infernocreativee"
+        />
         <SocialIcon Icon={FaWhatsapp} href="https://wa.me/081547473104" />
       </div>
     </div>
