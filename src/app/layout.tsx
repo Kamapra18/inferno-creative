@@ -35,6 +35,7 @@ export const metadata: Metadata = {
   },
   keywords: [
     "Inferno Creative",
+    "Inferno Production",
     "jasa fotografi Bali",
     "jasa videografi Bali",
     "jasa fotografi profesional",
@@ -72,17 +73,17 @@ export const metadata: Metadata = {
   ],
   robots: "index, follow",
   authors: [
-    { name: "Inferno Creative", url: "https://inferno-creative.vercel.app/" },
+    { name: "Inferno Creative", url: "https://www.inferno-production.com/" },
   ],
   creator: "Inferno Creative",
   publisher: "Inferno Creative",
   themeColor: "#1c2a58",
-  metadataBase: new URL("https://inferno-creative.vercel.app/"),
+  metadataBase: new URL("https://www.inferno-production.com/"),
   openGraph: {
     title: "Inferno Creative",
     description:
       "Penyedia jasa fotografi, videografi, dan web undangan digital profesional dan kreatif.",
-    url: "https://inferno-creative.vercel.app/",
+    url: "https://www.inferno-production.com/",
     siteName: "Inferno Creative",
     images: [
       {

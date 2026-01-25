@@ -30,14 +30,16 @@ export default function Fitur() {
           {FEATURES.map((item, idx) => (
             <motion.div
               key={idx}
-              className="bg-[var(--color-accent)] rounded-lg p-6 text-white shadow-md hover:shadow-lg transition-shadow"
+              className="bg-[var(--color-accent)] rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
               whileHover={{ scale: 1.03 }}>
               <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-sm">{item.desc}</p>
+              <p className="text-sm" style={{ color: "#ffffff" }}>
+                {item.desc}
+              </p>
             </motion.div>
           ))}
         </div>

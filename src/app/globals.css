@@ -16,7 +16,7 @@
     --color-background: #0a0a0a;
     --color-foreground: #ededed;
 
-    --color-accent: #c62828;
+    --color-accent: #6d0d0d;
     --color-white: #1a1a1a;
     --color-text-muted: #a0a0a0;
   }
@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {

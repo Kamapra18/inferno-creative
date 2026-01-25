@@ -25,6 +25,7 @@ export default function KatalogSection() {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
+          arrows: false,
         },
       },
     ],
