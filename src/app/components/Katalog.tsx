@@ -49,11 +49,11 @@ export default function KatalogSection() {
           <h1
             className="font-bold text-4xl md:text-5xl mb-4"
             style={{ color: "var(--color-foreground)" }}>
-            Katalog Website Undangan
+            Portofolio Kami
           </h1>
           <p className="text-[var(--color-text-muted)]">
-            Tampilan elegan, fitur lengkap, dan desain yang bisa disesuaikan
-            sesuai keinginan.
+            beberapa <strong>Highlight</strong> katalog porto projek yang pernah
+            kami kerjakan
           </p>
         </motion.div>
 

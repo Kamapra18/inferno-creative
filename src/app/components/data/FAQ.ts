@@ -25,7 +25,7 @@ export const faqDokumentasi: FAQItem[] = [
   {
     question: "Berapa lama hasil foto/video akan dikirim?",
     answer:
-      "Estimasi pengiriman hasil foto/video adalah 3-7 hari kerja tergantung paket yang diambil.",
+      "Estimasi pengiriman hasil foto/video adalah 2-3 hari kerja tergantung paket yang diambil.",
   },
   {
     question: "Apakah bisa request lokasi khusus untuk prewedding?",

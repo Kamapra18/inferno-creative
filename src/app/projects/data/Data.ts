@@ -26,9 +26,16 @@ export const katalogWeb = [
 ];
 
 export const katalogFoto = [
-  "/katalog/FeedWismakarma/Cover1.jpg",
-  "/katalog/FeedWismakarma/Cover2.jpg",
-  "/katalog/FeedWismakarma/Cover3.jpg",
-  "/katalog/FeedWismakarma/Model-1.jpg",
-  "/katalog/FeedWismakarma/Model-2.jpg",
+  "/katalog/nyekah/nyekah1.webp",
+  "/katalog/nyekah/nyekah3.webp",
+  "/katalog/nyekah/nyekah4.webp",
+  "/katalog/yudisium/yudisium1.webp",
+  "/katalog/yudisium/yudisium2.webp",
+  "/katalog/yudisium/yudisium3.webp",
+  "/katalog/FeedWismakarma/wismakarma2.webp",
+  "/katalog/FeedWismakarma/wismakarma3.jpg",
+  "/katalog/FeedWismakarma/wismakarma1.webp",
+  "/katalog/FeedWismakarma/wismakarma4.webp",
+  "/katalog/FeedWismakarma/wismakarma5.webp",
+  "/katalog/FeedWismakarma/wismakarma6.webp",
 ];

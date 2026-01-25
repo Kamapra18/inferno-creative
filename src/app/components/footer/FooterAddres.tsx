@@ -5,9 +5,9 @@ export default function FooterAddress() {
       <ul
         className="mt-2 space-y-2"
         style={{ color: "var(--color-foreground)" }}>
-        <li>br. Pekandelan</li>
-        <li>ds. Nyalian</li>
-        <li>Banjarangkan, Klungkung</li>
+        <li>br. Angkeb Canging</li>
+        <li>ds. Gulingan</li>
+        <li>Mengwi, Badung</li>
         <li>Bali</li>
       </ul>
     </div>

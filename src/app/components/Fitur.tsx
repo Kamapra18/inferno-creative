@@ -36,7 +36,11 @@ export default function Fitur() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
               whileHover={{ scale: 1.03 }}>
-              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+              <h3
+                className="text-lg font-semibold mb-2"
+                style={{ color: "#ffffff" }}>
+                {item.title}
+              </h3>
               <p className="text-sm" style={{ color: "#ffffff" }}>
                 {item.desc}
               </p>
