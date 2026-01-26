@@ -29,7 +29,7 @@ html {
 }
 
 body {
-  /* background: var(--color-background); */
+  background: var(--color-background-solid);
   color: var(--color-foreground);
   font-family: var(--font-inter), sans-serif;
   /* min-height: 100vh; */

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 const Katalog = () => {
   return (
     <section
-      id="katalog"
+      id="paket"
       className="py-16 "
       style={{ background: "var(--color-background-down)" }}>
       <div className="text-center mb-12 px-4">
