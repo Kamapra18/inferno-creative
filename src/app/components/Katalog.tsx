@@ -37,7 +37,7 @@ export default function KatalogSection() {
     <section
       id="katalog"
       className="py-16"
-      style={{ backgroundColor: "var(--color-background)" }}>
+      style={{ background: "var(--color-background-down)" }}>
       <div className="max-w-6xl mx-auto px-4">
         {/* Heading */}
         <motion.div
@@ -69,7 +69,7 @@ export default function KatalogSection() {
             className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
               activeTab === "web"
                 ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-accent)] text-[var(--color-accent)]"
+                : "border-[var(--color-foreground)] text-[var(--color-foreground)]"
             }`}>
             Web Undangan
           </button>
@@ -78,7 +78,7 @@ export default function KatalogSection() {
             className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
               activeTab === "foto"
                 ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-accent)] text-[var(--color-accent)]"
+                : "border-[var(--color-foreground)] text-[var(--color-foreground)]"
             }`}>
             Foto
           </button>

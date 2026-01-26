@@ -15,7 +15,7 @@ export default function FooterSection() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="py-8 px-6 sm:px-10"
       style={{
-        backgroundColor: "var(--color-background)",
+        background: "var(--color-background-solid)",
         color: "var(--color-foreground)",
       }}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">

@@ -8,8 +8,8 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="flex flex-col items-center justify-center min-h-screen px-4 py-10 text-center"
-      style={{ backgroundColor: "var(--color-background)" }}>
+      className="flex flex-col items-center justify-center min-h-screen px-4 py-10 text-center "
+      style={{ background: "var(--color-background)" }}>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

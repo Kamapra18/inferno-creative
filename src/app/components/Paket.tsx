@@ -1,13 +1,16 @@
 "use client";
 
-import Order from "./elements/Order";
+import ButtonCard from "./elements/ButtonCard";
 import Button from "./elements/Button";
 import { paketList } from "../components/data/Paket";
 import { motion } from "framer-motion";
 
 const Katalog = () => {
   return (
-    <section id="katalog" className="py-16 bg-[var(--color-background)]">
+    <section
+      id="katalog"
+      className="py-16 "
+      style={{ background: "var(--color-background-down)" }}>
       <div className="text-center mb-12 px-4">
         <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
@@ -30,7 +33,8 @@ const Katalog = () => {
         {paketList.map((paket, index) => (
           <motion.div
             key={index}
-            className="bg-white rounded-xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg transition"
+            className="rounded-xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg transition"
+            style={{ background: "var(--color-card)" }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -38,54 +42,48 @@ const Katalog = () => {
             <div>
               <h2
                 className="text-lg md:text-xl font-semibold mb-1"
-                style={{ color: "var(--color-foreground)" }}>
+                style={{ color: "var(--color-background-solid)" }}>
                 {paket.title}
               </h2>
-              <h3 className="text-sm text-[var(--color-text-muted)] mb-2">
-                {paket.subtitle}
-              </h3>
+              <h3 className="text-sm text-black mb-2">{paket.subtitle}</h3>
 
               {paket.promo ? (
                 <div className="mb-2">
-                  <p className="text-[var(--color-text-muted)] line-through">
+                  <p className="text-[var(--color-accent)] line-through">
                     {paket.originalPrice}
                   </p>
-                  <p
-                    className="text-2xl font-bold text-primary"
-                    style={{ color: "var(--color-foreground)" }}>
+                  <p className="text-2xl font-bold text-primary text-black">
                     {paket.price}{" "}
-                    <span className="text-sm font-normal text-[var(--color-text-muted)]">
+                    <span className="text-sm font-normal text-black">
                       (promo)
                     </span>
                   </p>
                 </div>
               ) : (
-                <p className="text-2xl  font-bold text-primary">
+                <p className="text-2xl  font-bold text-primary text-black">
                   {paket.price}
                 </p>
               )}
 
               <hr className="my-4" />
 
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-sm text-black">
                 {paket.features.map((fitur, i) => (
                   <li key={i} className="flex items-start">
                     <span className="text-green-500 mr-2">✔</span>
-                    <span className="text-[var(--color-text-muted)]">
-                      {fitur}
-                    </span>
+                    <span className="text-black">{fitur}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="mt-6">
-              <Order
+              <ButtonCard
                 href="https://wa.me/6281547473104"
                 target="_blank"
                 rel="noopener noreferrer">
                 {paket.buttonText}
-              </Order>
+              </ButtonCard>
             </div>
           </motion.div>
         ))}

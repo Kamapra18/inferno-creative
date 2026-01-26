@@ -5,7 +5,10 @@ import { motion } from "framer-motion";
 
 export default function Services() {
   return (
-    <section id="services" className="py-16 bg-[var(--color-white)] px-4">
+    <section
+      id="services"
+      className="py-16 px-4"
+      style={{ background: "var(--color-background-solid)" }}>
       <div className="max-w-5xl mx-auto">
         {/* Heading */}
         <motion.div
@@ -48,7 +51,7 @@ export default function Services() {
             return (
               <motion.div
                 key={i}
-                className="text-left"
+                className="text-left border border-white/50 rounded-xl p-6 hover:border-white/80 transition"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

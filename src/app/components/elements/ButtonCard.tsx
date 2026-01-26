@@ -8,15 +8,15 @@ interface ButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, href, ...props }) => {
+const ButtonCard: React.FC<ButtonProps> = ({ children, href, ...props }) => {
   return (
     <a
       href={href}
-      className="inline-flex items-center gap-2 px-4 py-2 border-3  rounded transition-colors duration-300"
+      className="inline-flex items-center gap-2 px-4 py-2 border-2 rounded transition-colors duration-300"
       style={{
-        color: "var(--color-foreground)",
-        borderColor: "var(--color-foreground)",
-        boxShadow: "0 0 12px rgba(0, 0, 0, 0.2)",
+        color: "var(--color-background-solid)",
+        borderColor: "var(--color-background-solid)",
+        boxShadow: "0 0 12px rgba(0, 0, 0, 0.4)",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = "var(--color-accent)";
@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({ children, href, ...props }) => {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.color = "var(--color-foreground)";
+        e.currentTarget.style.color = "var(--color-background-solid)";
       }}
       {...props}>
       {children}
@@ -33,4 +33,4 @@ const Button: React.FC<ButtonProps> = ({ children, href, ...props }) => {
   );
 };
 
-export default Button;
+export default ButtonCard;

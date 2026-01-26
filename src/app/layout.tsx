@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Playfair_Display } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Inter,
+  Playfair_Display,
+  Plus_Jakarta_Sans,
+  Montserrat,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
@@ -9,11 +16,20 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+});
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+});
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["400", "600", "700", "800"], // Ambil weight yang dibutuhkan saja
 });
 
 const geistSans = Geist({
@@ -115,10 +131,11 @@ export default function RootLayout({
     <html lang="id">
       <body
         className={`
-          ${inter.variable} 
+          ${jakarta.variable} 
+          ${inter.variable}
           ${playfair.variable} 
           ${geistSans.variable} 
-          ${geistMono.variable} 
+          ${montserrat.variable} 
           antialiased
         `}>
         {children}

@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #f9f8f5;
-  --color-foreground: #000000;
+  --color-background: linear-gradient(
+    180deg,
+    #7a0c0c 0%,
+    #5a0808 40%,
+    #2b0202 100%
+  );
+  --color-background-solid: #2b0202;
+  --color-background-down: linear-gradient(
+    180deg,
+    #2b0202 0%,
+    #5a0808 40%,
+    #7a0c0c 100%
+  );
+  --color-foreground: #ffffff;
   --color-accent: #c62828;
-  --color-white: #ffffff;
-  --color-text-muted: #666666;
+  --color-card: #f5f2e9;
+  --color-text-muted: #e0e0e0;
 
-  --font-heading: var(--font-playfair);
+  --font-heading: var(--font-montserrat);
   --font-body: var(--font-inter);
 }
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #0a0a0a;
-    --color-foreground: #ededed;
-
-    --color-accent: #6d0d0d;
-    --color-white: #1a1a1a;
-    --color-text-muted: #a0a0a0;
-  }
-} */
 
 html {
   scroll-behavior: smooth;
@@ -28,9 +29,11 @@ html {
 }
 
 body {
-  background-color: var(--color-background);
+  /* background: var(--color-background); */
   color: var(--color-foreground);
-  font-family: var(--font-body, Arial, Helvetica, sans-serif);
+  font-family: var(--font-inter), sans-serif;
+  /* min-height: 100vh; */
+  /* position: fixed; */
 }
 
 h1,
@@ -39,5 +42,5 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading, serif);
+  font-family: var(--font-montserrat), sans-serif;
 }

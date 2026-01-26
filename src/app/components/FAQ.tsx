@@ -18,7 +18,10 @@ const FAQ = () => {
   };
 
   return (
-    <section id="faq" className="py-16 bg-white px-6">
+    <section
+      id="faq"
+      className="py-16  px-6"
+      style={{ background: "var(--color-background)" }}>
       <motion.div
         className="text-center mb-10"
         initial={{ opacity: 0, y: 30 }}
@@ -42,7 +45,7 @@ const FAQ = () => {
             className={`px-6 py-2 rounded-full font-semibold transition-colors duration-300 border-2 ${
               selectedCategory === type
                 ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-accent)] text-[var(--color-accent)]"
+                : "border-[var(--color-card)] text-[var(--color-card)]"
             }`}
             onClick={() => setSelectedCategory(type as "web" | "dokumentasi")}>
             {type === "web" ? "Web Undangan" : "Dokumentasi / Prewedding"}

@@ -14,8 +14,8 @@ const Back: React.FC<BackProps> = ({ children, href, ...props }) => {
       href={href}
       className="inline-flex items-center gap-2 px-4 py-2 border-3 rounded transition-colors duration-300"
       style={{
-        color: "var(--color-accent)",
-        borderColor: "var(--color-accent)",
+        color: "var(--color-card)",
+        borderColor: "var(--color-card)",
         boxShadow: "0 0 12px rgba(0, 0, 0, 0.2)",
       }}
       onMouseEnter={(e) => {
@@ -24,7 +24,7 @@ const Back: React.FC<BackProps> = ({ children, href, ...props }) => {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.color = "var(--color-accent)";
+        e.currentTarget.style.color = "var(--color-card)";
       }}
       {...props}>
       <ArrowLeft size={18} />

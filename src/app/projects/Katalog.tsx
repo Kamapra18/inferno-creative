@@ -6,6 +6,7 @@ import Button from "../components/elements/Button";
 import Image from "next/image";
 import Back from "../components/elements/Back";
 import { katalogWeb, katalogFoto } from "./data/Data";
+import ButtonCard from "../components/elements/ButtonCard";
 
 interface KatalogItem {
   image: string;
@@ -29,7 +30,7 @@ export default function KatalogSection() {
     <motion.section
       id="katalog"
       className="py-16"
-      style={{ backgroundColor: "var(--color-white)" }}
+      style={{ background: "var(--color-background-solid)" }}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -61,7 +62,7 @@ export default function KatalogSection() {
             className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
               activeTab === "web"
                 ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-accent)] text-[var(--color-accent)]"
+                : "border-[var(--color-card)] text-[var(--color-card)]"
             }`}>
             Web Undangan
           </button>
@@ -70,7 +71,7 @@ export default function KatalogSection() {
             className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
               activeTab === "foto"
                 ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-accent)] text-[var(--color-accent)]"
+                : "border-[var(--color-card)] text-[var(--color-card)]"
             }`}>
             Foto
           </button>
@@ -80,7 +81,7 @@ export default function KatalogSection() {
           {data.map((item, idx) => (
             <motion.div
               key={idx}
-              className="bg-[var(--color-white)] rounded-lg shadow-md overflow-hidden"
+              className="bg-[var(--color-card)] rounded-lg shadow-md overflow-hidden"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
@@ -102,12 +103,12 @@ export default function KatalogSection() {
                     className="inline-block px-4 py-2 rounded bg-[var(--color-accent)] text-white font-semibold transition hover:opacity-90">
                     Pesan
                   </a>
-                  <Button
+                  <ButtonCard
                     href={item.linkDemo}
                     target="_blank"
                     rel="noopener noreferrer">
                     Lihat
-                  </Button>
+                  </ButtonCard>
                 </div>
               )}
             </motion.div>
