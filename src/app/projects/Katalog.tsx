@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Button from "../components/elements/Button";
 import Image from "next/image";
 import Back from "../components/elements/Back";
 import { katalogWeb, katalogFoto } from "./data/Data";
