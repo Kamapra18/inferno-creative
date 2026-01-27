@@ -29,7 +29,7 @@ const playfair = Playfair_Display({
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["400", "600", "700", "800"], // Ambil weight yang dibutuhkan saja
+  weight: ["400", "600", "700", "800"],
 });
 
 const geistSans = Geist({
@@ -140,6 +140,25 @@ export default function RootLayout({
         `}>
         {children}
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Inferno Creative",
+              url: "https://www.inferno-production.com/",
+              logo: "https://www.inferno-production.com/logo/Asset-4.png",
+              sameAs: ["https://www.instagram.com/inferno.creativee/"],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                areaServed: "ID",
+                availableLanguage: "Indonesian",
+              },
+            }),
+          }}
+        />
       </body>
     </html>
   );
