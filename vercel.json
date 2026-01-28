@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/undangan/tema2",
+      "destination": "/undangan/tema2/index.html"
+    }
+  ]
+}
