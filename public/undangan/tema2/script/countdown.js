@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return data < 10 ? "0" + data : data;
   }
 
-  let countDownDate = new Date("Aug 28, 2025 00:00:00").getTime();
+  let countDownDate = new Date("Aug 28, 2026 00:00:00").getTime();
 
   let countdownInterval = setInterval(() => {
     let now = new Date().getTime();
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let days = Math.floor(distance / (1000 * 60 * 60 * 24));
     let hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
     );
     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (distance > 0) {
     let days = Math.floor(distance / (1000 * 60 * 60 * 24));
     let hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
     );
     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
