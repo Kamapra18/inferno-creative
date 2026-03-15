@@ -2,11 +2,11 @@ import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppButton: React.FC = () => {
-  const phoneNumber = "6281547473104";
+  const phoneNumber = "6285645150857";
   const message =
     "Halo, saya tertarik untuk memesan undangan pernikahan. Boleh minta informasi mengenai paket dan harganya?  ";
   const whatsappLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(
-    message
+    message,
   )}`;
 
   return (
