@@ -47,14 +47,14 @@ export const katalogPhotobooth: KatalogItem[] = [
     id: 3,
     category: "photobooth",
     type: "wedding",
-    image: "/katalog/photobooth/inferno-wedding-krisna-&-mika.jpg",
+    image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika.jpg",
     title: "Wedding Krisna & Mika",
   },
   {
     id: 4,
     category: "photobooth",
     type: "wedding",
-    image: "/katalog/photobooth/inferno-wedding-krisna-&-mika-2.jpg",
+    image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika-2.jpg",
     title: "Wedding Krisna & Mika",
   },
   {
