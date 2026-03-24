@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 interface ButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   children: React.ReactNode;
   href: string;
+  target?: string;
 }
 
 const ButtonCard: React.FC<ButtonProps> = ({ children, href, ...props }) => {

@@ -1,128 +1,138 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
-import Back from "../components/elements/Back";
-import { katalogWeb, katalogFoto } from "./data/Data";
-import ButtonCard from "../components/elements/ButtonCard";
+import {
+  katalogAll,
+  katalogFotoVideo,
+  katalogPhotobooth,
+  katalogUndangan,
+} from "@/data/Katalog";
+import { motion } from "framer-motion";
+import Back from "@/components/elements/Back";
 
-interface KatalogItem {
-  image: string;
-  linkDemo: string;
-  linkWa: string;
-}
+type Category = "all" | "fotoVideo" | "photobooth" | "undangan";
 
-export default function KatalogSection() {
-  const [activeTab, setActiveTab] = useState<"web" | "foto">("web");
+const categories = [
+  { label: "Semua", value: "all" },
+  { label: "Foto & Video", value: "fotoVideo" },
+  { label: "Photobooth", value: "photobooth" },
+  { label: "Undangan", value: "undangan" },
+];
 
-  const data: KatalogItem[] =
-    activeTab === "web"
-      ? katalogWeb
-      : katalogFoto.map((img: string) => ({
-          image: img,
-          linkDemo: "#",
-          linkWa: "#",
-        }));
+export default function ProjectsSection() {
+  const [active, setActive] = useState<Category>("all");
+
+  const getData = () => {
+    switch (active) {
+      case "fotoVideo":
+        return katalogFotoVideo;
+      case "photobooth":
+        return katalogPhotobooth;
+      case "undangan":
+        return katalogUndangan;
+      default:
+        return katalogAll;
+    }
+  };
+
+  const data = getData();
 
   return (
-    <motion.section
-      id="katalog"
-      className="py-16"
-      style={{ background: "var(--color-background-solid)" }}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      viewport={{ once: true }}>
-      <div className="max-w-6xl mx-auto px-4">
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}>
-          <h1 className="font-bold text-4xl md:text-5xl mb-4">
-            Katalog Website Undangan
+    <section
+      id="porto"
+      className="py-20 px-4"
+      style={{ background: "var(--color-background-solid)" }}>
+      <div className="max-w-6xl mx-auto text-center">
+        {/* HEADING */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Portofolio Kami
           </h1>
-          <p className="text-[var(--color-text-muted)]">
-            Tampilan elegan, fitur lengkap, dan desain yang bisa disesuaikan
-            sesuai keinginan.
+
+          <p className="text-white max-w-2xl mx-auto">
+            Lihat berbagai hasil karya terbaik kami dari wedding, event,
+            photobooth hingga undangan digital dengan kualitas profesional.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="flex justify-center gap-4 mb-10"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          viewport={{ once: true }}>
-          <button
-            onClick={() => setActiveTab("web")}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
-              activeTab === "web"
-                ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-card)] text-[var(--color-card)]"
-            }`}>
-            Web Undangan
-          </button>
-          <button
-            onClick={() => setActiveTab("foto")}
-            className={`px-6 py-2 rounded-full font-medium transition-colors duration-300 border ${
-              activeTab === "foto"
-                ? "bg-[var(--color-accent)] text-white"
-                : "border-[var(--color-card)] text-[var(--color-card)]"
-            }`}>
-            Foto
-          </button>
-        </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {data.map((item, idx) => (
-            <motion.div
-              key={idx}
-              className="bg-[var(--color-card)] rounded-lg shadow-md overflow-hidden"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              viewport={{ once: true }}>
-              <Image
-                src={item.image}
-                alt={`Katalog ${idx + 1}`}
-                width={400}
-                height={300}
-                className="w-full h-auto object-cover"
-              />
-
-              {activeTab === "web" && (
-                <div className="p-4 text-center flex justify-center gap-3">
-                  <a
-                    href={item.linkWa}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block px-4 py-2 rounded bg-[var(--color-accent)] text-white font-semibold transition hover:opacity-90">
-                    Pesan
-                  </a>
-                  <ButtonCard
-                    href={item.linkDemo}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    Lihat
-                  </ButtonCard>
-                </div>
-              )}
-            </motion.div>
+        {/* FILTER */}
+        <div className="flex justify-center gap-3 flex-wrap mb-12">
+          {categories.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => setActive(cat.value as Category)}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border backdrop-blur-sm
+              ${
+                active === cat.value
+                  ? "bg-white text-black border-white shadow-lg scale-105"
+                  : "border-white/30 text-white hover:border-white hover:bg-white/10 hover:scale-105"
+              }`}>
+              {cat.label}
+            </button>
           ))}
         </div>
 
-        <motion.div
-          className="mt-10 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          viewport={{ once: true }}>
-          <Back href="/">Kembali</Back>
-        </motion.div>
+        {/* GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {data.map((item, i) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="group relative overflow-hidden rounded-xl cursor-pointer">
+              {/* IMAGE */}
+              <Image
+                src={item.image}
+                alt={item.title}
+                width={500}
+                height={600}
+                className="w-full aspect-[4/5] object-cover transition duration-500 group-hover:scale-110"
+              />
+
+              {/* OVERLAY */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition duration-300" />
+
+              {/* CONTENT */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-left">
+                <h3 className="text-white font-semibold text-lg">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm text-gray-300 capitalize mb-3">
+                  {item.category} • {item.type}
+                </p>
+
+                {item.category === "undangan" ? (
+                  <a
+                    href={item.demoUrl}
+                    target="_blank"
+                    className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
+                    Lihat Demo
+                  </a>
+                ) : (
+                  <a
+                    href="https://wa.me/6285645150857"
+                    target="_blank"
+                    className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
+                    Booking Sekarang
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </motion.section>
+      <motion.div
+        className="text-center mt-12"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}>
+        <Back href="/" onClick={() => window.history.back()}>
+          Kembali
+        </Back>
+      </motion.div>
+    </section>
   );
 }

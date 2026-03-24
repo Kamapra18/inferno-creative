@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import {
   Geist,
-  Geist_Mono,
   Inter,
   Playfair_Display,
   Plus_Jakarta_Sans,
@@ -9,6 +8,7 @@ import {
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+import ConsoleLog from "@/components/feature/ConsoleLog";
 
 // Font utama
 const inter = Inter({
@@ -37,68 +37,44 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Inferno Creative",
-  description:
-    "Inferno Creative adalah penyedia jasa fotografi, videografi, dan pembuatan website undangan digital dengan sentuhan profesional dan estetika modern.",
-  icons: {
-    icon: "/logo/Asset-4.png",
+  metadataBase: new URL("https://www.inferno-production.com/"),
+
+  title: {
+    default: "Inferno Creative - Jasa Foto Video & Undangan Digital Bali",
+    template: "%s | Inferno Creative",
   },
+
+  description:
+    "Jasa fotografi, videografi, photobooth, dan pembuatan website undangan digital di Bali. Profesional, cinematic, dan modern untuk wedding, event, dan bisnis.",
+
   keywords: [
-    "Inferno Creative",
-    "Inferno Production",
-    "jasa fotografi Bali",
-    "jasa videografi Bali",
-    "jasa fotografi profesional",
-    "jasa videografi profesional",
-    "jasa fotografi modern",
-    "jasa videografi modern",
-    "jasa fotografi Bali modern",
-    "jasa videografi Bali modern",
-    "jasa fotografi Bali profesional",
-    "jasa videografi Bali profesional",
-    "jasa prewedding Bali",
+    "jasa foto Bali",
+    "jasa video Bali",
     "jasa wedding Bali",
-    "jasa foto prewedding",
-    "jasa foto wedding",
-    "jasa foto produk",
-    "jasa foto makanan",
-    "jasa foto event",
-    "jasa foto komersial",
-    "jasa foto fashion",
-    "jasa foto keluarga",
-    "jasa dokumentasi acara",
-    "jasa fotografi",
-    "jasa videografi",
-    "web undangan digital",
-    "website undangan ulang tahun digital",
-    "website undangan pernikahan digital",
-    "website undangan digital metatah",
-    "website undangan digital mepandes",
-    "website undangan digital 3 bulanan",
-    "undangan online",
-    "jasa dokumentasi acara",
-    "foto pernikahan",
-    "video pernikahan",
+    "photobooth Bali",
     "undangan digital Bali",
+    "jasa dokumentasi Bali",
+    "Dokumentasi Murah di Bali",
   ],
-  robots: "index, follow",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
   authors: [
     { name: "Inferno Creative", url: "https://www.inferno-production.com/" },
   ],
-  creator: "Inferno Creative",
-  publisher: "Inferno Creative",
-  themeColor: "#1c2a58",
-  metadataBase: new URL("https://www.inferno-production.com/"),
+
   openGraph: {
-    title: "Inferno Creative",
+    title: "Inferno Creative - Jasa Foto Video & Undangan Digital Bali",
     description:
-      "Penyedia jasa fotografi, videografi, dan web undangan digital profesional dan kreatif.",
+      "Layanan profesional fotografi, videografi, photobooth, dan undangan digital di Bali.",
     url: "https://www.inferno-production.com/",
     siteName: "Inferno Creative",
     images: [
@@ -106,19 +82,22 @@ export const metadata: Metadata = {
         url: "/logo/Asset-2.png",
         width: 1200,
         height: 630,
-        alt: "Inferno Creative - Jasa Foto Video & Web Undangan",
+        alt: "Inferno Creative",
       },
     ],
-    type: "website",
     locale: "id_ID",
+    type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Inferno Creative",
-    description:
-      "Jasa fotografi, videografi, dan website undangan digital modern.",
+    description: "Jasa foto, video, photobooth & undangan digital Bali.",
     images: ["/logo/Asset-2.png"],
-    creator: "@infernocreative",
+  },
+
+  icons: {
+    icon: "/logo/Asset-4.png",
   },
 };
 
@@ -138,6 +117,7 @@ export default function RootLayout({
           ${montserrat.variable} 
           antialiased
         `}>
+        <ConsoleLog />
         {children}
         <Analytics />
         <script
@@ -145,17 +125,49 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Organization",
+              "@type": "LocalBusiness",
               name: "Inferno Creative",
+              image: "https://www.inferno-production.com/logo/Asset-4.png",
               url: "https://www.inferno-production.com/",
-              logo: "https://www.inferno-production.com/logo/Asset-4.png",
-              sameAs: ["https://www.instagram.com/inferno.creativee/"],
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                areaServed: "ID",
-                availableLanguage: "Indonesian",
+              telephone: "+6281234567890", // isi nomor lu
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Bali",
+                addressCountry: "ID",
               },
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: "-8.4095",
+                longitude: "115.1889",
+              },
+              areaServed: "Bali",
+              sameAs: ["https://www.instagram.com/inferno.creativee/"],
+              priceRange: "$$",
+              description:
+                "Jasa fotografi, videografi, photobooth, dan undangan digital profesional di Bali.",
+              makesOffer: [
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Jasa Fotografi & Videografi",
+                  },
+                },
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Photobooth",
+                  },
+                },
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Undangan Digital",
+                  },
+                },
+              ],
             }),
           }}
         />

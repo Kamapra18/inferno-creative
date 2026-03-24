@@ -1,24 +1,44 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://www.inferno-production.com";
+
   return [
     {
-      url: "https://www.inferno-production.com",
+      url: `${baseUrl}`,
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "monthly",
       priority: 1,
     },
     {
-      url: "https://www.inferno-production.com/projects",
+      url: `${baseUrl}/projects`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
-      url: "https://www.inferno-production.com/paket",
+      url: `${baseUrl}/paket`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/jasa-foto-video-bali`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/photobooth-bali`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/undangan-bali`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.95,
     },
   ];
 }

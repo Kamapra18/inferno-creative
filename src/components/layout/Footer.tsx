@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import FooterLogo from "./footer/FooterLogo";
-import FooterAddress from "./footer/FooterAddres";
-import FooterContact from "./footer/FooterContact";
-import FooterServices from "./footer/FooterServ";
+import FooterLogo from "../footer/FooterLogo";
+import FooterAddress from "../footer/FooterAddres";
+import FooterContact from "../footer/FooterContact";
+import FooterServices from "../footer/FooterServ";
 
 export default function FooterSection() {
   return (

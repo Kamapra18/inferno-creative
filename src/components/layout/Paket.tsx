@@ -1,33 +1,58 @@
 "use client";
 
-import ButtonCard from "@/components/elements/ButtonCard";
-import Back from "@/components/elements/Back";
-import { paketList } from "@/data/Paket";
+import ButtonCard from "../elements/ButtonCard";
+import Button from "../elements/Button";
+import {
+  paketList,
+  paketUndangan,
+  paketDokumentasi,
+  paketPhotobooth,
+  paketAllInOne,
+} from "@/data/Paket";
 import { motion } from "framer-motion";
 
-const Katalog = () => {
-  const data = paketList;
+type Category = "all" | "undangan" | "dokumentasi" | "photobooth" | "home";
+
+type Props = {
+  category?: Category;
+  limit?: number;
+};
+
+const Katalog = ({ category = "all", limit }: Props) => {
+  const getData = () => {
+    switch (category) {
+      case "undangan":
+        return paketUndangan;
+      case "dokumentasi":
+        return paketDokumentasi;
+      case "photobooth":
+        return paketPhotobooth;
+      case "all":
+        return paketList;
+      case "home":
+        return paketAllInOne;
+      default:
+        return paketList;
+    }
+  };
+
+  const data = limit ? getData().slice(0, limit) : getData();
 
   return (
     <section
       id="paket"
       className="py-16"
-      style={{ background: "var(--color-background-solid)" }}>
+      style={{ background: "var(--color-background-down)" }}>
       <div className="text-center mb-12 px-4">
         <motion.h1
           className="text-3xl md:text-5xl font-bold mb-4"
           style={{ color: "var(--color-foreground)" }}
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}>
+          animate={{ opacity: 1, y: 0 }}>
           Daftar Paket
         </motion.h1>
 
-        <motion.p
-          className="text-[var(--color-text-muted)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}>
+        <motion.p className="text-[var(--color-text-muted)]">
           Pilih paket sesuai kebutuhan Anda.
         </motion.p>
       </div>
@@ -43,9 +68,8 @@ const Katalog = () => {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}>
             <div>
-              {/* Badge Promo/Populer jika ada */}
               {paket.badge && (
-                <div className="absolute top-2 right-[-10px] rotate-12 z-10">
+                <div className="absolute top-2 right-[-20px] rotate-12">
                   <span className="px-4 py-1 text-xs font-bold bg-[var(--color-accent)] text-white shadow-lg">
                     {paket.badge}
                   </span>
@@ -56,29 +80,26 @@ const Katalog = () => {
                 {paket.title}
               </h2>
 
-              <h3 className="text-sm mb-2 text-black opacity-80">
-                {paket.subtitle}
-              </h3>
+              <h3 className="text-sm mb-2 text-black">{paket.subtitle}</h3>
 
               {paket.promo ? (
                 <>
-                  <p className="line-through text-[var(--color-accent)] text-sm">
+                  <p className="line-through text-[var(--color-accent)]">
                     {paket.originalPrice}
                   </p>
                   <p className="text-2xl font-bold text-black">
-                    {paket.price}{" "}
-                    <span className="text-sm font-normal">(promo)</span>
+                    {paket.price} <span className="text-sm">(promo)</span>
                   </p>
                 </>
               ) : (
                 <p className="text-2xl font-bold text-black">{paket.price}</p>
               )}
 
-              <hr className="my-4 border-gray-300" />
+              <hr className="my-4" />
 
               <ul className="space-y-2 text-sm">
                 {paket.features.map((fitur, i) => (
-                  <li key={i} className="flex items-start">
+                  <li key={i} className="flex">
                     <span className="text-green-500 mr-2">✔</span>
                     <span className="text-black">{fitur}</span>
                   </li>
@@ -95,15 +116,9 @@ const Katalog = () => {
         ))}
       </div>
 
-      <motion.div
-        className="text-center mt-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}>
-        <Back href="/" onClick={() => window.history.back()}>
-          Kembali
-        </Back>
-      </motion.div>
+      <div className="text-center mt-10">
+        <Button href="/paket">Lihat Paket Lengkapnya</Button>
+      </div>
     </section>
   );
 };

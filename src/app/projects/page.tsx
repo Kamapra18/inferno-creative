@@ -1,13 +1,13 @@
 "use client";
 
-import HeroSection from "../components/HeroSection";
+import HeroSection from "@/components/layout/HeroSection";
 import KatalogSection from "./Katalog";
-import FooterSection from "../components/Footer";
+import FooterSection from "@/components/layout/Footer";
 
 export default function Project() {
   return (
     <div>
-      <HeroSection />
+      <HeroSection variant="porto" />
       <KatalogSection />
       <FooterSection />
     </div>
