@@ -129,7 +129,7 @@ export default function RootLayout({
               name: "Inferno Creative",
               image: "https://www.inferno-production.com/logo/Asset-4.png",
               url: "https://www.inferno-production.com/",
-              telephone: "+6281234567890", // isi nomor lu
+              telephone: "+6285645150857",
               address: {
                 "@type": "PostalAddress",
                 addressLocality: "Bali",
