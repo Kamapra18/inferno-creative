@@ -59,6 +59,40 @@ export const paketUndangan: Paket[] = [
     ],
     buttonText: "Pesan Premium",
   },
+  {
+    title: "Desain Undangan",
+    subtitle: "Custom desain undangan cetak",
+    price: "Rp 50.000 - Rp 100.000",
+    // badge: "",
+    category: "undangan",
+    features: ["Revisi 5x", "Bisa Custom", "gak tau lagi"],
+    buttonText: "Pesan Sekarang",
+  },
+  {
+    title: "Undangan Cetak",
+    subtitle: "Undangan Cetak",
+    price: "Rp 3.000 per pcs",
+    badge: "biasa",
+    category: "undangan",
+    features: ["gak tau", "gak tau 2"],
+    buttonText: "pesan sekarang",
+  },
+  {
+    title: "Paket Complit",
+    subtitle: "Undangan Cetak dan Undangan Digital",
+    price: "Rp 500.000",
+    originalPrice: "Rp 650.000",
+    promo: true,
+    badge: "Favorit",
+    category: "undangan",
+    features: [
+      "Free desain",
+      "Free Revisi 3x",
+      "Undangan Digital",
+      "Undangan Cetak",
+    ],
+    buttonText: "Claim Sekarang",
+  },
 ];
 
 /* ========================= */

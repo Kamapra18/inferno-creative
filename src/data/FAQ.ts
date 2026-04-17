@@ -79,6 +79,6 @@ export const faqPhotobooth: FAQItem[] = [
   {
     question: "Berapa lama durasi sewa photobooth?",
     answer:
-      "Durasi fleksibel, biasanya mulai dari 2–6 jam tergantung paket yang dipilih.",
+      "Durasi fleksibel, biasanya mulai dari 2–5 jam tergantung paket yang dipilih.",
   },
 ];

@@ -9,6 +9,7 @@ import {
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ConsoleLog from "@/components/feature/ConsoleLog";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Font utama
 const inter = Inter({
@@ -119,6 +120,7 @@ export default function RootLayout({
         `}>
         <ConsoleLog />
         {children}
+        <SpeedInsights />
         <Analytics />
         <script
           type="application/ld+json"
