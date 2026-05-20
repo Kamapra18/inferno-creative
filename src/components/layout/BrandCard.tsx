@@ -13,7 +13,7 @@ export default function BrandCard() {
           boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         }}>
         <Image
-          src="/logo/asset-3.png"
+          src="/logo/Asset-3.png"
           alt="Inferno Photobooth"
           width={58}
           height={58}
