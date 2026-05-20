@@ -37,7 +37,7 @@ export default function BrandCard() {
           style={{
             color: "rgba(255,255,255,0.65)",
           }}>
-          Capture the Moment, Keep the Fire
+          Capture the Moment, Creating Stories
         </p>
       </div>
 
@@ -52,7 +52,7 @@ export default function BrandCard() {
 
       {/* Social */}
       <a
-        href="https://instagram.com/infernophotobooth"
+        href="https://www.instagram.com/inferno.photobooth/"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-70">
@@ -71,7 +71,7 @@ export default function BrandCard() {
           style={{
             color: "rgba(255,255,255,0.72)",
           }}>
-          @infernophotobooth
+          @inferno.photobooth
         </span>
       </a>
     </div>
