@@ -14,10 +14,12 @@
     #5a0808 40%,
     #7a0c0c 100%
   );
+  --color-box: #901a1e;
   --color-foreground: #ffffff;
   --color-accent: #c62828;
   --color-card: #f5f2e9;
   --color-text-muted: #e0e0e0;
+  --color-gold: #c9a84c;
 
   --font-heading: var(--font-montserrat);
   --font-body: var(--font-inter);
