@@ -7,16 +7,16 @@ import {
   FiChevronDown,
   FiArrowUpRight,
   FiFolder,
-  FiGift,
+  FiVideo,
   FiImage,
 } from "react-icons/fi";
 
 const LINKS = [
   {
-    type: "gift_click",
-    icon: FiGift,
-    label: "Gift",
-    sub: "Akses video gift",
+    type: "video_click",
+    icon: FiVideo,
+    label: "Video",
+    sub: "Akses video Gif event",
   },
   {
     type: "frame_click",
@@ -49,7 +49,7 @@ export default function EventAccordion({ event }: { event: Event }) {
   }, [open]);
 
   const urls: Record<string, string> = {
-    gift_click: event.gift,
+    video_click: event.video,
     frame_click: event.frame,
     raw_click: event.raw,
   };

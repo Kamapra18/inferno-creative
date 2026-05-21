@@ -6,17 +6,17 @@ export default function BrandCard() {
     <div className="flex flex-col items-center px-7 pt-10 pb-8">
       {/* Logo */}
       <div
-        className="w-[88px] h-[88px] rounded-full flex items-center justify-center overflow-hidden"
+        className="w-[80px] h-[80px] rounded-full flex items-center justify-center overflow-hidden"
         style={{
-          background: "var(--color-foreground)",
+          // background: "var(--color-foreground)",
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         }}>
         <Image
           src="/logo/Asset-5.png"
           alt="Inferno Photobooth"
-          width={58}
-          height={58}
+          width={88}
+          height={88}
           className="object-contain"
         />
       </div>
