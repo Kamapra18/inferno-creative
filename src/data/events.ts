@@ -49,8 +49,9 @@ export const events: Event[] = [
     slug: "Ikumi-&-Cok",
     name: "Wedding Ikumi & Cok",
     frame:
-      "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
-    video: "https://www.youtube.com/watch?v=ZtLh0wQyQWc",
-    raw: "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
+      "https://drive.google.com/drive/folders/1jD4HFQnvCQQlS8oJOeR-QN44thxKWf_7?usp=sharing",
+    video:
+      "https://drive.google.com/drive/folders/1zIX7wYNJcHQ07hpDZ2EaQXmumDiwFzTE?usp=sharing",
+    raw: "https://drive.google.com/drive/folders/1wjrz8eTeDo83vzWUH9-y15ZQxfFCf5m8?usp=sharing",
   },
 ];
