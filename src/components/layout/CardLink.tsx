@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { FiInstagram } from "react-icons/fi";
+import Link from "next/link";
 
-export default function CardLink() {
+export default function BrandCard() {
   return (
     <div className="flex flex-col items-center px-7 pt-10 pb-8">
       {/* Logo */}
@@ -12,26 +13,29 @@ export default function CardLink() {
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         }}>
-        <Image
-          src="/logo/Asset-5.png"
-          alt="Inferno Photobooth"
-          width={88}
-          height={88}
-          className="object-contain"
-        />
+        <Link href="/photobooth-bali">
+          <Image
+            src="/logo/Asset-5.png"
+            alt="Inferno Photobooth"
+            width={88}
+            height={88}
+            className="object-contain"
+          />
+        </Link>
       </div>
 
       {/* Title */}
       <div className="text-center mt-5">
-        <h1
-          className="text-[24px] font-semibold"
-          style={{
-            color: "white",
-            letterSpacing: "0.02em",
-          }}>
-          Inferno Photobooth <br />
-          <span className="text-[16px]">Wedding Ikumi & Cok</span>
-        </h1>
+        <Link href="/photobooth-bali">
+          <h1
+            className="text-[24px] font-semibold"
+            style={{
+              color: "white",
+              letterSpacing: "0.02em",
+            }}>
+            Inferno Photobooth <br />
+          </h1>
+        </Link>
 
         <p
           className="text-[12px] mt-2"

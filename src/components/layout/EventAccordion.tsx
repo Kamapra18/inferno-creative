@@ -49,9 +49,9 @@ export default function EventAccordion({ event }: { event: Event }) {
   }, [open]);
 
   const urls: Record<string, string> = {
-    video_click: event.video,
+    video_click: event.video ?? "",
     frame_click: event.frame,
-    raw_click: event.raw,
+    raw_click: event.raw ?? "",
   };
 
   const openLink = (type: string) => {
