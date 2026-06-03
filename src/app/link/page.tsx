@@ -1,6 +1,6 @@
-import { portoEvents } from "@/data/PortoPhotobooth";
-import CardLink from "@/components/layout/CardLink";
-import EventButton from "@/components/layout/EventButton";
+import { events } from "@/data/events";
+import BrandCard from "@/components/layout/BrandCard";
+import EventAccordion from "@/components/layout/EventAccordion";
 
 export default function Page() {
   return (
@@ -28,11 +28,11 @@ export default function Page() {
         />
 
         <div className="relative z-10">
-          <CardLink />
+          <BrandCard />
 
           <div className="px-5 pb-6 flex flex-col gap-4">
-            {portoEvents.map((event) => (
-              <EventButton key={event.slug} event={event} />
+            {events.map((event) => (
+              <EventAccordion key={event.slug} event={event} />
             ))}
           </div>
         </div>
