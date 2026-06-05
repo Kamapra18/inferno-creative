@@ -43,19 +43,26 @@ export const katalogFotoVideo: KatalogItem[] = [
 ];
 
 export const katalogPhotobooth: KatalogItem[] = [
+  // {
+  //   id: 1,
+  //   category: "photobooth",
+  //   type: "wedding",
+  //   image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika.jpg",
+  //   title: "Wedding Krisna & Mika",
+  // },
   {
-    id: 3,
+    id: 1,
     category: "photobooth",
     type: "wedding",
-    image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika.jpg",
+    image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika-2.jpg",
     title: "Wedding Krisna & Mika",
   },
   {
     id: 4,
     category: "photobooth",
     type: "wedding",
-    image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika-2.jpg",
-    title: "Wedding Krisna & Mika",
+    image: "/katalog/photobooth/Inferno-wedding-ikumi-&-cok.jpg",
+    title: "Wedding Ikumi & Cok",
   },
   {
     id: 10,
@@ -63,6 +70,27 @@ export const katalogPhotobooth: KatalogItem[] = [
     type: "event",
     image: "/katalog/photobooth/inferno-event-stt-putra-presada.jpg",
     title: "Event STT Putra Presada",
+  },
+  {
+    id: 11,
+    category: "photobooth",
+    type: "event",
+    image: "/katalog/photobooth/Inferno-open-campus-primakara.jpg",
+    title: "Event Open Campus Primakara",
+  },
+  {
+    id: 12,
+    category: "photobooth",
+    type: "wedding",
+    image: "/katalog/photobooth/Inferno-wedding-yande-&-melly.jpg",
+    title: "Wedding Yande & Melly",
+  },
+  {
+    id: 13,
+    category: "photobooth",
+    type: "event",
+    image: "/katalog/photobooth/Inferno-pameran-dkv-primakara.jpg",
+    title: "Event Pameran DKV Primakara",
   },
 ];
 

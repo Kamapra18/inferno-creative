@@ -17,7 +17,7 @@ export const paketUndangan: Paket[] = [
   {
     title: "Web Undangan Basic",
     subtitle: "Simple & Elegan",
-    price: "Rp 150.000",
+    price: "Rp 200.000",
     category: "undangan",
     features: [
       "Template siap pakai",
@@ -31,7 +31,7 @@ export const paketUndangan: Paket[] = [
   {
     title: "Web Undangan Standard",
     subtitle: "Interaktif & Lebih Lengkap",
-    price: "Rp 250.000",
+    price: "Rp 300.000",
     // badge: "Paling Laris",
     category: "undangan",
     features: [
@@ -46,7 +46,7 @@ export const paketUndangan: Paket[] = [
   {
     title: "Web Undangan Premium",
     subtitle: "Custom & Eksklusif",
-    price: "Rp 450.000",
+    price: "Rp 500.000",
     badge: "Custom",
     category: "undangan",
     features: [
@@ -159,22 +159,23 @@ export const paketDokumentasi: Paket[] = [
 /* PHOTOBOOTH (3 ITEM) */
 /* ========================= */
 export const paketPhotobooth: Paket[] = [
-  {
-    title: "Photobooth Free (Graduation)",
-    subtitle: "Gratis Digital, Bayar Cetak",
-    price: "Free",
-    badge: "Free",
-    category: "photobooth",
-    features: [
-      "Durasi 2 jam",
-      "Free foto digital (scan QR)",
-      "Bayar hanya jika cetak foto",
-      "Properti standar",
-      "Syarat follow Instagram Inferno Creative & Inferno Photobooth",
-      // "Tidak berlaku untuk wedding",
-    ],
-    buttonText: "Claim Sekarang",
-  },
+  // {
+  //   title: "Photobooth Free (Graduation)",
+  //   subtitle: "Gratis Digital, Bayar Cetak",
+  //   price: "Free",
+  //   badge: "Free",
+  //   category: "photobooth",
+  //   features: [
+  //     "Durasi 2 jam",
+  //     "Free foto digital (scan QR)",
+  //     "Bayar hanya jika cetak foto",
+  //     "Properti standar",
+  //     "Syarat follow Instagram Inferno Creative & Inferno Photobooth",
+  //     // "Tidak berlaku untuk wedding",
+  //   ],
+  //   buttonText: "Claim Sekarang",
+  // },
+
   {
     title: "Photobooth Digital",
     subtitle: "Photobooth seru tanpa cetak, praktis & hemat",
@@ -198,8 +199,25 @@ export const paketPhotobooth: Paket[] = [
     badge: "Favorit",
     category: "photobooth",
     features: [
+      "Durasi 3 jam",
+      "limited cetak foto (maks. 300 cetakan)",
+      "Free foto digital (scan QR)",
+      "Custom frame sesuai tema",
+      "Properti unik & lengkap",
+      "Standby operator",
+      "Overtime +Rp100.000/jam",
+    ],
+    buttonText: "Pesan Sekarang",
+  },
+  {
+    title: "Photobooth Wedding",
+    subtitle: "Full Service Tanpa Ribet",
+    price: "Rp 1.500.000",
+    badge: "Best Value",
+    category: "photobooth",
+    features: [
       "Durasi 5 jam",
-      "Unlimited cetak foto",
+      "limited cetak foto (maks. 500 cetakan)",
       "Free foto digital (scan QR)",
       "Custom frame sesuai tema",
       "Properti unik & lengkap",
