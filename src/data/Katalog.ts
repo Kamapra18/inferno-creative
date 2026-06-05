@@ -51,7 +51,7 @@ export const katalogPhotobooth: KatalogItem[] = [
   //   title: "Wedding Krisna & Mika",
   // },
   {
-    id: 1,
+    id: 3,
     category: "photobooth",
     type: "wedding",
     image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika-2.jpg",
