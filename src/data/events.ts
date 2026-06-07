@@ -46,12 +46,12 @@ export const events: Event[] = [
 
   {
     id: 6,
-    slug: "Ikumi-&-Cok",
-    name: "Wedding Ikumi & Cok",
+    slug: "Sitefest",
+    name: "Sitefest 2026",
     frame:
-      "https://drive.google.com/drive/folders/1jD4HFQnvCQQlS8oJOeR-QN44thxKWf_7?usp=sharing",
+      "https://drive.google.com/drive/folders/11phsSeVAdFKmu1oMU-XgNl7olOvgTAYY",
     video:
-      "https://drive.google.com/drive/folders/1zIX7wYNJcHQ07hpDZ2EaQXmumDiwFzTE?usp=sharing",
-    raw: "https://drive.google.com/drive/folders/1wjrz8eTeDo83vzWUH9-y15ZQxfFCf5m8?usp=sharing",
+      "https://drive.google.com/drive/folders/1bHFlcGFpsVb9uU3PU0oKQuxbCV0zooZL?usp=drive_link",
+    raw: "https://drive.google.com/drive/folders/1hbV_J9uQxM6nZ3gyg0-ArRgeuzC4MSG9?usp=drive_link",
   },
 ];
