@@ -49,7 +49,7 @@ export const events: Event[] = [
     slug: "Sitefest",
     name: "Sitefest 2026",
     frame:
-      "https://drive.google.com/drive/folders/11phsSeVAdFKmu1oMU-XgNl7olOvgTAYY",
+      "https://drive.google.com/drive/folders/1t3Bvzwv1TBJMf7zDBR7HD4tdVOro_8YQ?usp=drive_link",
     video:
       "https://drive.google.com/drive/folders/1bHFlcGFpsVb9uU3PU0oKQuxbCV0zooZL?usp=drive_link",
     raw: "https://drive.google.com/drive/folders/1hbV_J9uQxM6nZ3gyg0-ArRgeuzC4MSG9?usp=drive_link",
