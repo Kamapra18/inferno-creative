@@ -6,26 +6,26 @@ export type Event = {
 };
 
 export const portoEvents: Event[] = [
+  // {
+  //   id: 0,
+  //   slug: "Price-List",
+  //   name: "Price List Kami",
+  //   frame: "/paket",
+  // },
   {
-    id: 0,
-    slug: "Price-List",
-    name: "Price List Kami",
-    frame: "/paket",
+    id: 1,
+    slug: "STT-Presada",
+    name: "Ulang Tahun STT Presada",
+    frame:
+      "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
   },
-  // {
-  //   id: 1,
-  //   slug: "STT-Presada",
-  //   name: "Ulang Tahun STT Presada",
-  //   frame:
-  //     "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
-  // },
-  // {
-  //   id: 2,
-  //   slug: "Krisna-&-Mika",
-  //   name: "Wedding Krisna & Mika",
-  //   frame:
-  //     "https://drive.google.com/drive/folders/1UHd4isEkKLVhyr8GW174t9zEXW7s6Vpf?usp=drive_link",
-  // },
+  {
+    id: 2,
+    slug: "Krisna-&-Mika",
+    name: "Wedding Krisna & Mika",
+    frame:
+      "https://drive.google.com/drive/folders/1UHd4isEkKLVhyr8GW174t9zEXW7s6Vpf?usp=drive_link",
+  },
   {
     id: 3,
     slug: "Yande-&-Melly",
@@ -54,5 +54,12 @@ export const portoEvents: Event[] = [
     name: "Wedding Ikumi & Cok",
     frame:
       "https://drive.google.com/drive/folders/1Ho1HhUiU7e06X-oXE1bhW0Ykn_YEIJTt?usp=drive_link",
+  },
+  {
+    id: 7,
+    slug: "Sitefest-Primakara",
+    name: "Event Sitefest Primakara",
+    frame:
+      "https://drive.google.com/drive/folders/1YaAhBoUvi-qbYH7cl5YaktJ7_ZO7TK_Y?usp=drive_link",
   },
 ];

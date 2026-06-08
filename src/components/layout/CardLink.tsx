@@ -1,6 +1,22 @@
 import Image from "next/image";
 import { FiInstagram } from "react-icons/fi";
+import { FaWhatsapp, FaTiktok } from "react-icons/fa";
 import Link from "next/link";
+
+const socials = [
+  {
+    href: "https://www.instagram.com/inferno.photobooth/",
+    icon: <FiInstagram size={18} />,
+  },
+  {
+    href: "https://wa.me/6285645150857/?text=Halo%2C%20saya%20tertarik%20untuk%20memesan%20photobooth%20.%20Boleh%20minta%20informasi%20mengenai%20paket%20dan%20harganya%3F",
+    icon: <FaWhatsapp size={18} />,
+  },
+  {
+    href: "https://www.tiktok.com/@infernocreativee",
+    icon: <FaTiktok size={18} />,
+  },
+];
 
 export default function BrandCard() {
   return (
@@ -9,7 +25,6 @@ export default function BrandCard() {
       <div
         className="w-[80px] h-[80px] rounded-full flex items-center justify-center overflow-hidden"
         style={{
-          // background: "var(--color-foreground)",
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         }}>
@@ -33,7 +48,7 @@ export default function BrandCard() {
               color: "white",
               letterSpacing: "0.02em",
             }}>
-            Inferno Photobooth <br />
+            Inferno Photobooth
           </h1>
         </Link>
 
@@ -56,29 +71,34 @@ export default function BrandCard() {
       />
 
       {/* Social */}
-      <a
-        href="https://www.instagram.com/inferno.photobooth/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-70">
-        <span
-          className="w-9 h-9 rounded-full flex items-center justify-center"
-          style={{
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: "white",
-          }}>
-          <FiInstagram size={15} />
-        </span>
+      <div className="flex flex-row gap-4 items-center justify-center">
+        {socials.map(({ href, icon }, index) => (
+          <a
+            key={index}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-opacity duration-200 hover:opacity-70">
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "white",
+              }}>
+              {icon}
+            </span>
+          </a>
+        ))}
+      </div>
 
-        <span
-          className="text-[13px]"
-          style={{
-            color: "rgba(255,255,255,0.72)",
-          }}>
-          @inferno.photobooth
-        </span>
-      </a>
+      <div
+        className="w-full h-px my-2 mt-4"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, var(--color-gold), transparent)",
+        }}
+      />
     </div>
   );
 }
