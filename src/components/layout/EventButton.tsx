@@ -1,8 +1,9 @@
 "use client";
 
-import { Event } from "@/data/events";
+import { Event } from "@/data/PortoPhotobooth";
 import { track } from "@vercel/analytics";
-import { FiArrowUpRight, FiImage } from "react-icons/fi";
+import { FiArrowUpRight } from "react-icons/fi";
+import Image from "next/image";
 
 export default function EventButton({ event }: { event: Event }) {
   const url = event.frame;
@@ -25,12 +26,17 @@ export default function EventButton({ event }: { event: Event }) {
         backdropFilter: "blur(10px)",
       }}>
       <span
-        className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+        className="w-12 h-12 rounded-2xl flex-shrink-0 overflow-hidden relative"
         style={{
-          background: "rgba(201,168,76,0.12)",
-          color: "var(--color-gold)",
+          background: "var(--color-box)",
         }}>
-        <FiImage size={20} />
+        <Image
+          src={event.image}
+          alt={event.name}
+          fill
+          sizes="48px"
+          className="object-cover"
+        />
       </span>
 
       <span className="flex-1">
@@ -39,11 +45,6 @@ export default function EventButton({ event }: { event: Event }) {
           style={{ color: "var(--color-foreground)" }}>
           {event.name}
         </span>
-        {/* <span
-          className="block text-[12px] mt-0.5"
-          style={{ color: "rgba(255,255,255,0.5)" }}>
-          Portofolio event 
-        </span> */}
       </span>
 
       <FiArrowUpRight

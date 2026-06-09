@@ -3,6 +3,7 @@ export type Event = {
   slug: string;
   name: string;
   frame: string;
+  image: string;
 };
 
 export const portoEvents: Event[] = [
@@ -16,6 +17,7 @@ export const portoEvents: Event[] = [
     id: 1,
     slug: "STT-Presada",
     name: "Ulang Tahun STT Presada",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
   },
@@ -23,6 +25,7 @@ export const portoEvents: Event[] = [
     id: 2,
     slug: "Krisna-&-Mika",
     name: "Wedding Krisna & Mika",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1UHd4isEkKLVhyr8GW174t9zEXW7s6Vpf?usp=drive_link",
   },
@@ -30,6 +33,7 @@ export const portoEvents: Event[] = [
     id: 3,
     slug: "Yande-&-Melly",
     name: "Wedding Yande & Melly",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1CdmLTpp3yvWASTLp94PVtnVCc72oxzyl?usp=drive_link",
   },
@@ -37,6 +41,7 @@ export const portoEvents: Event[] = [
     id: 4,
     slug: "Open-Campus-Primakara",
     name: "Event Open Campus Primakara",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1JRH7ytfI4c95BsPhnjtKEBHsJTK_Ig2E?usp=drive_link",
   },
@@ -44,6 +49,7 @@ export const portoEvents: Event[] = [
     id: 5,
     slug: "Pameran-DKV-Primakara",
     name: "Event Pameran DKV Primakara",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1gYMSQXmVqoYwauFNlS2t0BiEDOH5Q7bF?usp=drive_link",
   },
@@ -52,6 +58,7 @@ export const portoEvents: Event[] = [
     id: 6,
     slug: "Ikumi-&-Cok",
     name: "Wedding Ikumi & Cok",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1Ho1HhUiU7e06X-oXE1bhW0Ykn_YEIJTt?usp=drive_link",
   },
@@ -59,6 +66,7 @@ export const portoEvents: Event[] = [
     id: 7,
     slug: "Sitefest-Primakara",
     name: "Event Sitefest Primakara",
+    image: "/box.png",
     frame:
       "https://drive.google.com/drive/folders/1YaAhBoUvi-qbYH7cl5YaktJ7_ZO7TK_Y?usp=drive_link",
   },
