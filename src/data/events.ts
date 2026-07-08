@@ -46,12 +46,12 @@ export const events: Event[] = [
 
   {
     id: 6,
-    slug: "Sitefest",
-    name: "Sitefest 2026",
+    slug: "BSE-2026",
+    name: "Bali Startup Expo 2026",
     frame:
-      "https://drive.google.com/drive/folders/1t3Bvzwv1TBJMf7zDBR7HD4tdVOro_8YQ?usp=drive_link",
+      "https://drive.google.com/drive/folders/1KCRAZ3RrDGOHmzhCiVkj9UeYU0tNMITs",
     video:
-      "https://drive.google.com/drive/folders/1bHFlcGFpsVb9uU3PU0oKQuxbCV0zooZL?usp=drive_link",
-    raw: "https://drive.google.com/drive/folders/1hbV_J9uQxM6nZ3gyg0-ArRgeuzC4MSG9?usp=drive_link",
+      "https://drive.google.com/drive/folders/1lDCelZBjFTXC901N1lag22OmAgAMWJ5g",
+    raw: "https://drive.google.com/drive/folders/1TJXleqnRPM9qI7XKVRtoHs5I0BC6erhk",
   },
 ];
