@@ -70,4 +70,12 @@ export const portoEvents: Event[] = [
     frame:
       "https://drive.google.com/drive/folders/1YaAhBoUvi-qbYH7cl5YaktJ7_ZO7TK_Y?usp=drive_link",
   },
+  {
+    id: 8,
+    slug: "Bali-Startup-Expo-2026",
+    name: "Event Bali Startup Expo 2026",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1Dgqm8F_LcAapJ2rn05tsb13R1jzk2nzE?usp=drive_link",
+  },
 ];
