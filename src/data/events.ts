@@ -10,12 +10,12 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "Junet-&-Fenny",
-    name: "Wedding Junet & Fenny",
+    slug: "Arma & Andriani",
+    name: "Wedding Arma & Andriani",
     frame:
-      "https://drive.google.com/drive/folders/1SmE0oyJfhvrwiQo_mwtWIY-C0iFN5DX8",
+      "https://drive.google.com/drive/folders/1uB6ip_YferarVgcQpSBCu_oA_3RK1_A9",
     video:
-      "https://drive.google.com/drive/folders/1T5J4l28OZfs3NpVRwvBJflsPQLeZmfMB",
-    raw: "https://drive.google.com/drive/folders/1cETPJQwCznMVFCveBYOX1mvkYUPNy0tD",
+      "https://drive.google.com/drive/folders/1VzBEHsrGRMLGTrXCnSi1AC3HLJNELBx-",
+    raw: "https://drive.google.com/drive/folders/1vfrJlfydvTltD4rfhIuVYKM1B4lCPIAd",
   },
 ];
