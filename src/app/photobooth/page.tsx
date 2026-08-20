@@ -1,8 +1,14 @@
+"use client";
+
 import { portoEvents } from "@/data/PortoPhotobooth";
 import CardLink from "@/components/layout/CardLink";
 import EventButton from "@/components/layout/EventButton";
 
 export default function Page() {
+  const sortedEvents = [...portoEvents].sort((a, b) => {
+    return Number(b.id) - Number(a.id);
+  });
+
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4 py-10"
@@ -18,7 +24,6 @@ export default function Page() {
           boxShadow:
             "0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
         }}>
-        {/* Glow */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -31,7 +36,7 @@ export default function Page() {
           <CardLink />
 
           <div className="px-5 pb-6 flex flex-col gap-4">
-            {portoEvents.map((event) => (
+            {sortedEvents.map((event) => (
               <EventButton key={event.slug} event={event} />
             ))}
           </div>
