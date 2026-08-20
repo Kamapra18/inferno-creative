@@ -85,4 +85,28 @@ export const portoEvents: Event[] = [
     frame:
       "https://drive.google.com/drive/folders/1WDnfb2Raz-q51SOow_TY9hdQM7kU59iz?usp=drive_link",
   },
+  {
+    id: 10,
+    slug: "Edi-&-Sutari",
+    name: "Edi & Sutari",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/13KybO2yp2K5P2fIylIk5rPMrfnyCjJvD?usp=sharing",
+  },
+  {
+    id: 11,
+    slug: "Arma-&-Andriani",
+    name: "Arma & Andriani",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1dR8u-OZ6uX5o4ifAj0GcFcQf8VUBv5py?usp=sharing",
+  },
+  {
+    id: 12,
+    slug: "Suardana-&-Tia",
+    name: "Suardana & Tia",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1_5ZcskAip0gvnpXzKTHN4JB0Oz3jHwuh?usp=drive_link",
+  },
 ];
