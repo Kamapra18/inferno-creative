@@ -88,15 +88,21 @@ export async function POST(req: NextRequest) {
     // 5. Map the rest of the data
     const invoiceData: InvoiceData = {
       invoice_number: invoiceNumber,
-      invoice_date: extractField(body, ["invoice_date", "tanggal_invoice"]),
-      payment_deadline: extractField(body, [
-        "payment_deadline",
-        "batas_pembayaran",
-      ]),
-      payment_status: extractField(body, [
-        "payment_status",
-        "status_pembayaran",
-      ]),
+      invoice_date: extractField(
+        body,
+        ["invoice_date", "tanggal_invoice"],
+        new Date().toISOString().split("T")[0]
+      ),
+      payment_deadline: extractField(
+        body,
+        ["payment_deadline", "batas_pembayaran"],
+        bookingDateRaw
+      ),
+      payment_status: extractField(
+        body,
+        ["payment_status", "status_pembayaran", "statusPembayaran"],
+        "UNPAID"
+      ),
 
       nama: extractField(body, ["nama", "customer_name", "nama_customer"]),
       email: extractField(body, ["email", "customer_email"]),
