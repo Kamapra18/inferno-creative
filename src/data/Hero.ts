@@ -3,8 +3,8 @@ export const heroData = {
     title: "Jasa Foto, Video & Undangan Digital di Bali",
     desc: "Abadikan momen spesialmu dengan dokumentasi profesional, photobooth interaktif, & undangan digital modern dalam satu layanan.",
     primaryCTA: {
-      label: "Konsultasi via WhatsApp",
-      href: "https://wa.me/6285645150857",
+      label: "Booking Sekarang",
+      href: "/booking",
     },
     secondaryCTA: {
       label: "Lihat Portfolio",

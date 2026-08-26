@@ -60,18 +60,15 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 function hitungHargaDP(hargaRaw: string, statusPembayaran: string) {
   if (statusPembayaran !== "DP") return hargaRaw;
-  
+
   const angkaOnly = hargaRaw.replace(/[^0-9]/g, "");
   if (!angkaOnly) return hargaRaw;
-  
+
   const harga = parseInt(angkaOnly, 10);
   const dp = harga / 2;
-  
+
   const formattedDP = dp.toLocaleString("id-ID");
-  
-  if (hargaRaw.toLowerCase().includes("mulai dari")) {
-    return `Mulai dari Rp ${formattedDP}`;
-  }
+
   return `Rp ${formattedDP}`;
 }
 
@@ -202,7 +199,7 @@ function BookingFormContent() {
         const detail = await response.json().catch(() => null);
         setErrorMessage(
           detail?.message ??
-            "Maaf, tanggal ini baru saja penuh. Silakan pilih tanggal lain.",
+          "Maaf, tanggal ini baru saja penuh. Silakan pilih tanggal lain.",
         );
         setStatus("error");
         fetchBookings(); // segarkan kalender agar mencerminkan keadaan terbaru
@@ -243,7 +240,12 @@ function BookingFormContent() {
       // Peringatan lama tidak relevan lagi untuk kategori baru; kalau tanggalnya
       // ternyata masih bentrok, efek cek ulang akan memunculkannya kembali.
       setKonflikTanggal("");
-      setFormData((prev) => ({ ...prev, [name]: value, baseHarga, harga: hitungHargaDP(baseHarga, prev.statusPembayaran) }));
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        baseHarga,
+        harga: hitungHargaDP(baseHarga, prev.statusPembayaran),
+      }));
     } else if (name === "statusPembayaran") {
       setFormData((prev) => ({
         ...prev,
@@ -259,8 +261,8 @@ function BookingFormContent() {
     const selectedDate = getSelectedDate();
     const tanggalTampil = selectedDate
       ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
-          selectedDate,
-        )
+        selectedDate,
+      )
       : formData.tanggalEvent;
 
     const waText = `Halo Inferno Creative, saya baru saja melakukan booking atas nama *${formData.namaClient}* untuk jasa *${formData.kategoriJasa}*. Berikut adalah bukti transfer saya:`;

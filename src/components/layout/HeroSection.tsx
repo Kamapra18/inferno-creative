@@ -58,9 +58,7 @@ export default function HeroSection({ variant = "home" }: HeroProps) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}>
           <Button
-            href={data.primaryCTA.href}
-            target="_blank"
-            rel="noopener noreferrer">
+            href={data.primaryCTA.href}>
             {data.primaryCTA.label}
           </Button>
 
