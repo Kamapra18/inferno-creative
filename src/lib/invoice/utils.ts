@@ -88,11 +88,59 @@ export function extractField(body: any, keys: string[], defaultValue: string = '
   return defaultValue;
 }
 
+/**
+ * Parse angka dari nilai yang bisa berupa number atau string berformat
+ * mata uang, mis. "Rp 1.500.000", "1.500.000,50", "1,500,000", "Rp1500000".
+ * Return null kalau tidak ada angka yang bisa diambil.
+ */
+export function parseCurrencyValue(raw: unknown): number | null {
+  if (typeof raw === 'number') {
+    return Number.isFinite(raw) ? raw : null;
+  }
+  if (typeof raw !== 'string') return null;
+
+  // Buang semua kecuali digit, pemisah, dan tanda minus
+  let str = raw.replace(/[^0-9.,-]/g, '').trim();
+  if (!str) return null;
+
+  const negative = str.startsWith('-');
+  str = str.replace(/-/g, '');
+  if (!str) return null;
+
+  const lastDot = str.lastIndexOf('.');
+  const lastComma = str.lastIndexOf(',');
+
+  if (lastDot !== -1 && lastComma !== -1) {
+    // Dua-duanya ada: yang paling belakang adalah pemisah desimal
+    const decimalSep = lastDot > lastComma ? '.' : ',';
+    const thousandSep = decimalSep === '.' ? ',' : '.';
+    str = str.split(thousandSep).join('');
+    str = str.replace(decimalSep, '.');
+  } else if (lastDot !== -1 || lastComma !== -1) {
+    const sep = lastDot !== -1 ? '.' : ',';
+    const parts = str.split(sep);
+    const decimals = parts[parts.length - 1];
+    // Lebih dari satu pemisah, atau tepat 3 digit di belakang
+    // (mis. "1.500" / "1,500") -> pemisah ribuan, bukan desimal.
+    if (parts.length > 2 || decimals.length === 3) {
+      str = parts.join('');
+    } else {
+      str = parts.slice(0, -1).join('') + '.' + decimals;
+    }
+  }
+
+  if (!/^\d*\.?\d+$/.test(str)) return null;
+
+  const val = Number(str);
+  if (!Number.isFinite(val)) return null;
+  return negative ? -val : val;
+}
+
 export function extractNumber(body: any, keys: string[], defaultValue: number = 0): number {
   for (const key of keys) {
     if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
-      const val = Number(body[key]);
-      if (!isNaN(val)) return val;
+      const val = parseCurrencyValue(body[key]);
+      if (val !== null) return val;
     }
   }
   return defaultValue;

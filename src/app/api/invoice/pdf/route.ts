@@ -66,7 +66,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Map the rest of the data
+    // 4. Hitung nominal (harga bisa dikirim sebagai "Rp 1.500.000")
+    const harga = extractNumber(body, [
+      "harga",
+      "unit_price",
+      "harga_satuan",
+      "total_price",
+    ]);
+    const subtotal = extractNumber(
+      body,
+      ["subtotal", "harga", "total_price"],
+      harga,
+    );
+    const discount = extractNumber(body, ["discount", "diskon"]);
+    const total = extractNumber(
+      body,
+      ["total", "grand_total", "total_pembayaran"],
+      Math.max(subtotal - discount, 0),
+    );
+
+    // 5. Map the rest of the data
     const invoiceData: InvoiceData = {
       invoice_number: invoiceNumber,
       invoice_date: extractField(body, ["invoice_date", "tanggal_invoice"]),
@@ -93,15 +112,10 @@ export async function POST(req: NextRequest) {
       duration: extractField(body, ["duration", "durasi"]),
       print_capacity: extractField(body, ["print_capacity", "kapasitas_print"]),
 
-      harga: extractNumber(body, [
-        "harga",
-        "unit_price",
-        "harga_satuan",
-        "total_price",
-      ]),
-      subtotal: extractNumber(body, ["subtotal", "harga", "total_price"]),
-      discount: extractNumber(body, ["discount", "diskon"]),
-      total: extractNumber(body, ["total"]),
+      harga,
+      subtotal,
+      discount,
+      total,
     };
 
     // Read logo image
@@ -111,7 +125,7 @@ export async function POST(req: NextRequest) {
       invoiceData.logoBase64 = `data:image/png;base64,${logoBuffer.toString("base64")}`;
     }
 
-    // 5. Generate PDF Stream
+    // 6. Generate PDF Stream
     const stream = await renderToStream(
       React.createElement(InvoicePDF, { data: invoiceData }) as any,
     );
