@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@react-pdf/renderer": "^4.8.1",
+    "@types/react-datepicker": "^6.2.0",
+>>>>>>> 0f77c3f (coba)
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^2.0.0",
     "framer-motion": "^12.23.12",
