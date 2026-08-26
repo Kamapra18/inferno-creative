@@ -80,11 +80,19 @@ export function getInvoiceNumber(bookingDateStr: string | undefined): string | n
 }
 
 export function extractField(body: any, keys: string[], defaultValue: string = '-'): string {
-  for (const key of keys) {
-    if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
-      return String(body[key]);
+  if (typeof body !== 'object' || body === null) return defaultValue;
+  
+  const lowerKeys = keys.map(k => k.toLowerCase());
+  const bodyKeys = Object.keys(body);
+  
+  // Find a matching key in body (case-insensitive)
+  for (const lowerKey of lowerKeys) {
+    const actualKey = bodyKeys.find(k => k.toLowerCase() === lowerKey);
+    if (actualKey && body[actualKey] !== undefined && body[actualKey] !== null && body[actualKey] !== '') {
+      return String(body[actualKey]);
     }
   }
+  
   return defaultValue;
 }
 
@@ -137,9 +145,15 @@ export function parseCurrencyValue(raw: unknown): number | null {
 }
 
 export function extractNumber(body: any, keys: string[], defaultValue: number = 0): number {
-  for (const key of keys) {
-    if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
-      const val = parseCurrencyValue(body[key]);
+  if (typeof body !== 'object' || body === null) return defaultValue;
+  
+  const lowerKeys = keys.map(k => k.toLowerCase());
+  const bodyKeys = Object.keys(body);
+
+  for (const lowerKey of lowerKeys) {
+    const actualKey = bodyKeys.find(k => k.toLowerCase() === lowerKey);
+    if (actualKey && body[actualKey] !== undefined && body[actualKey] !== null && body[actualKey] !== '') {
+      const val = parseCurrencyValue(body[actualKey]);
       if (val !== null) return val;
     }
   }
