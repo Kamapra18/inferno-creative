@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     // 3. Extract and normalize date for Invoice Number
     const bookingDateRaw = extractField(
       body,
-      ["tanggal", "event_date", "tanggal_kegiatan"],
+      ["tanggal", "event_date", "tanggal_kegiatan", "TanggalEvent", "tanggalEvent", "tanggalevent"],
       "",
     );
 
@@ -85,6 +85,30 @@ export async function POST(req: NextRequest) {
       Math.max(subtotal - discount, 0),
     );
 
+    const paketValue = extractField(
+      body,
+      ["paket", "package_name", "paket_photobooth", "KategoriJasa", "kategoriJasa", "kategori_jasa"],
+      "-"
+    );
+
+    let defaultDuration = "-";
+    let defaultPrintCapacity = "-";
+
+    const p = paketValue.toLowerCase();
+    if (p.includes("prewedding foto & video")) {
+      defaultDuration = "5 Jam";
+    } else if (p.includes("prewedding foto") || p.includes("prewedding video")) {
+      defaultDuration = "3 Jam";
+    } else if (p.includes("dokumentasi wedding") || p.includes("dokumentasi event")) {
+      defaultDuration = "6 Jam";
+    } else if (p.includes("photobooth basic digital") || p.includes("photobooth basic print")) {
+      defaultDuration = "2 Jam";
+      if (p.includes("print")) defaultPrintCapacity = "300 Print";
+    } else if (p.includes("photobooth eksklusif digital") || p.includes("photobooth eksklusif print")) {
+      defaultDuration = "5 Jam";
+      if (p.includes("print")) defaultPrintCapacity = "500 Print";
+    }
+
     // 5. Map the rest of the data
     const invoiceData: InvoiceData = {
       invoice_number: invoiceNumber,
@@ -100,23 +124,19 @@ export async function POST(req: NextRequest) {
       ),
       payment_status: extractField(
         body,
-        ["payment_status", "status_pembayaran", "statusPembayaran"],
+        ["payment_status", "status_pembayaran", "statusPembayaran", "status pembayaran"],
         "UNPAID"
       ),
 
-      nama: extractField(body, ["nama", "customer_name", "nama_customer"]),
-      email: extractField(body, ["email", "customer_email"]),
+      nama: extractField(body, ["nama", "customer_name", "nama_customer", "Nama Client", "namaClient", "nama_client"]),
+      email: extractField(body, ["email", "customer_email", "Email"]),
       tanggal: bookingDateRaw,
-      jam: extractField(body, ["jam", "start_time", "mulai_jam"]),
-      lokasi: extractField(body, ["lokasi", "location", "lokasi_kegiatan"]),
+      jam: extractField(body, ["jam", "start_time", "mulai_jam", "JamEvent", "jamEvent"]),
+      lokasi: extractField(body, ["lokasi", "location", "lokasi_kegiatan", "Lokasi"]),
 
-      paket: extractField(
-        body,
-        ["paket", "package_name", "paket_photobooth"],
-        "Paket Basic 4 Jam",
-      ),
-      duration: extractField(body, ["duration", "durasi"]),
-      print_capacity: extractField(body, ["print_capacity", "kapasitas_print"]),
+      paket: paketValue,
+      duration: extractField(body, ["duration", "durasi"], defaultDuration),
+      print_capacity: extractField(body, ["print_capacity", "kapasitas_print"], defaultPrintCapacity),
 
       harga,
       subtotal,
