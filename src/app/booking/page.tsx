@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   AlertCircle,
   MessageCircle,
+  Upload,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -94,6 +95,7 @@ function BookingFormContent() {
       keterangan: terpilih.paketAsli
         ? `Paket dipilih: ${terpilih.paketAsli}`
         : "",
+      buktiTransferFile: null as File | null,
     };
   });
 
@@ -185,11 +187,23 @@ function BookingFormContent() {
     setErrorMessage("");
 
     try {
-      const { baseHarga, ...dataToSend } = formData;
+      const { baseHarga, buktiTransferFile, ...restData } = formData;
+      
+      const formDataToSend = new FormData();
+      // Append all text fields
+      Object.entries(restData).forEach(([key, value]) => {
+        formDataToSend.append(key, value as string);
+      });
+      
+      // Append the file if it exists, with field name 'bukti_transfer'
+      if (buktiTransferFile) {
+        formDataToSend.append("bukti_transfer", buktiTransferFile);
+      }
+
       const response = await fetch(BOOKING_WEBHOOK_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
+        // fetch will automatically set Content-Type to multipart/form-data with the correct boundary
+        body: formDataToSend,
         signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       });
 
@@ -225,6 +239,26 @@ function BookingFormContent() {
           : "Booking gagal dikirim. Data Anda masih tersimpan di form, silakan coba lagi.",
       );
       setStatus("error");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran file terlalu besar. Maksimal 5MB.");
+        e.target.value = "";
+        return;
+      }
+      setFormData((prev) => ({
+        ...prev,
+        buktiTransferFile: file,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        buktiTransferFile: null,
+      }));
     }
   };
 
@@ -265,7 +299,7 @@ function BookingFormContent() {
       )
       : formData.tanggalEvent;
 
-    const waText = `Halo Inferno Creative, saya baru saja melakukan booking atas nama *${formData.namaClient}* untuk jasa *${formData.kategoriJasa}*. Berikut adalah bukti transfer saya:`;
+    const waText = `Halo Inferno Creative, saya baru saja melakukan booking atas nama *${formData.namaClient}* untuk jasa *${formData.kategoriJasa}* dan sudah mengupload bukti transfer di website.`;
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
 
     return (
@@ -310,7 +344,7 @@ function BookingFormContent() {
           </dl>
 
           <p className="text-white/70 text-sm mb-4">
-            Langkah terakhir: kirimkan bukti transfer Anda lewat WhatsApp.
+            Kami akan segera memproses booking Anda. Silakan hubungi kami via WhatsApp jika ada pertanyaan.
           </p>
 
           {/* Anchor biasa, bukan window.open — supaya tidak diblokir popup
@@ -322,7 +356,7 @@ function BookingFormContent() {
             className="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-medium py-4 px-6 rounded-xl transition-all shadow-lg shadow-[#25D366]/30 flex items-center justify-center gap-2 text-lg"
           >
             <MessageCircle size={20} />
-            <span>Kirim Bukti Transfer</span>
+            <span>Hubungi via WhatsApp</span>
           </a>
 
           <Link
@@ -594,6 +628,42 @@ function BookingFormContent() {
                   required
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Bukti Transfer */}
+          <div className="space-y-2">
+            <label className="text-white/90 text-sm font-medium ml-1">
+              Upload Bukti Transfer *
+            </label>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <div className="flex items-start gap-4 mb-5">
+                <div className="bg-orange-500/20 p-3 rounded-xl text-orange-400">
+                  <CreditCard size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-white/90">
+                    Silakan lakukan pembayaran ke rekening berikut:
+                  </p>
+                  <p className="text-xl font-bold text-white mt-1">
+                    BCA 6690955278
+                  </p>
+                  <p className="text-sm text-white/70">
+                    a/n I Made Wisnu Pradnya Yoga
+                  </p>
+                </div>
+              </div>
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                onChange={handleFileChange}
+                className="w-full text-white/70 text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-600 file:text-white hover:file:bg-orange-700 transition-all cursor-pointer file:cursor-pointer bg-white/5 border border-white/10 rounded-lg p-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                required
+              />
+              <p className="text-white/40 text-xs mt-2 ml-1 flex items-center gap-1">
+                <Info size={12} />
+                Format didukung: JPG, PNG, PDF (Maks. 5MB)
+              </p>
             </div>
           </div>
 
