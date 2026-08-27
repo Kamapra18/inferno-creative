@@ -66,8 +66,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Hitung nominal (harga bisa dikirim sebagai "Rp 1.500.000")
+    // 4. Hitung nominal (prioritaskan baseHarga yang merupakan harga asli paket sebelum DP)
     const harga = extractNumber(body, [
+      "baseHarga",
+      "base_harga",
       "harga",
       "unit_price",
       "harga_satuan",
@@ -75,14 +77,26 @@ export async function POST(req: NextRequest) {
     ]);
     const subtotal = extractNumber(
       body,
-      ["subtotal", "harga", "total_price"],
+      ["subtotal"],
       harga,
     );
     const discount = extractNumber(body, ["discount", "diskon"]);
+
+    const paymentStatus = extractField(
+      body,
+      ["payment_status", "status_pembayaran", "statusPembayaran", "status pembayaran"],
+      "UNPAID"
+    );
+
+    let calculatedTotal = Math.max(subtotal - discount, 0);
+    if (paymentStatus.toUpperCase() === "DP") {
+      calculatedTotal = calculatedTotal / 2;
+    }
+
     const total = extractNumber(
       body,
       ["total", "grand_total", "total_pembayaran"],
-      Math.max(subtotal - discount, 0),
+      calculatedTotal,
     );
 
     const paketValue = extractField(
@@ -122,11 +136,7 @@ export async function POST(req: NextRequest) {
         ["payment_deadline", "batas_pembayaran"],
         bookingDateRaw
       ),
-      payment_status: extractField(
-        body,
-        ["payment_status", "status_pembayaran", "statusPembayaran", "status pembayaran"],
-        "UNPAID"
-      ),
+      payment_status: paymentStatus,
 
       nama: extractField(body, ["nama", "customer_name", "nama_customer", "Nama Client", "namaClient", "nama_client"]),
       email: extractField(body, ["email", "customer_email", "Email"]),

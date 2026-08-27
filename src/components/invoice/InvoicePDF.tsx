@@ -508,7 +508,7 @@ export const InvoicePDF: React.FC<{ data: InvoiceData }> = ({ data }) => {
                 </View>
                 <Text style={styles.infoBoxTitle}>DETAIL PAKET</Text>
               </View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Paket Photobooth</Text><Text style={styles.infoColon}>:</Text><Text style={styles.infoValue}>{data.paket || 'Paket Basic 4 Jam'}</Text></View>
+              <View style={styles.infoRow}><Text style={styles.infoLabel}>Paket</Text><Text style={styles.infoColon}>:</Text><Text style={styles.infoValue}>{data.paket || 'Paket Basic 4 Jam'}</Text></View>
               <View style={styles.infoRow}><Text style={styles.infoLabel}>Durasi</Text><Text style={styles.infoColon}>:</Text><Text style={styles.infoValue}>{data.duration || '-'}</Text></View>
               <View style={styles.infoRow}><Text style={styles.infoLabel}>Kapasitas Print</Text><Text style={styles.infoColon}>:</Text><Text style={styles.infoValue}>{data.print_capacity || '-'}</Text></View>
             </View>
@@ -590,7 +590,9 @@ export const InvoicePDF: React.FC<{ data: InvoiceData }> = ({ data }) => {
               </View>
 
               <View style={styles.bigTotalBox}>
-                <Text style={styles.bigTotalLabel}>TOTAL PEMBAYARAN</Text>
+                <Text style={styles.bigTotalLabel}>
+                  {data.payment_status?.toUpperCase() === 'DP' ? 'TOTAL PEMBAYARAN (DP 50%)' : 'TOTAL PEMBAYARAN'}
+                </Text>
                 <Text style={styles.bigTotalValue}>{formatCurrency(data.total)}</Text>
               </View>
 

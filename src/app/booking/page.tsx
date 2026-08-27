@@ -187,7 +187,7 @@ function BookingFormContent() {
     setErrorMessage("");
 
     try {
-      const { baseHarga, buktiTransferFile, ...restData } = formData;
+      const { buktiTransferFile, ...restData } = formData;
       
       const formDataToSend = new FormData();
       // Append all text fields
