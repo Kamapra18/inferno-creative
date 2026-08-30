@@ -96,6 +96,14 @@ export const portoEvents: Event[] = [
       "https://drive.google.com/drive/folders/1DuNzZpD5-Zc_77u91aSBDAZxvIm3i3JO?usp=drive_link",
   },
   {
+    id: 12,
+    slug: "Pandu Satya & Dayu Sintya",
+    name: "Wedding Pandu Satya & Dayu Sintya",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1aBoqpdHdi_A_a7zGGnnOWHm8AkUv535d?usp=drive_link",
+  },
+  {
     id: 99,
     slug: "Yande-&-Melly",
     name: "Wedding Yande & Melly",
