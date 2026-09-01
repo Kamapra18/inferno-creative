@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     let invoiceNumber = extractField(
       body,
-      ["invoice_number", "no_inv", "nomor_invoice", "invoiceNumber", "nomorInvoice"],
+      ["invoice", "invoice_number", "no_inv", "nomor_invoice", "invoiceNumber", "nomorInvoice"],
       ""
     );
 
