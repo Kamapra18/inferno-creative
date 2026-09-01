@@ -57,7 +57,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const invoiceNumber = getInvoiceNumber(bookingDateRaw);
+    let invoiceNumber = extractField(
+      body,
+      ["invoice_number", "no_inv", "nomor_invoice", "invoiceNumber", "nomorInvoice"],
+      ""
+    );
+
+    if (!invoiceNumber || invoiceNumber === "-") {
+      invoiceNumber = getInvoiceNumber(bookingDateRaw) || "";
+    }
 
     if (!invoiceNumber) {
       return NextResponse.json(

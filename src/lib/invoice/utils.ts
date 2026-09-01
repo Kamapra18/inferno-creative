@@ -76,7 +76,9 @@ export function parseIndonesianDateToYYYYMMDD(dateString: string | undefined): s
 export function getInvoiceNumber(bookingDateStr: string | undefined): string | null {
   const yyyymmdd = parseIndonesianDateToYYYYMMDD(bookingDateStr);
   if (!yyyymmdd) return null;
-  return `INV-INF-${yyyymmdd}`;
+  // Menambahkan 4 digit angka acak agar invoice number selalu unik
+  const uniqueSuffix = Math.floor(1000 + Math.random() * 9000).toString();
+  return `INV-INF-${yyyymmdd}-${uniqueSuffix}`;
 }
 
 export function extractField(body: any, keys: string[], defaultValue: string = '-'): string {
