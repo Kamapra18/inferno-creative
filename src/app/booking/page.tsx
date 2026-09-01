@@ -55,7 +55,7 @@ const WHATSAPP_NUMBER = "6285645150857";
 const BOOKING_WEBHOOK_URL =
   "https://n8n.imadegautama.com/webhook/booking-inferno";
 const BOOKING_LIST_URL = "https://n8n.imadegautama.com/webhook/databooking";
-const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_TIMEOUT_MS = 60_000;
 
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 

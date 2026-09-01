@@ -13,7 +13,7 @@ export const KATEGORI_BOOKING = [
   { value: "Photobooth Basic Print", harga: "Rp 1.200.000" },
   { value: "Photobooth Eksklusif Print", harga: "Rp 2.500.000" },
   { value: "Undangan Digital", harga: "Rp 150.000" },
-  { value: "Dokumentasi Event", harga: "Rp 1.000.000" },
+  { value: "Dokumentasi Event", harga: "Rp 1.500.000" },
 ];
 
 export function grupKategori(kategori: string) {
