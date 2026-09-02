@@ -117,7 +117,11 @@ const Katalog = ({ category = "all", limit }: Props) => {
       </div>
 
       <div className="text-center mt-10">
-        <Button href="/paket">Lihat Paket Lengkapnya</Button>
+        <Button
+          href="https://wa.me/6285645150857?text=Halo%2C%20permisi.%20Saya%20tertarik%20dengan%20paket%20all%20in%20one%20yang%20ditawarkan.%20Boleh%20minta%20tolong%20dikirimkan%20detail%20paketnya%3F"
+          target="_blank">
+          Lihat Paket Lengkapnya
+        </Button>
       </div>
     </section>
   );

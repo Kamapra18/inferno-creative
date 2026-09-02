@@ -43,13 +43,6 @@ export const katalogFotoVideo: KatalogItem[] = [
 ];
 
 export const katalogPhotobooth: KatalogItem[] = [
-  // {
-  //   id: 1,
-  //   category: "photobooth",
-  //   type: "wedding",
-  //   image: "/katalog/photobooth/Inferno-wedding-krisna-&-mika.jpg",
-  //   title: "Wedding Krisna & Mika",
-  // },
   {
     id: 3,
     category: "photobooth",
@@ -67,9 +60,9 @@ export const katalogPhotobooth: KatalogItem[] = [
   {
     id: 10,
     category: "photobooth",
-    type: "event",
-    image: "/katalog/photobooth/inferno-event-stt-putra-presada.jpg",
-    title: "Event STT Putra Presada",
+    type: "weddding",
+    image: "/katalog/photobooth/inferno-wedding-pandu-&-dayu.jpg",
+    title: "Wedding Pandu & Dayu",
   },
   {
     id: 11,
@@ -91,6 +84,13 @@ export const katalogPhotobooth: KatalogItem[] = [
     type: "event",
     image: "/katalog/photobooth/Inferno-pameran-dkv-primakara.jpg",
     title: "Event Pameran DKV Primakara",
+  },
+  {
+    id: 14,
+    category: "photobooth",
+    type: "wedding",
+    image: "/katalog/photobooth/Inferno-wedding-arma-&-andriani.jpg",
+    title: "Wedding Arma & Andriani",
   },
 ];
 
