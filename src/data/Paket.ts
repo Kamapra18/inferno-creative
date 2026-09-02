@@ -176,7 +176,7 @@ export const paketDokumentasi: Paket[] = [
   {
     title: "Paket Foto Event",
     subtitle: "Dokumentasi Acara Profesional",
-    price: "Rp 350.000",
+    price: "Rp 1.500.000",
     category: "dokumentasi",
     features: [
       "Durasi 6 jam",
