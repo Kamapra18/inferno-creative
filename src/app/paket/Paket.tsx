@@ -87,7 +87,7 @@ const Katalog = () => {
             </div>
 
             <div className="mt-6">
-              <ButtonCard href="https://wa.me/6285645150857" target="_blank">
+              <ButtonCard href={`/booking?service=${encodeURIComponent(paket.title)}`}>
                 {paket.buttonText}
               </ButtonCard>
             </div>

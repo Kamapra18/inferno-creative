@@ -7,7 +7,6 @@ import {
   paketUndangan,
   paketDokumentasi,
   paketPhotobooth,
-  paketAllInOne,
 } from "@/data/Paket";
 import { motion } from "framer-motion";
 
@@ -30,7 +29,9 @@ const Katalog = ({ category = "all", limit }: Props) => {
       case "all":
         return paketList;
       case "home":
-        return paketAllInOne;
+        const homeTitles = ["Photobooth Unlimited Print", "Dokumentasi Wedding", "Prewedding Foto & Video"];
+        // Return them in the exact order specified
+        return paketList.filter(p => homeTitles.includes(p.title)).sort((a, b) => homeTitles.indexOf(a.title) - homeTitles.indexOf(b.title));
       default:
         return paketList;
     }
@@ -108,7 +109,7 @@ const Katalog = ({ category = "all", limit }: Props) => {
             </div>
 
             <div className="mt-6">
-              <ButtonCard href="https://wa.me/6285645150857" target="_blank">
+              <ButtonCard href={`/booking?service=${encodeURIComponent(paket.title)}`}>
                 {paket.buttonText}
               </ButtonCard>
             </div>

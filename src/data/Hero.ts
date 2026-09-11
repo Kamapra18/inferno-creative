@@ -4,7 +4,7 @@ export const heroData = {
     desc: "Abadikan momen spesialmu dengan dokumentasi profesional, photobooth interaktif, & undangan digital modern dalam satu layanan.",
     primaryCTA: {
       label: "Booking Sekarang",
-      href: "/booking",
+      href: "/paket",
     },
     secondaryCTA: {
       label: "Lihat Portfolio",

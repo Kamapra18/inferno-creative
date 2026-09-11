@@ -6,14 +6,24 @@ export type BookingTerdaftar = {
 export const KATEGORI_BOOKING = [
   { value: "Prewedding Foto", harga: "Rp 1.500.000" },
   { value: "Prewedding Video", harga: "Rp 1.500.000" },
-  { value: "Prewedding Foto & Video", harga: "Rp 2.800.000" },
+  { value: "Prewedding Foto & Video", harga: "Rp 3.000.000" },
   { value: "Dokumentasi Wedding", harga: "Rp 1.500.000" },
-  { value: "Photobooth Basic Digital", harga: "Rp 800.000" },
-  { value: "Photobooth Eksklusif Digital", harga: "Rp 1.500.000" },
-  { value: "Photobooth Basic Print", harga: "Rp 1.200.000" },
-  { value: "Photobooth Eksklusif Print", harga: "Rp 2.500.000" },
-  { value: "Undangan Digital", harga: "Rp 150.000" },
   { value: "Dokumentasi Event", harga: "Rp 1.500.000" },
+  { value: "Photobooth Softcopy 2 Jam", harga: "Rp 800.000" },
+  { value: "Photobooth Softcopy 3 Jam", harga: "Rp 1.100.000" },
+  { value: "Photobooth Softcopy 4 Jam", harga: "Rp 1.400.000" },
+  { value: "Photobooth Softcopy 5 Jam", harga: "Rp 1.800.000" },
+  { value: "Photobooth Limited Print 2 Jam", harga: "Rp 1.200.000" },
+  { value: "Photobooth Limited Print 3 Jam", harga: "Rp 1.500.000" },
+  { value: "Photobooth Limited Print 4 Jam", harga: "Rp 1.800.000" },
+  { value: "Photobooth Limited Print 5 Jam", harga: "Rp 2.200.000" },
+  { value: "Photobooth Unlimited Print 2 Jam", harga: "Rp 1.500.000" },
+  { value: "Photobooth Unlimited Print 3 Jam", harga: "Rp 1.800.000" },
+  { value: "Photobooth Unlimited Print 4 Jam", harga: "Rp 2.200.000" },
+  { value: "Photobooth Unlimited Print 5 Jam", harga: "Rp 2.500.000" },
+  { value: "Undangan Online Premium", harga: "Rp 300.000" },
+  { value: "Undangan Online Eksklusif", harga: "Rp 500.000" },
+  { value: "Foto Graduation", harga: "Rp 500.000" },
 ];
 
 export function grupKategori(kategori: string) {
@@ -33,6 +43,13 @@ export function resolveKategori(service: string | null): { kategori: string; har
   // Try exact match first to prevent greedy substring matching
   let match = KATEGORI_BOOKING.find((k) => k.value.toLowerCase() === s);
   
+  // Manual mapping for cases where package title differs significantly from options
+  if (!match) {
+    if (s.includes("photobooth softcopy")) {
+      match = KATEGORI_BOOKING.find(k => k.value === "Photobooth Softcopy 2 Jam");
+    }
+  }
+
   // Fallback to fuzzy match
   if (!match) {
     match = KATEGORI_BOOKING.find((k) => k.value.toLowerCase().includes(s) || s.includes(k.value.toLowerCase()));
