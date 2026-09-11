@@ -282,29 +282,13 @@ export default function AdminDashboard() {
                             <select
                               value={editForm.status_pembayaran}
                               onChange={(e) => {
-                                const val = e.target.value;
-                                let newHarga = editForm.harga;
-                                if (row.KategoriJasa) {
-                                  // Gunakan resolveKategori agar pencocokan lebih kebal spasi/typo
-                                  const matchInfo = resolveKategori(row.KategoriJasa);
-                                  if (matchInfo && matchInfo.harga && row.KategoriJasa !== "asd") {
-                                    if (val === "Lunas") {
-                                      newHarga = matchInfo.harga;
-                                    } else if (val.includes("DP")) {
-                                      const num = parseInt(matchInfo.harga.replace(/\D/g, ""));
-                                      if (!isNaN(num)) {
-                                        newHarga = "Rp " + new Intl.NumberFormat("id-ID").format(num / 2);
-                                      }
-                                    }
-                                  }
-                                }
-                                setEditForm({ ...editForm, status_pembayaran: val, harga: newHarga });
+                                setEditForm({ ...editForm, status_pembayaran: e.target.value });
                               }}
-                              className="bg-white/5 border border-white/20 rounded px-2 py-1 text-sm w-full min-w-[140px]"
+                              className="bg-black border border-white/20 rounded px-2 py-1 text-sm w-full min-w-[140px] text-white"
                             >
-                              <option value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
-                              <option value="DP Terbayar">DP Terbayar</option>
-                              <option value="Lunas">Lunas</option>
+                              <option className="bg-black text-white" value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+                              <option className="bg-black text-white" value="DP Terbayar">DP Terbayar</option>
+                              <option className="bg-black text-white" value="Lunas">Lunas</option>
                             </select>
                           ) : (
                             getStatusBadge(row.status_pembayaran)
