@@ -66,6 +66,8 @@ export default function AdminDashboard() {
         namaClient: item["Nama Client"] || item.namaClient,
         contact: item["Contact"] || item.contact,
         status_pembayaran: item["statuspembayaran"] || item.status_pembayaran || "Menunggu Konfirmasi",
+        tipePembayaran: item["Tipe Pembayaran"] || item["tipePembayaran"] || item["tipe_pembayaran"] || item.tipePembayaran,
+        harga: item["Harga"] || item.harga,
       }));
       // Kita membalik data agar yang terbaru (di bawah spreadsheet) tampil di atas
       setBookings(mappedData.reverse());
