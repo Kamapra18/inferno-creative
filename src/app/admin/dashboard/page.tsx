@@ -282,7 +282,24 @@ export default function AdminDashboard() {
                             <select
                               value={editForm.status_pembayaran}
                               onChange={(e) => {
-                                setEditForm({ ...editForm, status_pembayaran: e.target.value });
+                                const val = e.target.value;
+                                let newHarga = editForm.harga;
+
+                                const isOriginallyDP = (row.tipePembayaran || "").toUpperCase().includes("DP");
+                                const originalNumeric = parseInt((row.harga || "0").replace(/\D/g, ""));
+
+                                if (!isNaN(originalNumeric) && originalNumeric > 0) {
+                                  const baseFullPrice = isOriginallyDP ? originalNumeric * 2 : originalNumeric;
+                                  if (val === "Lunas") {
+                                    newHarga = "Rp " + new Intl.NumberFormat("id-ID").format(baseFullPrice);
+                                  } else if (val.includes("DP")) {
+                                    newHarga = "Rp " + new Intl.NumberFormat("id-ID").format(baseFullPrice / 2);
+                                  } else {
+                                    newHarga = row.harga || "";
+                                  }
+                                }
+                                
+                                setEditForm({ ...editForm, status_pembayaran: val, harga: newHarga });
                               }}
                               className="bg-black border border-white/20 rounded px-2 py-1 text-sm w-full min-w-[140px] text-white"
                             >
