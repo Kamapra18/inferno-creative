@@ -182,8 +182,19 @@ export const paketPhotobooth: Paket[] = [
 /* ========================= */
 /* GABUNGAN */
 /* ========================= */
-export const paketList: Paket[] = [
+const allPaket = [
   ...paketUndangan,
   ...paketDokumentasi,
   ...paketPhotobooth,
+];
+
+const topTitles = [
+  "Prewedding Foto & Video",
+  "Photobooth Unlimited Print",
+  "Dokumentasi Wedding"
+];
+
+export const paketList: Paket[] = [
+  ...allPaket.filter((p) => topTitles.includes(p.title)).sort((a, b) => topTitles.indexOf(a.title) - topTitles.indexOf(b.title)),
+  ...allPaket.filter((p) => !topTitles.includes(p.title)),
 ];
