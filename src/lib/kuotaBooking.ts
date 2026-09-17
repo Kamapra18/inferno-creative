@@ -24,6 +24,7 @@ export const KATEGORI_BOOKING = [
   { value: "Undangan Online Premium", harga: "Rp 300.000" },
   { value: "Undangan Online Eksklusif", harga: "Rp 500.000" },
   { value: "Foto Graduation", harga: "Rp 500.000" },
+  { value: "Paket All In One", harga: "Rp 4.000.000" },
 ];
 
 export function grupKategori(kategori: string) {

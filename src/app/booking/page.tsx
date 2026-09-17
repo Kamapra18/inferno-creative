@@ -103,7 +103,7 @@ function BookingFormContent() {
 
     return {
       namaClient: searchParams.get("name") || "",
-      contact: searchParams.get("phone") || "",
+      contact: searchParams.get("phone") || "+62",
       email: searchParams.get("email") || "",
       kategoriJasa: terpilih.kategori,
       baseHarga: terpilih.harga,
@@ -220,6 +220,9 @@ function BookingFormContent() {
 
     try {
       const { ...restData } = formData;
+      
+      // Hapus simbol '+' agar tidak error format formula di Spreadsheet
+      restData.contact = restData.contact.replace(/\+/g, "");
       const orderId = `BOOKING-${Date.now()}`;
 
       const formDataToSend = new FormData();
@@ -284,7 +287,7 @@ function BookingFormContent() {
 
     // Hanya izinkan angka untuk input kontak/WhatsApp
     if (name === "contact") {
-      value = value.replace(/[^0-9]/g, "");
+      value = value.replace(/[^0-9+]/g, "");
     }
 
     if (name === "kategoriJasa") {

@@ -180,15 +180,36 @@ export const paketPhotobooth: Paket[] = [
 
 
 /* ========================= */
+/* ALL IN ONE (1 ITEM) */
+/* ========================= */
+export const paketAllInOne: Paket[] = [
+  {
+    title: "Paket All In One",
+    subtitle: "Dokumentasi, Photobooth & Undangan",
+    price: "Rp 4.000.000",
+    badge: "Super Hemat",
+    category: "all",
+    features: [
+      "Dokumentasi 5 Jam",
+      "Photobooth Unlimited Print 5 Jam",
+      "Undangan Online Eksklusif",
+    ],
+    buttonText: "Booking Now",
+  }
+];
+
+/* ========================= */
 /* GABUNGAN */
 /* ========================= */
 const allPaket = [
   ...paketUndangan,
   ...paketDokumentasi,
   ...paketPhotobooth,
+  ...paketAllInOne,
 ];
 
 const topTitles = [
+  "Paket All In One",
   "Prewedding Foto & Video",
   "Photobooth Unlimited Print",
   "Dokumentasi Wedding"
