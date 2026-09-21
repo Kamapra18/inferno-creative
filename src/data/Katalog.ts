@@ -122,6 +122,14 @@ export const katalogUndangan: KatalogItem[] = [
     demoUrl:
       "https://www.inferno-production.com/undangan/tema2/index.html?to=Kamu",
   },
+  {
+    id: 9,
+    category: "undangan",
+    type: "digital",
+    image: "/katalog/undangan/web3.webp",
+    title: "Undangan Elegan",
+    demoUrl: "https://www.infernoinvite.biz.id/theme3/?kepada=Tamu%20Undangan",
+  },
 ];
 
 /* ========================= */
