@@ -105,7 +105,7 @@ export const katalogUndangan: KatalogItem[] = [
       "https://www.inferno-production.com/undangan/tema2/index.html?to=Kamu",
   },
   {
-    id: 6,
+    id: 15,
     category: "undangan",
     type: "digital",
     image: "/katalog/web1.png",

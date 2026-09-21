@@ -17,7 +17,7 @@ export const heroData = {
     desc: "Dokumentasi wedding, prewedding, dan event dengan hasil cinematic dan storytelling yang kuat.",
     primaryCTA: {
       label: "Booking Sekarang",
-      href: "https://wa.me/6285645150857",
+      href: "/paket",
     },
     secondaryCTA: {
       label: "Lihat Hasil Foto",
@@ -30,7 +30,7 @@ export const heroData = {
     desc: "Photobooth interaktif dengan hasil foto instan untuk meramaikan acara dan menciptakan pengalaman seru.",
     primaryCTA: {
       label: "Cek Paket Photobooth",
-      href: "https://wa.me/6285645150857",
+      href: "/paket",
     },
     secondaryCTA: {
       label: "Lihat Gallery",
@@ -43,7 +43,7 @@ export const heroData = {
     desc: "Undangan online modern dengan fitur lengkap seperti RSVP, galeri foto, dan musik.",
     primaryCTA: {
       label: "Cek Harga",
-      href: "https://wa.me/6285645150857",
+      href: "/paket",
     },
     secondaryCTA: {
       label: "Lihat Template",

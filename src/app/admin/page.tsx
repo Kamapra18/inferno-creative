@@ -19,7 +19,10 @@ export default function AdminLogin() {
 
     // Simulate API call for security, though hardcoded here
     setTimeout(() => {
-      if (username === "admin" && password === "inferno123") {
+      const expectedUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME
+      const expectedPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+
+      if (username === expectedUsername && password === expectedPassword) {
         // Set a simple cookie to track auth status
         document.cookie = "admin_token=authenticated; path=/; max-age=86400"; // 1 day
         router.push("/admin/dashboard");

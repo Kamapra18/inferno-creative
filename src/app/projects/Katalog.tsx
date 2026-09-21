@@ -113,7 +113,7 @@ export default function ProjectsSection() {
                   </a>
                 ) : (
                   <a
-                    href="https://wa.me/6285645150857"
+                    href="/paket"
                     className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
                     Booking Sekarang
                   </a>

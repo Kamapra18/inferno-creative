@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Hanya jalankan middleware ini untuk path yang dimulai dengan /admin/dashboard
   if (request.nextUrl.pathname.startsWith("/admin/dashboard")) {
     const token = request.cookies.get("admin_token");
