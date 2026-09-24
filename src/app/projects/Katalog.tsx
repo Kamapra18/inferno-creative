@@ -75,52 +75,71 @@ export default function ProjectsSection() {
 
         {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {data.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="group relative overflow-hidden rounded-xl cursor-pointer">
-              {/* IMAGE */}
-              <Image
-                src={item.image}
-                alt={item.title}
-                width={500}
-                height={600}
-                className="w-full aspect-[4/5] object-cover transition duration-500 group-hover:scale-110"
-              />
+          {data.map((item, i) => {
+            const isUndangan = item.category === "undangan";
 
-              {/* OVERLAY */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition duration-300" />
+            const cardContent = (
+              <>
+                {/* IMAGE */}
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  width={500}
+                  height={600}
+                  className="w-full aspect-[4/5] object-cover transition duration-500 group-hover:scale-110"
+                />
 
-              {/* CONTENT */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-left">
-                <h3 className="text-white font-semibold text-lg">
-                  {item.title}
-                </h3>
+                {/* OVERLAY */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition duration-300" />
 
-                <p className="text-sm text-gray-300 capitalize mb-3">
-                  {item.category} • {item.type}
-                </p>
+                {/* CONTENT */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-left">
+                  <h3 className="text-white font-semibold text-lg">
+                    {item.title}
+                  </h3>
 
-                {item.category === "undangan" ? (
-                  <a
-                    href={item.demoUrl}
-                    target="_blank"
-                    className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
-                    Lihat Demo
-                  </a>
-                ) : (
-                  <a
-                    href="/paket"
-                    className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
-                    Booking Sekarang
-                  </a>
-                )}
-              </div>
-            </motion.div>
-          ))}
+                  <p className="text-sm text-gray-300 capitalize mb-3">
+                    {item.category} • {item.type}
+                  </p>
+
+                  {isUndangan ? (
+                    <span className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full group-hover:scale-105 transition">
+                      Lihat Demo
+                    </span>
+                  ) : (
+                    <a
+                      href="/paket"
+                      className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full hover:scale-105 transition">
+                      Booking Sekarang
+                    </a>
+                  )}
+                </div>
+              </>
+            );
+
+            return isUndangan ? (
+              <motion.a
+                key={item.id}
+                href={item.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="group relative overflow-hidden rounded-xl cursor-pointer block">
+                {cardContent}
+              </motion.a>
+            ) : (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="group relative overflow-hidden rounded-xl cursor-pointer">
+                {cardContent}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
       <motion.div

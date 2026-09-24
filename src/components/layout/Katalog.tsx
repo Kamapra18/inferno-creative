@@ -83,44 +83,64 @@ export default function KatalogSection({
 
         {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {data.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="group relative overflow-hidden rounded-xl">
-              <Image
-                src={item.image}
-                alt={item.title}
-                width={500}
-                height={600}
-                className="w-full aspect-[4/5] object-cover transition duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/40" />
+          {data.map((item, i) => {
+            const isUndangan = item.category === "undangan";
 
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-left">
-                <h3 className="font-semibold text-lg text-white">
-                  {item.title}
-                </h3>
+            const cardContent = (
+              <>
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  width={500}
+                  height={600}
+                  className="w-full aspect-[4/5] object-cover transition duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/40" />
 
-                <p className="text-sm text-gray-300 capitalize mb-3">
-                  {item.category} • {item.type}
-                </p>
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-left">
+                  <h3 className="font-semibold text-lg text-white">
+                    {item.title}
+                  </h3>
 
-                {/* CTA KHUSUS UNDANGAN */}
-                {item.category === "undangan" && (
-                  <a
-                    href={item.demoUrl}
-                    target="_blank"
-                    className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full mt-2 hover:scale-105 transition">
-                    Lihat Demo
-                  </a>
-                )}
-              </div>
-            </motion.div>
-          ))}
+                  <p className="text-sm text-gray-300 capitalize mb-3">
+                    {item.category} • {item.type}
+                  </p>
+
+                  {/* CTA KHUSUS UNDANGAN */}
+                  {isUndangan && (
+                    <span className="inline-block text-xs px-3 py-1.5 bg-[var(--color-accent)] text-white rounded-full mt-2 group-hover:scale-105 transition">
+                      Lihat Demo
+                    </span>
+                  )}
+                </div>
+              </>
+            );
+
+            return isUndangan ? (
+              <motion.a
+                key={item.id}
+                href={item.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="group relative overflow-hidden rounded-xl cursor-pointer block">
+                {cardContent}
+              </motion.a>
+            ) : (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="group relative overflow-hidden rounded-xl">
+                {cardContent}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* CTA */}
