@@ -102,7 +102,7 @@ export const katalogUndangan: KatalogItem[] = [
     image: "/katalog/web.png",
     title: "Undangan Digital Modern",
     demoUrl:
-      "https://www.inferno-production.com/undangan/tema2/index.html?to=Kamu",
+      "https://www.inferno-production.com/undangan/ratna-classic/index.html?to=Kamu",
   },
   {
     id: 15,
@@ -120,13 +120,13 @@ export const katalogUndangan: KatalogItem[] = [
     image: "/katalog/web2.png",
     title: "Undangan Elegan",
     demoUrl:
-      "https://www.inferno-production.com/undangan/tema2/index.html?to=Kamu",
+      "https://www.inferno-production.com/undangan/tema1/index.html?to=Kamu",
   },
   {
     id: 9,
     category: "undangan",
     type: "digital",
-    image: "/katalog/undangan/web3.webp",
+    image: "/katalog/web4.png",
     title: "Undangan Elegan",
     demoUrl: "https://www.infernoinvite.biz.id/theme3/?kepada=Tamu%20Undangan",
   },
