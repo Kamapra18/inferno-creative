@@ -10,12 +10,12 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "Arma & Andriani",
-    name: "Wedding Arma & Andriani",
+    slug: "Arkamara Dijiwa",
+    name: "Gatering Arkamara Dijiwa",
     frame:
-      "https://drive.google.com/drive/folders/1uB6ip_YferarVgcQpSBCu_oA_3RK1_A9",
+      "https://drive.google.com/drive/folders/1uzmBY3PUGA5aiwUdqFf_FgPqz0rLyCQl?usp=sharing",
     video:
-      "https://drive.google.com/drive/folders/1VzBEHsrGRMLGTrXCnSi1AC3HLJNELBx-",
-    raw: "https://drive.google.com/drive/folders/1vfrJlfydvTltD4rfhIuVYKM1B4lCPIAd",
+      "https://drive.google.com/drive/folders/1UlXm3SpO9j51r7-yEyIzIJXMhAc7pZUU?usp=sharing",
+    raw: "https://drive.google.com/drive/folders/12yYL4XHCQXuhps_WgRppf6pXg1fekRj7?usp=drive_link",
   },
 ];
