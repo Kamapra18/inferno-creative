@@ -10,12 +10,12 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "Arkamara Dijiwa",
-    name: "Gatering Arkamara Dijiwa",
+    slug: "ojk-dahsyat",
+    name: "OJK DahSyat",
     frame:
-      "https://drive.google.com/drive/folders/1uzmBY3PUGA5aiwUdqFf_FgPqz0rLyCQl?usp=sharing",
+      "https://drive.google.com/drive/folders/12l3Ma2wFYCUBwv-QQQB5POgpwOLnyQsu",
     video:
-      "https://drive.google.com/drive/folders/1UlXm3SpO9j51r7-yEyIzIJXMhAc7pZUU?usp=sharing",
-    raw: "https://drive.google.com/drive/folders/12yYL4XHCQXuhps_WgRppf6pXg1fekRj7?usp=drive_link",
+      "https://drive.google.com/drive/folders/1OOyJoZuiajunBZ5D_MOyprDwISTAB6Jc",
+    raw: "https://drive.google.com/drive/folders/1VWAdX3PY4GpR5cLel2AG9fmbS-zSjv8J",
   },
 ];
