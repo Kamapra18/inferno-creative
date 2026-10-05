@@ -10,7 +10,8 @@ import {
   LogOut,
   Edit,
   Save,
-  X
+  X,
+  ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -33,6 +34,15 @@ interface SheetRow {
   status_pembayaran?: string;
   order_id?: string;
   [key: string]: any; // Allow other fields
+}
+
+function formatWaNumber(phone: string | number): string {
+  const clean = String(phone).replace(/\D/g, "");
+  if (!clean) return "";
+  if (clean.startsWith("62")) return clean;
+  if (clean.startsWith("0")) return "62" + clean.slice(1);
+  if (clean.startsWith("8")) return "62" + clean;
+  return clean;
 }
 
 export default function AdminDashboard() {
@@ -59,16 +69,95 @@ export default function AdminDashboard() {
       if (!Array.isArray(data)) {
         throw new Error("Format data tidak valid, diharapkan array.");
       }
-      // Map Id-Order from spreadsheet to order_id and fix case-sensitive headers
-      const mappedData = data.map((item: any) => ({
-        ...item,
-        order_id: item["Id-Order"] || item.order_id,
-        namaClient: item["Nama Client"] || item.namaClient,
-        contact: item["Contact"] || item.contact,
-        status_pembayaran: item["statuspembayaran"] || item.status_pembayaran || "Menunggu Konfirmasi",
-        tipePembayaran: item["Tipe Pembayaran"] || item["tipePembayaran"] || item["tipe_pembayaran"] || item.tipePembayaran,
-        harga: item["Harga"] || item.harga,
-      }));
+      // Map response dari webhook n8n Google Sheets ke object SheetRow yang konsisten
+      const mappedData = data
+        .filter((item: any) => {
+          // Hanya tampilkan jika baris memiliki data (tidak kosong semua)
+          const name = String(item["Nama Client"] ?? item.namaClient ?? "").trim();
+          const service = String(item["KategoriJasa"] ?? item.kategoriJasa ?? "").trim();
+          const order = String(item["Id_order"] ?? item["Id-Order"] ?? item.order_id ?? "").trim();
+          const tgl = String(item["TanggalEvent "] ?? item["TanggalEvent"] ?? item.tanggalEvent ?? "").trim();
+          return name !== "" || service !== "" || order !== "" || tgl !== "";
+        })
+        .map((item: any, index: number) => {
+          const rowNumber = Number(item.row_number) || index + 2;
+          const orderId = String(item["Id_order"] ?? item["Id-Order"] ?? item.order_id ?? "").trim();
+          const namaClient = String(item["Nama Client"] ?? item.namaClient ?? "").trim();
+          const contact = String(item["Contact"] ?? item.contact ?? "").trim();
+          const kategoriJasa = String(item["KategoriJasa"] ?? item.kategoriJasa ?? "").trim();
+          const tanggalEvent = String(item["TanggalEvent "] ?? item["TanggalEvent"] ?? item.tanggalEvent ?? "").trim();
+          const jamEvent = String(item["JamEvent "] ?? item["JamEvent"] ?? item.jamEvent ?? "").trim();
+          const lokasi = String(item["lokasi"] ?? item.lokasi ?? item.Lokasi ?? "").trim();
+          const harga = String(item["harga"] ?? item["Harga"] ?? item.harga ?? "").trim();
+          const email = String(item["Email"] ?? item.email ?? "").trim();
+          const rawStatus = String(item["statuspembayaran"] ?? item["statusPembayaran"] ?? item.status_pembayaran ?? "").trim();
+          const keterangan = String(item["keterangan"] ?? item.keterangan ?? "").trim();
+          const buktiTransfer = String(item["Bukti Transfer"] ?? item["buktiTransfer"] ?? item.buktiTransfer ?? "").trim();
+
+          // Normalisasi status pembayaran: jika "Lunas" / "DP" / kosong ("Menunggu Konfirmasi")
+          let status_pembayaran = "Menunggu Konfirmasi";
+          const s = rawStatus.toLowerCase();
+          if (s === "lunas" || s.includes("lunas")) {
+            status_pembayaran = "Lunas";
+          } else if (s === "dp" || s.includes("dp")) {
+            status_pembayaran = "DP";
+          } else if (rawStatus) {
+            status_pembayaran = rawStatus;
+          }
+
+          // Tipe pembayaran
+          let tipePembayaran = String(item["Tipe Pembayaran"] ?? item.tipePembayaran ?? "").trim();
+          if (!tipePembayaran) {
+            if (status_pembayaran === "DP" || orderId.includes("-DP-")) {
+              tipePembayaran = "DP (50%)";
+            } else if (status_pembayaran === "Lunas" || orderId.includes("-LUNAS-")) {
+              tipePembayaran = "Lunas (100%)";
+            } else {
+              tipePembayaran = "-";
+            }
+          }
+
+          // Metode pembayaran
+          let metodePembayaran = String(item["metodePembayaran"] ?? item["Metode Pembayaran"] ?? "").trim();
+          if (!metodePembayaran) {
+            if (buktiTransfer.toLowerCase().includes("doku")) {
+              metodePembayaran = "DOKU Checkout";
+            } else if (buktiTransfer.startsWith("http")) {
+              metodePembayaran = "Transfer / Bukti Upload";
+            } else {
+              metodePembayaran = orderId ? "DOKU Checkout" : "Manual";
+            }
+          }
+
+          return {
+            ...item,
+            row_number: rowNumber,
+            order_id: orderId,
+            "Id_order": orderId,
+            "Id-Order": orderId,
+            namaClient,
+            contact,
+            kategoriJasa,
+            KategoriJasa: kategoriJasa,
+            tanggalEvent,
+            "TanggalEvent ": tanggalEvent,
+            TanggalEvent: tanggalEvent,
+            jamEvent,
+            "JamEvent ": jamEvent,
+            JamEvent: jamEvent,
+            lokasi,
+            harga,
+            email,
+            status_pembayaran,
+            statuspembayaran: status_pembayaran,
+            statusPembayaran: status_pembayaran,
+            tipePembayaran,
+            metodePembayaran,
+            keterangan,
+            buktiTransfer,
+            "Bukti Transfer": buktiTransfer,
+          };
+        });
       // Kita membalik data agar yang terbaru (di bawah spreadsheet) tampil di atas
       setBookings(mappedData.reverse());
     } catch (err: any) {
@@ -89,11 +178,17 @@ export default function AdminDashboard() {
 
     try {
       const formData = new FormData();
-      // Mengirim data yang bisa dijadikan patokan n8n untuk mencari baris di spreadsheet
+      // Mengirim Id-Order persis sesuai node webhook n8n: {{ $json.body.Id-Order }}
+      formData.append("Id-Order", orderId || "");
+      formData.append("Id_order", orderId || "");
+      formData.append("order_id", orderId || "");
       formData.append("namaClient", clientName || "");
       formData.append("tanggalEvent", tanggalEvent || "");
-      formData.append("order_id", orderId || "");
+      formData.append("statusPembayaran", editForm.status_pembayaran);
       formData.append("statuspembayaran", editForm.status_pembayaran);
+      formData.append("status_pembayaran", editForm.status_pembayaran);
+      formData.append("payment_status", editForm.status_pembayaran);
+      formData.append("tipePembayaran", editForm.status_pembayaran);
       formData.append("harga", editForm.harga);
 
       const response = await fetch(BOOKING_UPDATE_URL, {
@@ -130,12 +225,18 @@ export default function AdminDashboard() {
   const getStatusBadge = (status?: string) => {
     const s = (status || "").toLowerCase();
     let text = status || "Menunggu Konfirmasi";
-    if (s.includes("lunas") || s === "success") text = "Lunas";
-    else if (s.includes("dp")) text = "DP Terbayar";
+    let dotColor = "bg-red-600";
+    if (s.includes("lunas") || s === "success") {
+      text = "Lunas";
+      dotColor = "bg-emerald-400";
+    } else if (s.includes("dp")) {
+      text = "DP";
+      dotColor = "bg-amber-400";
+    }
 
     return (
       <span className="inline-flex items-center gap-2 px-3 py-1 bg-transparent border border-white/20 text-white/90 rounded-full text-xs font-medium">
-        <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+        <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span>
         {text}
       </span>
     );
@@ -254,8 +355,19 @@ export default function AdminDashboard() {
                         className="hover:bg-red-500/5 transition-colors"
                       >
                         <td className="p-4 align-top">
-                          <p className="text-xs font-mono text-white/40 mb-1">{row.order_id || `ROW-${index}`}</p>
+                          <p className="text-xs font-mono text-white/40 mb-1">{row.order_id || `ROW-${row.row_number || index + 1}`}</p>
                           <p className="text-sm">{row.metodePembayaran || "-"}</p>
+                          {row.buktiTransfer && row.buktiTransfer.startsWith("http") && (
+                            <a
+                              href={row.buktiTransfer}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] text-red-400 hover:text-red-300 mt-1 transition-colors underline"
+                            >
+                              <ExternalLink size={11} />
+                              <span>Lihat Bukti</span>
+                            </a>
+                          )}
                         </td>
                         <td className="p-4 align-top">
                           <p className="font-medium text-white/90">{row.namaClient || "-"}</p>
@@ -305,9 +417,9 @@ export default function AdminDashboard() {
                               }}
                               className="bg-black border border-white/20 rounded px-2 py-1 text-sm w-full min-w-[140px] text-white"
                             >
-                              <option className="bg-black text-white" value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
-                              <option className="bg-black text-white" value="DP Terbayar">DP Terbayar</option>
+                              <option className="bg-black text-white" value="DP">DP</option>
                               <option className="bg-black text-white" value="Lunas">Lunas</option>
+                              <option className="bg-black text-white" value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
                             </select>
                           ) : (
                             getStatusBadge(row.status_pembayaran)
@@ -349,9 +461,9 @@ export default function AdminDashboard() {
                                 >
                                   <Edit size={16} />
                                 </button>
-                                {row.contact && (
+                                {row.contact && formatWaNumber(row.contact) && (
                                   <a
-                                    href={`https://wa.me/${String(row.contact).replace(/^0/, '62').replace(/\D/g, '')}?text=Halo%20${encodeURIComponent(row.namaClient || '')},%20kami%20dari%20Inferno%20Creative%20ingin%20mengkonfirmasi%20pembayaran%20booking%20Anda.`}
+                                    href={`https://wa.me/${formatWaNumber(row.contact)}?text=Halo%20${encodeURIComponent(row.namaClient || '')},%20kami%20dari%20Inferno%20Creative%20ingin%20mengkonfirmasi%20pembayaran%20booking%20Anda.`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="p-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-lg transition-colors flex items-center justify-center"

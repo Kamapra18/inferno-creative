@@ -19,8 +19,8 @@ export default function AdminLogin() {
 
     // Simulate API call for security, though hardcoded here
     setTimeout(() => {
-      const expectedUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME
-      const expectedPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+      const expectedUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
+      const expectedPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
 
       if (username === expectedUsername && password === expectedPassword) {
         // Set a simple cookie to track auth status

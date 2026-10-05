@@ -1,55 +1,81 @@
 import { NextResponse } from "next/server";
+import { createDokuCheckoutSession, sanitizeDokuField } from "@/lib/doku";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { orderId, grossAmount, customerName, customerEmail, customerPhone, itemName } = body;
+    const {
+      orderId,
+      grossAmount,
+      customerName,
+      customerEmail,
+      customerPhone,
+      itemName,
+      tipePembayaran = "Lunas",
+      callbackUrl,
+    } = body;
 
     if (!orderId || !grossAmount) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Parameter orderId dan grossAmount wajib diisi." },
+        { status: 400 }
+      );
     }
 
-    const secretKey = process.env.XENDIT_SECRET_KEY;
-    if (!secretKey) {
-      throw new Error("XENDIT_SECRET_KEY is not set in environment variables");
-    }
+    const host =
+      request.headers.get("x-forwarded-host") ||
+      request.headers.get("host") ||
+      "www.inferno-production.com";
+    const proto = request.headers.get("x-forwarded-proto") || "http";
+    const origin = `${proto}://${host}`;
 
-    // Menggunakan Fetch API langsung ke Xendit untuk menghindari isu versi SDK
-    const response = await fetch("https://api.xendit.co/v2/invoices", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Basic ${Buffer.from(secretKey + ":").toString("base64")}`,
-      },
-      body: JSON.stringify({
-        external_id: orderId,
-        amount: Math.round(grossAmount),
-        payer_email: customerEmail || "no-email@example.com",
-        description: `Booking: ${itemName}`,
-        customer: {
-          given_names: customerName,
-          email: customerEmail || "no-email@example.com",
-          mobile_number: customerPhone,
+    // Pastikan callbackUrl adalah URL path bersih tanpa karakter '?' atau '&'
+    const cleanCallbackUrl =
+      callbackUrl && !callbackUrl.includes("?")
+        ? callbackUrl
+        : `${origin}/booking/success/${orderId}`;
+
+    const cleanPhone = (customerPhone || "").replace(/[^0-9]/g, "");
+    const cleanEmail =
+      customerEmail && customerEmail.includes("@")
+        ? customerEmail.replace(/[^a-zA-Z0-9.@_-]/g, "")
+        : "customer@inferno-production.com";
+
+    const cleanItemName = sanitizeDokuField(itemName || "Layanan Inferno").replace(/&/g, "dan");
+
+    const session = await createDokuCheckoutSession({
+      invoiceNumber: orderId,
+      amount: Math.round(Number(grossAmount)),
+      currency: "IDR",
+      callbackUrl: cleanCallbackUrl,
+      autoRedirect: true,
+      lineItems: [
+        {
+          name: `${cleanItemName} (${tipePembayaran})`,
+          price: Math.round(Number(grossAmount)),
+          quantity: 1,
         },
-        // Anda bisa menentukan halaman sukses kemana user dikembalikan setelah bayar
-        // success_redirect_url: "https://domainanda.com/success",
-      }),
+      ],
+      customer: {
+        name: sanitizeDokuField(customerName || "Pelanggan Inferno"),
+        email: cleanEmail,
+        phone: cleanPhone || "081234567890",
+      },
+      paymentDueDateMinutes: 60,
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Xendit API Error:", data);
-      throw new Error(data.message || "Failed to create invoice");
-    }
-
     return NextResponse.json({
-      invoice_url: data.invoice_url,
+      success: true,
+      payment_url: session.paymentUrl,
+      invoice_number: session.invoiceNumber,
     });
   } catch (error: any) {
     console.error("Payment API Error:", error);
     return NextResponse.json(
-      { error: "Failed to create payment transaction", details: error.message },
+      {
+        error: error.message || "Gagal membuat transaksi DOKU Checkout",
+        details: error.message,
+      },
       { status: 500 }
     );
   }

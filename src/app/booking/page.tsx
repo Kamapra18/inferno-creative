@@ -15,7 +15,11 @@ import {
   Info,
   Mail,
   CreditCard,
-  Tag,
+  QrCode,
+  ShieldCheck,
+  Lock,
+  Sparkles,
+  ExternalLink,
   Loader2,
   CheckCircle2,
   AlertCircle,
@@ -24,6 +28,7 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { id } from "date-fns/locale";
@@ -59,7 +64,8 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 declare global {
   interface Window {
-    snap: any;
+    snap?: any;
+    loadJokulCheckout?: (url: string) => void;
   }
 }
 
@@ -67,18 +73,27 @@ function formatHarga(hargaRaw: string, tipePembayaran: string = "Lunas") {
   const amountStr = hargaRaw.replace(/[^0-9]/g, "");
   if (!amountStr) return hargaRaw;
   const grossAmount = parseInt(amountStr, 10);
-  
+
   if (tipePembayaran === "DP") {
     const dpAmount = Math.floor(grossAmount / 2);
     return `Rp ${dpAmount.toLocaleString("id-ID")}`;
   }
-  
-  return hargaRaw; 
+
+  return hargaRaw;
+}
+
+function getNumericHarga(hargaRaw: string, tipePembayaran: string = "Lunas"): number {
+  const amountStr = (hargaRaw || "").replace(/[^0-9]/g, "");
+  if (!amountStr) return 0;
+  const base = parseInt(amountStr, 10);
+  return tipePembayaran === "DP" ? Math.floor(base / 2) : base;
 }
 
 function BookingFormContent() {
   const searchParams = useSearchParams();
   const serviceParam = searchParams.get("service");
+  const statusParam = searchParams.get("status");
+  const isDokuSuccess = statusParam === "success";
 
   const availableOptions = useMemo(() => {
     if (!serviceParam) return KATEGORI_BOOKING;
@@ -100,6 +115,7 @@ function BookingFormContent() {
 
   const [formData, setFormData] = useState(() => {
     const terpilih = resolveKategori(serviceParam);
+    const defaultTipe = "DP";
 
     return {
       namaClient: searchParams.get("name") || "",
@@ -107,26 +123,64 @@ function BookingFormContent() {
       email: searchParams.get("email") || "",
       kategoriJasa: terpilih.kategori,
       baseHarga: terpilih.harga,
-      harga: terpilih.harga,
+      harga: formatHarga(terpilih.harga, defaultTipe),
       tanggalEvent: searchParams.get("date") || "",
       jamEvent: "",
       lokasi: searchParams.get("location") || "",
       keterangan: terpilih.paketAsli
         ? `Paket dipilih: ${terpilih.paketAsli}`
         : "",
-      tipePembayaran: "DP",
-      metodePembayaran: "Transfer",
+      tipePembayaran: defaultTipe,
+      metodePembayaran: "DOKU", // DOKU Checkout sebagai opsi utama & instan
     };
   });
 
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [status, setStatus] = useState<SubmitStatus>(isDokuSuccess ? "success" : "idle");
   const [formStep, setFormStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoadingBookings, setIsLoadingBookings] = useState(true);
   const [bookingsFailed, setBookingsFailed] = useState(false);
   const [konflikTanggal, setKonflikTanggal] = useState("");
+  const [dokuPaymentUrl, setDokuPaymentUrl] = useState<string>("");
+  const [hasSyncedN8n, setHasSyncedN8n] = useState(false);
+
+  // Jika kembali dari callback redirect DOKU Checkout (?status=success), pastikan update n8n menjadi Lunas
+  useEffect(() => {
+    if (isDokuSuccess && !hasSyncedN8n) {
+      const orderId = searchParams.get("order_id");
+      const clientName = searchParams.get("name") || formData.namaClient;
+      const service = searchParams.get("service") || formData.kategoriJasa;
+      const amount = searchParams.get("amount") || formData.harga;
+      const isDP = orderId?.includes("-DP-") || formData.tipePembayaran === "DP";
+      const targetStatus = isDP ? "DP" : "Lunas";
+
+      if (orderId) {
+        setHasSyncedN8n(true);
+        fetch("/api/payment/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId,
+            clientName,
+            service,
+            amount,
+            status: targetStatus,
+            statusPembayaran: targetStatus,
+            tipePembayaran: targetStatus,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(`n8n status ${targetStatus} confirmed successfully:`, data);
+          })
+          .catch((err) => {
+            console.warn("Gagal konfirmasi callback n8n:", err);
+          });
+      }
+    }
+  }, [isDokuSuccess, hasSyncedN8n, searchParams, formData.namaClient, formData.kategoriJasa, formData.harga, formData.tipePembayaran]);
 
   const fetchBookings = useCallback(async (signal?: AbortSignal) => {
     try {
@@ -220,17 +274,151 @@ function BookingFormContent() {
 
     try {
       const { ...restData } = formData;
-      
       // Hapus simbol '+' agar tidak error format formula di Spreadsheet
       restData.contact = restData.contact.replace(/\+/g, "");
-      const orderId = `BOOKING-${Date.now()}`;
+      const isDP = formData.tipePembayaran === "DP";
+      const targetStatus = isDP ? "DP" : "Lunas";
+      const orderId = `BOOKING-${isDP ? "DP" : "LUNAS"}-${Date.now()}`;
 
+      // ==========================================
+      // ALUR 1: PEMBAYARAN VIA DOKU CHECKOUT
+      // ==========================================
+      if (formData.metodePembayaran === "DOKU") {
+        // Simpan data booking ke webhook spreadsheet terlebih dahulu
+        try {
+          const formDataToSend = new FormData();
+          // Pemetaan field persis sesuai n8n & Google Sheets:
+          formDataToSend.append("namaClient", restData.namaClient);
+          formDataToSend.append("contact", restData.contact);
+          formDataToSend.append("kategoriJasa", restData.kategoriJasa);
+          formDataToSend.append("tanggalEvent", restData.tanggalEvent);
+          formDataToSend.append("jamEvent", restData.jamEvent);
+          formDataToSend.append("lokasi", restData.lokasi);
+          formDataToSend.append("harga", formData.harga);
+          formDataToSend.append("email", restData.email);
+          // Sesuai opsi yang dipilih: jika user memilih DP tercatat "DP", jika memilih lunas tercatat "Lunas"
+          formDataToSend.append("statusPembayaran", targetStatus);
+          formDataToSend.append("statuspembayaran", targetStatus);
+          formDataToSend.append("status_pembayaran", targetStatus);
+          formDataToSend.append("payment_status", targetStatus);
+          formDataToSend.append("keterangan", restData.keterangan);
+          // n8n mapping: {{ $json["Id-Order"] }} dan Id_order
+          formDataToSend.append("Id-Order", orderId);
+          formDataToSend.append("Id_order", orderId);
+          formDataToSend.append("order_id", orderId);
+          formDataToSend.append("buktiTransfer", `DOKU Checkout (${targetStatus})`);
+          formDataToSend.append("webViewLink", `DOKU Checkout (${targetStatus})`);
+          formDataToSend.append("tipePembayaran", formData.tipePembayaran);
+          formDataToSend.append("metodePembayaran", "DOKU Checkout");
+
+          // Simpan data order lengkap di storage untuk dikirim kembali saat callback sukses
+          const fullOrderData = {
+            orderId,
+            "Id-Order": orderId,
+            Id_order: orderId,
+            namaClient: restData.namaClient,
+            contact: restData.contact,
+            kategoriJasa: restData.kategoriJasa,
+            tanggalEvent: restData.tanggalEvent,
+            jamEvent: restData.jamEvent,
+            lokasi: restData.lokasi,
+            harga: formData.harga,
+            email: restData.email,
+            statusPembayaran: targetStatus, // "DP" jika pilih DP, "Lunas" jika pilih Lunas
+            statuspembayaran: targetStatus,
+            status: targetStatus,
+            tipePembayaran: formData.tipePembayaran,
+            keterangan: restData.keterangan,
+            metodePembayaran: "DOKU Checkout",
+            buktiTransfer: `DOKU Checkout (${targetStatus})`,
+            webViewLink: `DOKU Checkout (${targetStatus})`,
+          };
+          try {
+            sessionStorage.setItem("inferno_order_" + orderId, JSON.stringify(fullOrderData));
+            localStorage.setItem("inferno_order_" + orderId, JSON.stringify(fullOrderData));
+          } catch (e) {
+            console.warn("Storage save error:", e);
+          }
+
+          await fetch(BOOKING_WEBHOOK_URL, {
+            method: "POST",
+            body: formDataToSend,
+            signal: AbortSignal.timeout(15_000),
+          }).catch((err) => {
+            console.warn("Gagal simpan n8n, lanjut request pembayaran:", err);
+          });
+        } catch (webhookErr) {
+          console.warn("Webhook n8n error:", webhookErr);
+        }
+
+        // Hitung nominal harga bersih untuk gateway
+        const grossAmount = getNumericHarga(formData.baseHarga, formData.tipePembayaran);
+        const origin =
+          typeof window !== "undefined"
+            ? window.location.origin
+            : "https://www.inferno-production.com";
+
+        // Clean Callback URL tanpa karakter '?' dan '&' (sesuai aturan ketat DOKU API)
+        const callbackUrl = `${origin}/booking/success/${encodeURIComponent(orderId)}`;
+
+        // Request sesi DOKU Checkout ke backend
+        const paymentRes = await fetch("/api/payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId,
+            grossAmount,
+            customerName: formData.namaClient,
+            customerEmail: formData.email,
+            customerPhone: formData.contact,
+            itemName: formData.kategoriJasa.replace(/&/g, "dan"),
+            tipePembayaran: formData.tipePembayaran,
+            callbackUrl,
+          }),
+        });
+
+        const paymentData = await paymentRes.json();
+
+        if (!paymentRes.ok || !paymentData.payment_url) {
+          throw new Error(
+            paymentData.error ||
+              paymentData.details ||
+              "Gagal membuat sesi DOKU Checkout. Pastikan DOKU_CLIENT_ID & DOKU_SECRET_KEY telah diatur di .env.local."
+          );
+        }
+
+        setDokuPaymentUrl(paymentData.payment_url);
+        setStatus("idle");
+
+        // Buka modal pop-up DOKU Checkout menggunakan SDK
+        if (typeof window !== "undefined" && typeof window.loadJokulCheckout === "function") {
+          window.loadJokulCheckout(paymentData.payment_url);
+        } else {
+          // Fallback redirect jika SDK belum siap atau diblokir pop-up blocker
+          window.location.href = paymentData.payment_url;
+        }
+        return;
+      }
+
+      // ==========================================
+      // ALUR 2: PEMBAYARAN MANUAL (TRANSFER / QRIS)
+      // ==========================================
       const formDataToSend = new FormData();
       Object.entries(restData).forEach(([key, value]) => {
         formDataToSend.append(key, value as string);
       });
-      formDataToSend.append("payment_status", "Menunggu Konfirmasi");
+      // Sesuai opsi yang dipilih: jika user memilih DP tercatat "DP", jika memilih lunas tercatat "Lunas"
+      formDataToSend.append("statusPembayaran", targetStatus);
+      formDataToSend.append("statuspembayaran", targetStatus);
+      formDataToSend.append("status_pembayaran", targetStatus);
+      formDataToSend.append("payment_status", targetStatus);
+      formDataToSend.append("tipePembayaran", targetStatus);
       formDataToSend.append("order_id", orderId);
+      formDataToSend.append("Id-Order", orderId);
+      formDataToSend.append("Id_order", orderId);
+
       if (file) {
         formDataToSend.append("buktiTransfer", file);
       } else {
@@ -249,7 +437,7 @@ function BookingFormContent() {
         const detail = await n8nResponse.json().catch(() => null);
         setErrorMessage(
           detail?.message ??
-          "Maaf, tanggal ini baru saja penuh. Silakan pilih tanggal lain.",
+            "Maaf, tanggal ini baru saja penuh. Silakan pilih tanggal lain.",
         );
         setStatus("error");
         setFormStep(1);
@@ -262,7 +450,6 @@ function BookingFormContent() {
       }
 
       setStatus("success");
-
     } catch (error) {
       console.error("Gagal memproses booking:", error);
       const isTimeout =
@@ -272,7 +459,9 @@ function BookingFormContent() {
       setErrorMessage(
         isTimeout
           ? "Server terlalu lama merespons. Periksa koneksi Anda, lalu coba lagi."
-          : error instanceof Error ? error.message : "Booking gagal diproses. Silakan coba lagi."
+          : error instanceof Error
+          ? error.message
+          : "Booking gagal diproses. Silakan coba lagi."
       );
       setStatus("error");
     }
@@ -293,12 +482,15 @@ function BookingFormContent() {
     if (name === "kategoriJasa") {
       const baseHarga =
         KATEGORI_BOOKING.find((k) => k.value === value)?.harga ?? "";
+      const tipePembayaran = prevTipe(formData.tipePembayaran);
+
       setKonflikTanggal("");
       setFormData((prev) => ({
         ...prev,
         [name]: value,
         baseHarga,
-        harga: formatHarga(baseHarga, prev.tipePembayaran),
+        tipePembayaran,
+        harga: formatHarga(baseHarga, tipePembayaran),
       }));
     } else if (name === "tipePembayaran") {
       setFormData((prev) => ({
@@ -310,6 +502,8 @@ function BookingFormContent() {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
+
+  const prevTipe = (current: string) => current || "DP";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -323,15 +517,24 @@ function BookingFormContent() {
     }
   };
 
-  if (status === "success") {
+  const isUndangan = formData.kategoriJasa.toLowerCase().includes("undangan");
+
+  if (status === "success" || isDokuSuccess) {
     const selectedDate = getSelectedDate();
     const tanggalTampil = selectedDate
       ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
-        selectedDate,
-      )
-      : formData.tanggalEvent;
+          selectedDate,
+        )
+      : formData.tanggalEvent || "Sesuai Jadwal Event";
 
-    const waText = `Halo Inferno Creative, saya baru saja melakukan booking atas nama *${formData.namaClient}* untuk jasa *${formData.kategoriJasa}*. Berikut adalah bukti pembayaran saya.`;
+    const displayClient = formData.namaClient || searchParams.get("name") || "Pelanggan";
+    const displayService = formData.kategoriJasa || searchParams.get("service") || "Layanan Inferno";
+    const displayOrderId = searchParams.get("order_id") || "BOOKING";
+
+    const waText = searchParams.get("order_id")
+      ? `Halo Inferno Creative, saya telah menyelesaikan pembayaran (*LUNAS*) atas nama *${displayClient}* untuk jasa *${displayService}* (Order ID: ${displayOrderId}). Mohon konfirmasi dan proses pesanan saya.`
+      : `Halo Inferno Creative, saya baru saja melakukan booking atas nama *${formData.namaClient}* untuk jasa *${formData.kategoriJasa}*. Berikut adalah rincian pesanan saya.`;
+
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
 
     return (
@@ -342,25 +545,25 @@ function BookingFormContent() {
           transition={{ duration: 0.6 }}
           className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl text-center"
         >
-          <div className="flex justify-center mb-4 text-green-400">
+          <div className="flex justify-center mb-4 text-emerald-400">
             <CheckCircle2 size={64} strokeWidth={1.5} />
           </div>
 
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-            Booking Berhasil Dikirim!
+            Pembayaran Lunas & Booking Berhasil!
           </h1>
           <p className="text-white/70 mb-8">
-            Terima kasih, {formData.namaClient}. Detail booking Anda sudah kami
-            terima.
+            Terima kasih, {displayClient}. Pembayaran Anda telah terverifikasi dan tercatat di sistem kami sebagai <span className="text-emerald-400 font-bold">LUNAS</span>.
           </p>
 
           <dl className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8 space-y-3 text-left">
             {[
-              { label: "Kategori Jasa", value: formData.kategoriJasa },
-              { label: "Tanggal", value: tanggalTampil },
-              { label: "Jam", value: formData.jamEvent },
-              { label: "Lokasi", value: formData.lokasi },
-              { label: "Harga", value: formData.harga },
+              { label: "Nomor Order", value: displayOrderId },
+              { label: "Kategori Jasa", value: displayService },
+              { label: "Tanggal Event", value: tanggalTampil },
+              { label: "Jam Event", value: formData.jamEvent || "-" },
+              { label: "Lokasi", value: formData.lokasi || "-" },
+              { label: "Status Pembayaran", value: "Lunas (Terverifikasi Otomatis)" },
             ].map((item) => (
               <div
                 key={item.label}
@@ -375,7 +578,7 @@ function BookingFormContent() {
           </dl>
 
           <p className="text-white/70 text-sm mb-4">
-            Kami akan segera memproses booking Anda. Silakan hubungi kami via WhatsApp jika ada pertanyaan.
+            Data pesanan Anda telah tersinkronisasi otomatis dengan tim kami. Silakan hubungi kami via WhatsApp untuk proses pengerjaan atau pertanyaan lebih lanjut.
           </p>
 
           <a
@@ -385,7 +588,7 @@ function BookingFormContent() {
             className="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-medium py-4 px-6 rounded-xl transition-all shadow-lg shadow-[#25D366]/30 flex items-center justify-center gap-2 text-lg"
           >
             <MessageCircle size={20} />
-            <span>Hubungi via WhatsApp</span>
+            <span>Konfirmasi Cepat via WhatsApp</span>
           </a>
 
           <Link
@@ -402,6 +605,16 @@ function BookingFormContent() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
+      {/* Script JS DOKU Checkout SDK */}
+      <Script
+        src={
+          process.env.NEXT_PUBLIC_DOKU_IS_PRODUCTION === "true"
+            ? "https://jokul.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"
+            : "https://sandbox.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"
+        }
+        strategy="afterInteractive"
+      />
+
       {formStep === 1 ? (
         <Link
           href="/"
@@ -432,261 +645,378 @@ function BookingFormContent() {
             {formStep === 1 ? "Detail Booking" : "Detail Pembayaran"}
           </h1>
           <p className="text-white/70">
-            {formStep === 1 
-              ? "Lengkapi data di bawah ini untuk memproses pemesanan Anda." 
+            {formStep === 1
+              ? "Lengkapi data di bawah ini untuk memproses pemesanan Anda."
               : "Selesaikan pembayaran untuk mengonfirmasi pesanan Anda."}
           </p>
         </div>
 
         <form onSubmit={formStep === 1 ? handleNextStep : handleSubmit} className="space-y-6">
-          {formStep === 1 && (<>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Nama Client *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"><User size={20} /></div>
-                <input type="text" name="namaClient" placeholder="Nama Lengkap" value={formData.namaClient} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30" required />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Nomor WhatsApp *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"><Phone size={20} /></div>
-                <input type="tel" name="contact" placeholder="081234567890" value={formData.contact} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30" required />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Email *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"><Mail size={20} /></div>
-                <input type="email" name="email" placeholder="email@contoh.com" value={formData.email} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30" required />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Kategori Jasa *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"><Camera size={20} /></div>
-                <select name="kategoriJasa" value={formData.kategoriJasa} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 appearance-none outline-none focus:ring-2 focus:ring-red-600 transition-all cursor-pointer" style={{ colorScheme: "dark" }} required>
-                  {availableOptions.map((kategori) => (
-                    <option key={kategori.value} value={kategori.value} className="text-gray-900">{kategori.value}</option>
-                  ))}
-                </select>
-              </div>
-              {formData.kategoriJasa.toLowerCase().includes("photobooth") && (
-                <p className="text-white/50 text-xs ml-1 flex items-start gap-1 mt-1"><Info size={12} className="shrink-0 mt-0.5" />Silakan klik kolom di atas untuk mengubah durasi jam photobooth.</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-                <label className="text-white/90 text-sm font-medium ml-1">Lokasi *</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"><MapPin size={20} /></div>
-                  <input type="text" name="lokasi" placeholder="Ketik lokasi acara..." value={formData.lokasi} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30" required />
+          {formStep === 1 && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Nama Client *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                      <User size={20} />
+                    </div>
+                    <input
+                      type="text"
+                      name="namaClient"
+                      placeholder="Nama Lengkap"
+                      value={formData.namaClient}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      required
+                    />
+                  </div>
                 </div>
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Tanggal Event *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 z-10 pointer-events-none"><Calendar size={20} /></div>
-                <DatePicker selected={getSelectedDate()} onChange={handleDateChange} filterDate={(date) => !isDateDisabled(date)} minDate={new Date()} dateFormat="dd MMMM yyyy" locale={id} placeholderText={isLoadingBookings ? "Memuat kalender..." : "Pilih tanggal"} disabled={isLoadingBookings} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30" wrapperClassName="w-full" required />
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Nomor WhatsApp *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                      <Phone size={20} />
+                    </div>
+                    <input
+                      type="tel"
+                      name="contact"
+                      placeholder="081234567890"
+                      value={formData.contact}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Email *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                      <Mail size={20} />
+                    </div>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="email@contoh.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Kategori Jasa *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                      <Camera size={20} />
+                    </div>
+                    <select
+                      name="kategoriJasa"
+                      value={formData.kategoriJasa}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 appearance-none outline-none focus:ring-2 focus:ring-red-600 transition-all cursor-pointer"
+                      style={{ colorScheme: "dark" }}
+                      required
+                    >
+                      {availableOptions.map((kategori) => (
+                        <option key={kategori.value} value={kategori.value} className="text-gray-900">
+                          {kategori.value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {formData.kategoriJasa.toLowerCase().includes("photobooth") && (
+                    <p className="text-white/50 text-xs ml-1 flex items-start gap-1 mt-1">
+                      <Info size={12} className="shrink-0 mt-0.5" />
+                      Silakan klik kolom di atas untuk mengubah durasi jam photobooth.
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Lokasi *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                      <MapPin size={20} />
+                    </div>
+                    <input
+                      type="text"
+                      name="lokasi"
+                      placeholder="Ketik lokasi acara..."
+                      value={formData.lokasi}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Tanggal Event *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 z-10 pointer-events-none">
+                      <Calendar size={20} />
+                    </div>
+                    <DatePicker
+                      selected={getSelectedDate()}
+                      onChange={handleDateChange}
+                      filterDate={(date) => !isDateDisabled(date)}
+                      minDate={new Date()}
+                      dateFormat="dd MMMM yyyy"
+                      locale={id}
+                      placeholderText={isLoadingBookings ? "Memuat kalender..." : "Pilih tanggal"}
+                      disabled={isLoadingBookings}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      wrapperClassName="w-full"
+                      required
+                    />
+                  </div>
+                  {konflikTanggal && (
+                    <p className="text-amber-300/90 text-xs ml-1 flex items-start gap-1 mt-1">
+                      <AlertCircle size={12} className="shrink-0 mt-0.5" />
+                      Tanggal sudah penuh untuk kategori ini. Silakan pilih tanggal lain.
+                    </p>
+                  )}
+                  {!isLoadingBookings &&
+                    (bookingsFailed ? (
+                      <p className="text-amber-300/90 text-xs ml-1 flex items-start gap-1 mt-1">
+                        <AlertCircle size={12} className="shrink-0 mt-0.5" />
+                        Jadwal terisi gagal dimuat, jadi tanggal yang sudah penuh mungkin tidak tercoret. Kami akan konfirmasi ulang ketersediaannya.
+                      </p>
+                    ) : (
+                      <p className="text-white/50 text-xs ml-1 flex items-center gap-1 mt-1">
+                        <Info size={12} />
+                        Tanggal yang dicoret berarti sudah penuh untuk kategori ini.
+                      </p>
+                    ))}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-white/90 text-sm font-medium ml-1">Jam Event *</label>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none">
+                      <Clock size={20} />
+                    </div>
+                    <input
+                      type="time"
+                      name="jamEvent"
+                      value={formData.jamEvent}
+                      onChange={handleChange}
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all"
+                      style={{ colorScheme: "dark" }}
+                      required
+                    />
+                  </div>
+                </div>
               </div>
-              {konflikTanggal && <p className="text-amber-300/90 text-xs ml-1 flex items-start gap-1 mt-1"><AlertCircle size={12} className="shrink-0 mt-0.5" />Tanggal sudah penuh untuk kategori ini. Silakan pilih tanggal lain.</p>}
-              {!isLoadingBookings &&
-                (bookingsFailed ? (
-                  <p className="text-amber-300/90 text-xs ml-1 flex items-start gap-1 mt-1">
-                    <AlertCircle size={12} className="shrink-0 mt-0.5" />
-                    Jadwal terisi gagal dimuat, jadi tanggal yang sudah penuh
-                    mungkin tidak tercoret. Kami akan konfirmasi ulang
-                    ketersediaannya.
-                  </p>
-                ) : (
-                  <p className="text-white/50 text-xs ml-1 flex items-center gap-1 mt-1">
-                    <Info size={12} />
-                    Tanggal yang dicoret berarti sudah penuh untuk kategori ini.
-                  </p>
-                ))}
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-white/90 text-sm font-medium ml-1">Jam Event *</label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none"><Clock size={20} /></div>
-                <input type="time" name="jamEvent" value={formData.jamEvent} onChange={handleChange} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all" style={{ colorScheme: "dark" }} required />
+              <div className="space-y-2">
+                <label className="text-white/90 text-sm font-medium ml-1">Keterangan Tambahan</label>
+                <div className="relative">
+                  <div className="absolute left-3 top-4 text-white/50">
+                    <FileText size={20} />
+                  </div>
+                  <textarea
+                    name="keterangan"
+                    placeholder="Detail tambahan, request khusus, atau tema undangan..."
+                    value={formData.keterangan}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30 resize-none"
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-white/90 text-sm font-medium ml-1">Keterangan Tambahan</label>
-            <div className="relative">
-              <div className="absolute left-3 top-4 text-white/50"><FileText size={20} /></div>
-              <textarea name="keterangan" placeholder="Detail tambahan, request khusus, atau pertanyaan..." value={formData.keterangan} onChange={handleChange} rows={4} className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30 resize-none" />
-            </div>
-          </div>
-          </>)}
+            </>
+          )}
 
           {formStep === 2 && (
             <div className="space-y-6">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <h3 className="text-lg font-semibold text-white mb-4">Ringkasan Pesanan</h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between gap-4">
-                    <span className="text-white/60 shrink-0">Jasa / Paket</span>
-                    <span className="text-white font-medium text-right">{formData.kategoriJasa}</span>
-                  </div>
-                  {formData.keterangan && formData.keterangan.startsWith("Paket dipilih:") && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-white/60 shrink-0">Detail</span>
-                      <span className="text-white font-medium text-right text-xs opacity-80">{formData.keterangan.replace("Paket dipilih:", "").trim()}</span>
+              {/* Ringkasan Pesanan */}
+              <div className="bg-gradient-to-b from-white/[0.08] to-white/[0.03] border border-white/15 rounded-2xl p-5 md:p-6 backdrop-blur-md shadow-xl">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-lg bg-red-600/20 text-red-400">
+                      <FileText size={18} />
                     </div>
-                  )}
-                  <div className="flex justify-between gap-4">
-                    <span className="text-white/60 shrink-0">Tanggal Event</span>
+                    <div>
+                      <h3 className="text-base font-semibold text-white">Ringkasan Pesanan</h3>
+                      <p className="text-xs text-white/50">Pastikan detail pesanan Anda sudah benar</p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-600/20 text-red-300 border border-red-500/30">
+                    Inferno Creative
+                  </span>
+                </div>
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 shrink-0">Nama Pemesan</span>
+                    <span className="text-white font-medium text-right">{formData.namaClient || "-"}</span>
+                  </div>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 shrink-0">Paket Layanan</span>
+                    <div className="text-right">
+                      <span className="text-white font-medium block">{formData.kategoriJasa}</span>
+                      {formData.keterangan && formData.keterangan.startsWith("Paket dipilih:") && (
+                        <span className="text-xs text-red-300/80 block mt-0.5">
+                          {formData.keterangan.replace("Paket dipilih:", "").trim()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center gap-4">
+                    <span className="text-white/60 shrink-0">Jadwal Event</span>
                     <span className="text-white font-medium text-right">
-                      {formData.tanggalEvent ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(new Date(formData.tanggalEvent)) : "-"}
+                      {formData.tanggalEvent
+                        ? new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
+                            new Date(formData.tanggalEvent)
+                          )
+                        : "-"}
+                      {formData.jamEvent ? ` • ${formData.jamEvent}` : ""}
                     </span>
                   </div>
-                  <div className="flex justify-between border-t border-white/10 pt-3 mt-3">
-                    <span className="text-white/80 font-medium">Total Harga</span>
-                    <span className="text-white font-bold">{formData.baseHarga}</span>
+                  {formData.lokasi && (
+                    <div className="flex justify-between items-start gap-4">
+                      <span className="text-white/60 shrink-0">Lokasi Acara</span>
+                      <span className="text-white/90 text-right text-xs max-w-[240px] truncate">{formData.lokasi}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center border-t border-white/10 pt-3 mt-3">
+                    <span className="text-white/80 font-medium">Total Nilai Paket</span>
+                    <span className="text-lg font-bold text-white tracking-wide">{formData.baseHarga}</span>
                   </div>
                 </div>
               </div>
 
+              {/* Pilihan Skema Pembayaran */}
               <div className="space-y-3">
-                <label className="text-white/90 text-sm font-medium ml-1">Pilih Opsi Pembayaran *</label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div 
-                    onClick={() => handleChange({ target: { name: 'tipePembayaran', value: 'DP' } } as any)}
-                    className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${formData.tipePembayaran === 'DP' ? 'border-red-600 bg-white/5' : 'border-white/10 bg-white/5 hover:border-white/20'}`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-semibold text-white">DP (50%)</span>
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${formData.tipePembayaran === 'DP' ? 'border-red-600' : 'border-white/30'}`}>
-                        {formData.tipePembayaran === 'DP' && <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>}
-                      </div>
-                    </div>
-                    <p className="text-2xl font-bold text-white">{formatHarga(formData.baseHarga, 'DP')}</p>
-                    <p className="text-xs text-white/50 mt-2 leading-relaxed">Bayar setengah di awal untuk mengamankan jadwal. Sisa dilunasi maksimal H-1 event.</p>
-                  </div>
-
-                  <div 
-                    onClick={() => handleChange({ target: { name: 'tipePembayaran', value: 'Lunas' } } as any)}
-                    className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${formData.tipePembayaran === 'Lunas' ? 'border-red-600 bg-white/5' : 'border-white/10 bg-white/5 hover:border-white/20'}`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-semibold text-white">Lunas (100%)</span>
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${formData.tipePembayaran === 'Lunas' ? 'border-red-600' : 'border-white/30'}`}>
-                        {formData.tipePembayaran === 'Lunas' && <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>}
-                      </div>
-                    </div>
-                    <p className="text-2xl font-bold text-white">{formData.baseHarga}</p>
-                    <p className="text-xs text-white/50 mt-2 leading-relaxed">Bayar penuh di awal agar tidak repot memikirkan sisa nanti.</p>
-                  </div>
+                <div className="flex items-center justify-between px-1">
+                  <label className="text-white/90 text-sm font-semibold">Pilih Skema Pembayaran</label>
+                  <span className="text-xs text-white/50">Dapat disesuaikan</span>
                 </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-white/90 text-sm font-medium ml-1">Pilih Metode Pembayaran *</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div 
-                    onClick={() => handleChange({ target: { name: 'metodePembayaran', value: 'Transfer' } } as any)}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex justify-between items-center ${formData.metodePembayaran === 'Transfer' ? 'border-red-600 bg-white/5' : 'border-white/10 bg-white/5 hover:border-white/20'}`}
+                  {/* DP 50% */}
+                  <div
+                    onClick={() =>
+                      handleChange({ target: { name: "tipePembayaran", value: "DP" } } as any)
+                    }
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                      formData.tipePembayaran === "DP"
+                        ? "border-red-500/80 bg-gradient-to-br from-red-950/40 via-red-900/10 to-transparent ring-1 ring-red-500/40 shadow-lg shadow-red-950/40"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]"
+                    }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="bg-white/10 p-2 rounded-lg text-white">
-                        <CreditCard size={20} />
+                    <div>
+                      <div className="flex justify-between items-start mb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-white text-base">Uang Muka (DP 50%)</span>
+                          {formData.tipePembayaran === "DP" && (
+                            <span className="text-[10px] bg-red-600/30 text-red-300 font-semibold px-2 py-0.5 rounded-full border border-red-500/40">
+                              Terpilih
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            formData.tipePembayaran === "DP"
+                              ? "border-red-500 bg-red-600/20"
+                              : "border-white/30"
+                          }`}
+                        >
+                          {formData.tipePembayaran === "DP" && (
+                            <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+                          )}
+                        </div>
                       </div>
-                      <span className="font-semibold text-white">Transfer Bank</span>
+                      <p className="text-2xl font-bold text-white tracking-tight">
+                        {formatHarga(formData.baseHarga, "DP")}
+                      </p>
                     </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.metodePembayaran === 'Transfer' ? 'border-red-600' : 'border-white/30'}`}>
-                      {formData.metodePembayaran === 'Transfer' && <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>}
-                    </div>
-                  </div>
-
-                  <div 
-                    onClick={() => handleChange({ target: { name: 'metodePembayaran', value: 'QRIS' } } as any)}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex justify-between items-center ${formData.metodePembayaran === 'QRIS' ? 'border-red-600 bg-white/5' : 'border-white/10 bg-white/5 hover:border-white/20'}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="bg-white/10 p-2 rounded-lg text-white">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                      </div>
-                      <span className="font-semibold text-white">QRIS (E-Wallet)</span>
-                    </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.metodePembayaran === 'QRIS' ? 'border-red-600' : 'border-white/30'}`}>
-                      {formData.metodePembayaran === 'QRIS' && <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mt-4">
-                <h3 className="text-white font-semibold mb-4">Instruksi Pembayaran</h3>
-                {formData.metodePembayaran === "Transfer" ? (
-                  <div className="space-y-4 text-white/80">
-                    <p>Silakan transfer sejumlah <strong className="text-white font-bold text-lg">{formData.harga}</strong> ke rekening berikut:</p>
-                    <div className="bg-white/5 p-4 rounded-xl border border-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                      <div className="bg-white p-3 rounded-xl self-start sm:self-center flex items-center justify-center shadow-inner">
-                        <span className="text-blue-600 font-black text-xl italic tracking-tighter leading-none">BCA</span>
-                      </div>
-                      <div>
-                        <p className="text-2xl font-mono text-white tracking-widest drop-shadow-md">6690955278</p>
-                        <p className="text-sm text-white/50 uppercase tracking-wider mt-1">A.N. I MADE WISNU PRADNYA YOGA</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-white/50 flex items-start gap-2 mt-2">
-                      <Info size={16} className="shrink-0 mt-0.5" />
-                      Silakan upload bukti transfer Anda pada kolom di bawah ini.
+                    <p className="text-xs text-white/50 mt-3 leading-relaxed">
+                      Kunci & amankan jadwal acara Anda. Sisa pelunasan diselesaikan sebelum hari pelaksanaan.
                     </p>
                   </div>
-                ) : (
-                  <div className="space-y-4 text-white/80 text-center flex flex-col items-center">
-                    <p>Silakan scan QRIS berikut menggunakan aplikasi m-Banking atau e-Wallet Anda sejumlah <strong className="text-white font-bold text-lg">{formData.harga}</strong>:</p>
-                    <div className="bg-white p-4 rounded-2xl inline-block shadow-xl my-2">
-                      <img src="/QRIS/QRIS.jpeg" alt="QRIS Inferno Creative" className="w-56 h-56 object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                      <div className="hidden w-56 h-56 flex flex-col items-center justify-center bg-slate-100 text-slate-500 border-2 border-dashed border-slate-300 rounded-xl text-sm">
-                        <Upload size={24} className="mb-2 opacity-50" />
-                        <span>Gambar QRIS tidak ditemukan</span>
-                        <span className="text-xs opacity-70 mt-1">(Upload file QRIS.jpeg ke folder public/QRIS/)</span>
+
+                  {/* Lunas 100% */}
+                  <div
+                    onClick={() =>
+                      handleChange({ target: { name: "tipePembayaran", value: "Lunas" } } as any)
+                    }
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                      formData.tipePembayaran === "Lunas"
+                        ? "border-red-500/80 bg-gradient-to-br from-red-950/40 via-red-900/10 to-transparent ring-1 ring-red-500/40 shadow-lg shadow-red-950/40"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-white text-base">Bayar Penuh (Lunas)</span>
+                          {formData.tipePembayaran === "Lunas" && (
+                            <span className="text-[10px] bg-red-600/30 text-red-300 font-semibold px-2 py-0.5 rounded-full border border-red-500/40">
+                              Terpilih
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            formData.tipePembayaran === "Lunas"
+                              ? "border-red-500 bg-red-600/20"
+                              : "border-white/30"
+                          }`}
+                        >
+                          {formData.tipePembayaran === "Lunas" && (
+                            <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+                          )}
+                        </div>
                       </div>
+                      <p className="text-2xl font-bold text-white tracking-tight">
+                        {formData.baseHarga}
+                      </p>
                     </div>
-                    <p className="text-sm text-white/50 flex items-start gap-2 text-left w-full max-w-md">
-                      <Info size={16} className="shrink-0 mt-0.5" />
-                      Silakan upload bukti pembayaran QRIS Anda pada kolom di bawah ini.
+                    <p className="text-xs text-white/50 mt-3 leading-relaxed">
+                      Satu kali transaksi praktis untuk kemudahan proses tanpa perlu memikirkan tagihan lanjutan.
                     </p>
                   </div>
-                )}
+                </div>
               </div>
 
-              {/* Upload Bukti */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mt-4">
-                <label className="text-white/90 text-sm font-medium mb-3 block">
-                  Upload Bukti Pembayaran *
-                </label>
-                <div className="flex flex-col gap-3">
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    onChange={handleFileChange}
-                    className="w-full text-white/70 text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition-all cursor-pointer file:cursor-pointer bg-white/5 border border-white/10 rounded-xl p-2 focus:outline-none focus:ring-1 focus:ring-white"
-                    required
-                  />
-                  <p className="text-white/40 text-xs flex items-center gap-1">
-                    <Info size={12} />
-                    Format didukung: JPG, PNG, PDF (Maks. 5MB)
+              {/* Metode Pembayaran - Minimalis & Elegan */}
+              <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 sm:p-5 backdrop-blur-md flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0">
+                  <CreditCard size={20} />
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-white block">Pembayaran Online</span>
+                  <p className="text-xs text-white/50 mt-0.5">
+                    Mendukung QRIS, Virtual Account, Kartu Kredit, & E-Wallet
                   </p>
                 </div>
               </div>
+
+              {/* Sesi popup aktif jika dibutuhkan */}
+              {dokuPaymentUrl && (
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-200 text-sm flex items-center justify-between gap-3 shadow-lg">
+                  <div className="flex items-center gap-2.5">
+                    <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
+                    <span>Jendela pembayaran aktif. Silakan selesaikan transaksi Anda.</span>
+                  </div>
+                  <a
+                    href={dokuPaymentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3.5 py-2 rounded-xl font-medium inline-flex items-center gap-1.5 shrink-0 transition-all shadow-md"
+                  >
+                    <span>Buka Pembayaran</span>
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+              )}
             </div>
           )}
 
@@ -701,7 +1031,7 @@ function BookingFormContent() {
             {formStep === 1 ? (
               <button
                 type="submit"
-                className="w-full bg-red-700 hover:bg-red-800 text-white font-medium py-4 px-6 rounded-xl transition-all shadow-lg shadow-red-700/30 flex items-center justify-center gap-2 text-lg"
+                className="w-full bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-xl shadow-red-950/40 flex items-center justify-center gap-2 text-base md:text-lg cursor-pointer active:scale-[0.99]"
               >
                 Lanjut ke Pembayaran
               </button>
@@ -709,20 +1039,15 @@ function BookingFormContent() {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="w-full bg-red-700 hover:bg-red-800 disabled:bg-red-700/50 disabled:cursor-not-allowed text-white font-medium py-4 px-6 rounded-xl transition-all shadow-lg shadow-red-700/30 flex items-center justify-center gap-2 text-lg"
+                className="w-full bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-500 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 text-base md:text-lg cursor-pointer active:scale-[0.99]"
               >
                 {status === "submitting" ? (
                   <>
                     <Loader2 size={20} className="animate-spin" />
-                    <span>Mengirim...</span>
+                    <span>Menyiapkan Pembayaran...</span>
                   </>
                 ) : (
-                  <>
-                    <Send size={20} />
-                    <span>
-                      {status === "error" ? "Coba Kirim Lagi" : "Selesaikan Pemesanan"}
-                    </span>
-                  </>
+                  <span>Bayar Sekarang • {formData.harga}</span>
                 )}
               </button>
             )}
