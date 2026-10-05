@@ -18,6 +18,8 @@ export interface InvoiceData {
   subtotal?: number;
   discount?: number;
   total?: number;
+  payment_amount?: number;
+  remaining_amount?: number;
 
   logoBase64?: string;
 }

@@ -30,6 +30,7 @@ export async function GET() {
     subtotal: 2000000,
     discount: 0,
     total: 2000000,
+    payment_amount: 2000000,
   };
 
   try {

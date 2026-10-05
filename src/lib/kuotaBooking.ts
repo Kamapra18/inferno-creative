@@ -70,22 +70,66 @@ export function toDateString(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
+export function normalizeDateString(dateStr: string | undefined | null): string {
+  if (!dateStr) return "";
+  const s = String(dateStr).trim();
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(s)) {
+    const [y, m, d] = s.split("-");
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+  // DD/MM/YYYY or DD-MM-YYYY
+  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(s)) {
+    const parts = s.split(/[\/\-]/);
+    const d = parts[0].padStart(2, "0");
+    const m = parts[1].padStart(2, "0");
+    const y = parts[2];
+    return `${y}-${m}-${d}`;
+  }
+  return s;
+}
+
 export function isTanggalPenuh(bookings: BookingTerdaftar[], tanggal: string, grupAktif: string) {
   if (grupAktif === "undangan") return false; // undangan ga ada batasnya
 
-  let kuotaPerHari = 2; // Maksimal 2 event per hari untuk dokumentasi/foto/video
-  if (grupAktif === "photobooth") {
-    kuotaPerHari = 1;
-  } else if (grupAktif === "all") {
-    kuotaPerHari = 1; // All-in-one dihitung 1 karena mencakup photobooth dsb
-  }
-  
-  let count = 0;
+  const normalizedTanggal = normalizeDateString(tanggal);
+
+  // Hitung jumlah pemakaian booking di tanggal tersebut
+  let countFotoVideo = 0;
+  let countPhotobooth = 0;
+  let countAllInOne = 0;
+
   for (const b of bookings) {
-    if (b.tanggalEvent === tanggal && grupKategori(b.kategoriJasa) === grupAktif) {
-      count++;
+    if (normalizeDateString(b.tanggalEvent) === normalizedTanggal) {
+      const grup = grupKategori(b.kategoriJasa);
+      if (grup === "fotovideo") {
+        countFotoVideo++;
+      } else if (grup === "photobooth") {
+        countPhotobooth++;
+      } else if (grup === "all") {
+        countAllInOne++;
+      }
     }
   }
-  
-  return count >= kuotaPerHari;
+
+  // Aturan kuota:
+  // - Foto & Video: 2 slot per hari
+  // - Photobooth: 1 slot per hari
+  // - Paket All In One: mencakup 1 slot Photobooth dan 1 slot Foto/Video
+  const totalPhotoboothUsed = countPhotobooth + countAllInOne;
+  const totalFotoVideoUsed = countFotoVideo + countAllInOne;
+
+  if (grupAktif === "photobooth") {
+    return totalPhotoboothUsed >= 1;
+  }
+
+  if (grupAktif === "fotovideo") {
+    return totalFotoVideoUsed >= 2;
+  }
+
+  if (grupAktif === "all") {
+    return countAllInOne >= 1 || totalPhotoboothUsed >= 1 || totalFotoVideoUsed >= 2;
+  }
+
+  return false;
 }

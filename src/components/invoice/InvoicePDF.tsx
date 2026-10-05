@@ -593,7 +593,13 @@ export const InvoicePDF: React.FC<{ data: InvoiceData }> = ({ data }) => {
                 <Text style={styles.bigTotalLabel}>
                   {data.payment_status?.toUpperCase() === 'DP' ? 'TOTAL PEMBAYARAN (DP 50%)' : 'TOTAL PEMBAYARAN'}
                 </Text>
-                <Text style={styles.bigTotalValue}>{formatCurrency(data.total)}</Text>
+                <Text style={styles.bigTotalValue}>
+                  {formatCurrency(
+                    data.payment_amount !== undefined
+                      ? data.payment_amount
+                      : data.total
+                  )}
+                </Text>
               </View>
 
               <View style={styles.statusBox}>

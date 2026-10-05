@@ -96,16 +96,32 @@ export async function POST(req: NextRequest) {
       "UNPAID"
     );
 
-    let calculatedTotal = Math.max(subtotal - discount, 0);
-    if (paymentStatus.toUpperCase() === "DP") {
-      calculatedTotal = calculatedTotal / 2;
+    const grandTotal = Math.max(subtotal - discount, 0);
+    // Total keseluruhan pesanan (harus tetap harga penuh dikurangi diskon)
+    const total = grandTotal;
+
+    // Nominal yang dibayarkan untuk blok merah:
+    // Jangan dibagi 2, ambil nilai otomatis yang sudah di-set dari alur payment / webhook / n8n
+    const explicitPayment = extractNumber(body, [
+      "payment_amount",
+      "total_pembayaran",
+      "amount_paid",
+      "nominal_dibayar",
+      "bayar",
+      "gross_amount",
+    ]);
+
+    const rawHarga = extractNumber(body, ["harga", "amount", "total_price"]);
+    const hasBaseHarga = extractNumber(body, ["baseHarga", "base_harga"]) > 0;
+
+    let paymentAmount = total;
+    if (explicitPayment > 0) {
+      paymentAmount = explicitPayment;
+    } else if (hasBaseHarga && rawHarga > 0) {
+      paymentAmount = rawHarga;
     }
 
-    const total = extractNumber(
-      body,
-      ["total", "grand_total", "total_pembayaran"],
-      calculatedTotal,
-    );
+    const remainingAmount = Math.max(total - paymentAmount, 0);
 
     const paketValue = extractField(
       body,
@@ -160,6 +176,8 @@ export async function POST(req: NextRequest) {
       subtotal,
       discount,
       total,
+      payment_amount: paymentAmount,
+      remaining_amount: remainingAmount,
     };
 
     // Read logo image

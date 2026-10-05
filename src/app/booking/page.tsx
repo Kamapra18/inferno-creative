@@ -38,21 +38,38 @@ import {
   resolveKategori,
   isTanggalPenuh,
   toDateString,
+  normalizeDateString,
   type BookingTerdaftar,
 } from "@/lib/kuotaBooking";
 
 type Booking = BookingTerdaftar;
 
 interface SheetRow {
-  "TanggalEvent "?: string;
-  TanggalEvent?: string;
-  KategoriJasa?: string;
+  [key: string]: any;
 }
 
-const toBooking = (row: SheetRow): Booking => ({
-  tanggalEvent: (row["TanggalEvent "] ?? row.TanggalEvent ?? "").trim(),
-  kategoriJasa: (row.KategoriJasa ?? "").trim(),
-});
+const toBooking = (row: SheetRow): Booking => {
+  const rawTanggal =
+    row["TanggalEvent "] ??
+    row["TanggalEvent"] ??
+    row["tanggalEvent"] ??
+    row["tanggal_event"] ??
+    row["Tanggal"] ??
+    row["tanggal"] ??
+    "";
+
+  const rawKategori =
+    row["KategoriJasa"] ??
+    row["kategoriJasa"] ??
+    row["kategori_jasa"] ??
+    row["paket"] ??
+    "";
+
+  return {
+    tanggalEvent: normalizeDateString(String(rawTanggal)),
+    kategoriJasa: String(rawKategori).trim(),
+  };
+};
 
 const WHATSAPP_NUMBER = "6285645150857";
 const BOOKING_WEBHOOK_URL =
@@ -766,12 +783,13 @@ function BookingFormContent() {
                       selected={getSelectedDate()}
                       onChange={handleDateChange}
                       filterDate={(date) => !isDateDisabled(date)}
+                      dayClassName={(date) => (isDateDisabled(date) ? "booking-day-penuh" : "")}
                       minDate={new Date()}
                       dateFormat="dd MMMM yyyy"
                       locale={id}
                       placeholderText={isLoadingBookings ? "Memuat kalender..." : "Pilih tanggal"}
                       disabled={isLoadingBookings}
-                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30"
+                      className="w-full bg-white/5 border border-white/10 text-white rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-red-600 transition-all placeholder:text-white/30 cursor-pointer"
                       wrapperClassName="w-full"
                       required
                     />
