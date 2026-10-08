@@ -223,19 +223,31 @@ export default function AdminDashboard() {
   };
 
   const getStatusBadge = (status?: string) => {
-    const s = (status || "").toLowerCase();
-    let text = status || "Menunggu Konfirmasi";
-    let dotColor = "bg-red-600";
+    const s = (status || "").toLowerCase().trim();
+    let text = status || "Menunggu Pembayaran";
+    let dotColor = "bg-amber-400";
+    let textColor = "text-amber-300";
+
     if (s.includes("lunas") || s === "success") {
       text = "Lunas";
       dotColor = "bg-emerald-400";
+      textColor = "text-emerald-300";
     } else if (s.includes("dp")) {
       text = "DP";
+      dotColor = "bg-blue-400";
+      textColor = "text-blue-300";
+    } else if (s.includes("batal") || s.includes("cancel")) {
+      text = "Batal";
+      dotColor = "bg-red-500";
+      textColor = "text-red-400";
+    } else if (s.includes("menunggu")) {
+      text = status || "Menunggu Pembayaran";
       dotColor = "bg-amber-400";
+      textColor = "text-amber-300";
     }
 
     return (
-      <span className="inline-flex items-center gap-2 px-3 py-1 bg-transparent border border-white/20 text-white/90 rounded-full text-xs font-medium">
+      <span className={`inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 ${textColor} rounded-full text-xs font-medium`}>
         <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span>
         {text}
       </span>
@@ -419,7 +431,9 @@ export default function AdminDashboard() {
                             >
                               <option className="bg-black text-white" value="DP">DP</option>
                               <option className="bg-black text-white" value="Lunas">Lunas</option>
+                              <option className="bg-black text-white" value="Menunggu Pembayaran">Menunggu Pembayaran</option>
                               <option className="bg-black text-white" value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+                              <option className="bg-black text-white" value="Batal">Batal</option>
                             </select>
                           ) : (
                             getStatusBadge(row.status_pembayaran)

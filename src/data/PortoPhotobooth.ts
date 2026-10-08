@@ -104,6 +104,22 @@ export const portoEvents: Event[] = [
       "https://drive.google.com/drive/folders/1aBoqpdHdi_A_a7zGGnnOWHm8AkUv535d?usp=drive_link",
   },
   {
+    id: 13,
+    slug: "Akamara Dijiwa",
+    name: "Gatring Akamara Dijiwa",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1bkWCtPdtUHy1-PQdmmTn3D_WBQDRwVby?usp=drive_link",
+  },
+  {
+    id: 14,
+    slug: "KMI EXPO 2026",
+    name: "KMI EXPO 2026",
+    image: "/box.png",
+    frame:
+      "https://drive.google.com/drive/folders/1AP6plIyNgri4Wd1QS16Lfoder_1E76gK?usp=drive_link",
+  },
+  {
     id: 99,
     slug: "Yande-&-Melly",
     name: "Wedding Yande & Melly",

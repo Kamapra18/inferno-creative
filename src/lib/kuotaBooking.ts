@@ -1,6 +1,7 @@
 export type BookingTerdaftar = {
   tanggalEvent: string;
   kategoriJasa: string;
+  statusPembayaran?: string;
 };
 
 export const KATEGORI_BOOKING = [
@@ -101,6 +102,19 @@ export function isTanggalPenuh(bookings: BookingTerdaftar[], tanggal: string, gr
 
   for (const b of bookings) {
     if (normalizeDateString(b.tanggalEvent) === normalizedTanggal) {
+      // Abaikan booking yang belum dibayar atau batal agar tidak mengunci kuota pelanggan lain
+      const status = (b.statusPembayaran || "").toLowerCase().trim();
+      const isUnpaidOrCancelled =
+        status.includes("menunggu") ||
+        status.includes("pending") ||
+        status.includes("batal") ||
+        status.includes("cancel") ||
+        status.includes("expired");
+
+      if (isUnpaidOrCancelled) {
+        continue;
+      }
+
       const grup = grupKategori(b.kategoriJasa);
       if (grup === "fotovideo") {
         countFotoVideo++;

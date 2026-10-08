@@ -112,48 +112,54 @@ export async function POST(request: Request) {
     updateFormData.append("tipePembayaran", effectiveTipe);
     updateFormData.append("metodePembayaran", metodePembayaran);
 
-    const updatePromise = fetch(BOOKING_UPDATE_URL, {
-      method: "POST",
-      body: updateFormData,
-      signal: AbortSignal.timeout(10_000),
-    }).catch((err) => {
+    let updateOk = false;
+    try {
+      const updateRes = await fetch(BOOKING_UPDATE_URL, {
+        method: "POST",
+        body: updateFormData,
+        signal: AbortSignal.timeout(10_000),
+      });
+      updateOk = updateRes.ok;
+    } catch (err) {
       console.warn("Gagal update status n8n via BOOKING_UPDATE_URL:", err);
-      return null;
-    });
+    }
 
-    // 2. Kirim update ke n8n webhook booking-inferno sebagai fallback
-    const webhookFormData = new FormData();
-    webhookFormData.append("namaClient", effectiveName);
-    webhookFormData.append("contact", effectiveContact);
-    webhookFormData.append("kategoriJasa", effectiveService);
-    webhookFormData.append("tanggalEvent", effectiveTanggal);
-    webhookFormData.append("jamEvent", effectiveJam);
-    webhookFormData.append("lokasi", effectiveLokasi);
-    webhookFormData.append("harga", effectiveHarga);
-    webhookFormData.append("email", effectiveEmail);
-    webhookFormData.append("statusPembayaran", effectiveStatus);
-    webhookFormData.append("statuspembayaran", effectiveStatus);
-    webhookFormData.append("status_pembayaran", effectiveStatus);
-    webhookFormData.append("payment_status", effectiveStatus);
-    webhookFormData.append("keterangan", effectiveKeterangan);
-    webhookFormData.append("Id-Order", effectiveOrderId);
-    webhookFormData.append("Id_order", effectiveOrderId);
-    webhookFormData.append("order_id", effectiveOrderId);
-    webhookFormData.append("buktiTransfer", effectiveBukti);
-    webhookFormData.append("webViewLink", effectiveWebView);
-    webhookFormData.append("tipePembayaran", effectiveTipe);
-    webhookFormData.append("metodePembayaran", metodePembayaran);
+    // 2. Hanya kirim ke webhook booking-inferno jika update ke n8n gagal (sebagai fallback darurat)
+    if (!updateOk) {
+      try {
+        const webhookFormData = new FormData();
+        webhookFormData.append("namaClient", effectiveName);
+        webhookFormData.append("contact", effectiveContact);
+        webhookFormData.append("kategoriJasa", effectiveService);
+        webhookFormData.append("tanggalEvent", effectiveTanggal);
+        webhookFormData.append("jamEvent", effectiveJam);
+        webhookFormData.append("lokasi", effectiveLokasi);
+        webhookFormData.append("harga", effectiveHarga);
+        webhookFormData.append("email", effectiveEmail);
+        webhookFormData.append("statusPembayaran", effectiveStatus);
+        webhookFormData.append("statuspembayaran", effectiveStatus);
+        webhookFormData.append("status_pembayaran", effectiveStatus);
+        webhookFormData.append("payment_status", effectiveStatus);
+        webhookFormData.append("keterangan", effectiveKeterangan);
+        webhookFormData.append("Id-Order", effectiveOrderId);
+        webhookFormData.append("Id_order", effectiveOrderId);
+        webhookFormData.append("order_id", effectiveOrderId);
+        webhookFormData.append("buktiTransfer", effectiveBukti);
+        webhookFormData.append("webViewLink", effectiveWebView);
+        webhookFormData.append("tipePembayaran", effectiveTipe);
+        webhookFormData.append("metodePembayaran", metodePembayaran);
 
-    const webhookPromise = fetch(BOOKING_WEBHOOK_URL, {
-      method: "POST",
-      body: webhookFormData,
-      signal: AbortSignal.timeout(10_000),
-    }).catch((err) => {
-      console.warn("Gagal update status n8n via BOOKING_WEBHOOK_URL:", err);
-      return null;
-    });
-
-    await Promise.allSettled([updatePromise, webhookPromise]);
+        await fetch(BOOKING_WEBHOOK_URL, {
+          method: "POST",
+          body: webhookFormData,
+          signal: AbortSignal.timeout(10_000),
+        }).catch((err) => {
+          console.warn("Gagal fallback status n8n via BOOKING_WEBHOOK_URL:", err);
+        });
+      } catch (err) {
+        console.warn("Error fallback booking-inferno:", err);
+      }
+    }
 
     return NextResponse.json({
       success: true,

@@ -65,9 +65,19 @@ const toBooking = (row: SheetRow): Booking => {
     row["paket"] ??
     "";
 
+  const rawStatus =
+    row["statusPembayaran"] ??
+    row["statuspembayaran"] ??
+    row["status_pembayaran"] ??
+    row["payment_status"] ??
+    row["status"] ??
+    row["Status"] ??
+    "";
+
   return {
     tanggalEvent: normalizeDateString(String(rawTanggal)),
     kategoriJasa: String(rawKategori).trim(),
+    statusPembayaran: String(rawStatus).trim(),
   };
 };
 
@@ -313,18 +323,19 @@ function BookingFormContent() {
           formDataToSend.append("lokasi", restData.lokasi);
           formDataToSend.append("harga", formData.harga);
           formDataToSend.append("email", restData.email);
-          // Sesuai opsi yang dipilih: jika user memilih DP tercatat "DP", jika memilih lunas tercatat "Lunas"
-          formDataToSend.append("statusPembayaran", targetStatus);
-          formDataToSend.append("statuspembayaran", targetStatus);
-          formDataToSend.append("status_pembayaran", targetStatus);
-          formDataToSend.append("payment_status", targetStatus);
+          // Status awal saat form disubmit sebelum bayar adalah "Menunggu Pembayaran"
+          const initialStatus = "Menunggu Pembayaran";
+          formDataToSend.append("statusPembayaran", initialStatus);
+          formDataToSend.append("statuspembayaran", initialStatus);
+          formDataToSend.append("status_pembayaran", initialStatus);
+          formDataToSend.append("payment_status", initialStatus);
           formDataToSend.append("keterangan", restData.keterangan);
           // n8n mapping: {{ $json["Id-Order"] }} dan Id_order
           formDataToSend.append("Id-Order", orderId);
           formDataToSend.append("Id_order", orderId);
           formDataToSend.append("order_id", orderId);
-          formDataToSend.append("buktiTransfer", `DOKU Checkout (${targetStatus})`);
-          formDataToSend.append("webViewLink", `DOKU Checkout (${targetStatus})`);
+          formDataToSend.append("buktiTransfer", `DOKU Checkout (${initialStatus})`);
+          formDataToSend.append("webViewLink", `DOKU Checkout (${initialStatus})`);
           formDataToSend.append("tipePembayaran", formData.tipePembayaran);
           formDataToSend.append("metodePembayaran", "DOKU Checkout");
 

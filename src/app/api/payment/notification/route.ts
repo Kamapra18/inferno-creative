@@ -67,7 +67,8 @@ export async function POST(request: Request) {
         ? `Rp ${Number(amount).toLocaleString("id-ID")}`
         : "";
 
-      // 1. Kirim update ke n8n webhook update-pembayaran-status (Webhook 3)
+      // 1. Kirim update status ke n8n webhook update-pembayaran-status (Webhook 3)
+      let updateSuccess = false;
       try {
         const updateFormData = new FormData();
         // n8n property matches: Id-Order, Id_order, order_id
@@ -88,45 +89,46 @@ export async function POST(request: Request) {
           updateFormData.append("harga", formattedHarga);
         }
 
-        await fetch(BOOKING_UPDATE_URL, {
+        const res = await fetch(BOOKING_UPDATE_URL, {
           method: "POST",
           body: updateFormData,
           signal: AbortSignal.timeout(10_000),
-        }).catch((err) => {
-          console.error("Gagal update status n8n via BOOKING_UPDATE_URL:", err);
         });
+        updateSuccess = res.ok;
       } catch (err) {
         console.error("Error sending update to n8n BOOKING_UPDATE_URL:", err);
       }
 
-      // 2. Kirim update ke n8n webhook booking-inferno sebagai fallback
-      try {
-        const webhookFormData = new FormData();
-        webhookFormData.append("Id-Order", orderId);
-        webhookFormData.append("Id_order", orderId);
-        webhookFormData.append("order_id", orderId);
-        webhookFormData.append("statusPembayaran", targetStatus);
-        webhookFormData.append("statuspembayaran", targetStatus);
-        webhookFormData.append("status_pembayaran", targetStatus);
-        webhookFormData.append("payment_status", targetStatus);
-        webhookFormData.append("tipePembayaran", targetStatus);
-        webhookFormData.append("channel", channel);
-        webhookFormData.append("metodePembayaran", `DOKU Checkout (${channel})`);
-        webhookFormData.append("buktiTransfer", `DOKU Checkout (${channel} - ${targetStatus})`);
-        webhookFormData.append("webViewLink", `DOKU Checkout (${channel} - ${targetStatus})`);
-        if (formattedHarga) {
-          webhookFormData.append("harga", formattedHarga);
-        }
+      // 2. Jika update gagal (misal data belum tercatat di spreadsheet), gunakan fallback
+      if (!updateSuccess) {
+        try {
+          const webhookFormData = new FormData();
+          webhookFormData.append("Id-Order", orderId);
+          webhookFormData.append("Id_order", orderId);
+          webhookFormData.append("order_id", orderId);
+          webhookFormData.append("statusPembayaran", targetStatus);
+          webhookFormData.append("statuspembayaran", targetStatus);
+          webhookFormData.append("status_pembayaran", targetStatus);
+          webhookFormData.append("payment_status", targetStatus);
+          webhookFormData.append("tipePembayaran", targetStatus);
+          webhookFormData.append("channel", channel);
+          webhookFormData.append("metodePembayaran", `DOKU Checkout (${channel})`);
+          webhookFormData.append("buktiTransfer", `DOKU Checkout (${channel} - ${targetStatus})`);
+          webhookFormData.append("webViewLink", `DOKU Checkout (${channel} - ${targetStatus})`);
+          if (formattedHarga) {
+            webhookFormData.append("harga", formattedHarga);
+          }
 
-        await fetch(BOOKING_WEBHOOK_URL, {
-          method: "POST",
-          body: webhookFormData,
-          signal: AbortSignal.timeout(10_000),
-        }).catch((err) => {
-          console.error("Gagal update status n8n via BOOKING_WEBHOOK_URL:", err);
-        });
-      } catch (webhookErr) {
-        console.error("Error sending update to n8n BOOKING_WEBHOOK_URL:", webhookErr);
+          await fetch(BOOKING_WEBHOOK_URL, {
+            method: "POST",
+            body: webhookFormData,
+            signal: AbortSignal.timeout(10_000),
+          }).catch((err) => {
+            console.error("Gagal update status n8n via BOOKING_WEBHOOK_URL:", err);
+          });
+        } catch (webhookErr) {
+          console.error("Error sending update to n8n BOOKING_WEBHOOK_URL:", webhookErr);
+        }
       }
     }
 
