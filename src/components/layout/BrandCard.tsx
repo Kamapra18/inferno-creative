@@ -30,7 +30,7 @@ export default function CardLink() {
             letterSpacing: "0.02em",
           }}>
           Inferno Photobooth <br />
-          <span className="text-[16px]">OJK DahSyat</span>
+          <span className="text-[16px]">Wedding Of DekMbar & Ria</span>
         </h1>
 
         <p

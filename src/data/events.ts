@@ -10,12 +10,12 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "ojk-dahsyat",
-    name: "OJK DahSyat",
+    slug: "DekMbar & Rian",
+    name: "Wedding Of DekMbar & Rian",
     frame:
-      "https://drive.google.com/drive/folders/12l3Ma2wFYCUBwv-QQQB5POgpwOLnyQsu",
+      "https://drive.google.com/drive/folders/1Un_UnNkyM0EhYkz6oAp-WECOHXELZfqF",
     video:
-      "https://drive.google.com/drive/folders/1OOyJoZuiajunBZ5D_MOyprDwISTAB6Jc",
-    raw: "https://drive.google.com/drive/folders/1VWAdX3PY4GpR5cLel2AG9fmbS-zSjv8J",
+      "https://drive.google.com/drive/folders/1LlcQpVmM7-fdq0HzdXOCtyj1HJfdJbRF",
+    raw: "https://drive.google.com/drive/folders/1t48TlXt_vCG89TBlv8fVqWo0xXwnpa5w",
   },
 ];
