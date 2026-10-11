@@ -212,7 +212,8 @@ const topTitles = [
   "Paket All In One",
   "Prewedding Foto & Video",
   "Photobooth Unlimited Print",
-  "Dokumentasi Wedding"
+  "Photobooth Limited Print",
+  "Photobooth Softcopy Only",
 ];
 
 export const paketList: Paket[] = [

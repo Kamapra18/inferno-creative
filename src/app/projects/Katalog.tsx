@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   katalogAll,
@@ -13,15 +14,59 @@ import Back from "@/components/elements/Back";
 
 type Category = "all" | "fotoVideo" | "photobooth" | "undangan";
 
-const categories = [
+const categories: { label: string; value: Category }[] = [
   { label: "Semua", value: "all" },
   { label: "Foto & Video", value: "fotoVideo" },
   { label: "Photobooth", value: "photobooth" },
   { label: "Undangan", value: "undangan" },
 ];
 
-export default function ProjectsSection() {
-  const [active, setActive] = useState<Category>("all");
+function parseCategory(cat: string | null): Category {
+  if (!cat) return "all";
+  const normalized = cat.toLowerCase().replace(/[^a-z]/g, "");
+  if (normalized === "photobooth") return "photobooth";
+  if (normalized === "undangan") return "undangan";
+  if (
+    normalized === "fotovideo" ||
+    normalized === "foto" ||
+    normalized === "video" ||
+    normalized === "dokumentasi"
+  ) {
+    return "fotoVideo";
+  }
+  return "all";
+}
+
+function ProjectsContent() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const [active, setActive] = useState<Category>(() => parseCategory(categoryParam));
+
+  useEffect(() => {
+    if (categoryParam) {
+      setActive(parseCategory(categoryParam));
+    }
+  }, [categoryParam]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#porto") {
+      const el = document.getElementById("porto");
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  }, []);
+
+  const handleCategoryChange = (val: Category) => {
+    setActive(val);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("category", val);
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
 
   const getData = () => {
     switch (active) {
@@ -61,7 +106,7 @@ export default function ProjectsSection() {
           {categories.map((cat) => (
             <button
               key={cat.value}
-              onClick={() => setActive(cat.value as Category)}
+              onClick={() => handleCategoryChange(cat.value)}
               className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border backdrop-blur-sm
               ${
                 active === cat.value
@@ -152,5 +197,24 @@ export default function ProjectsSection() {
         </Back>
       </motion.div>
     </section>
+  );
+}
+
+export default function ProjectsSection() {
+  return (
+    <Suspense
+      fallback={
+        <section
+          id="porto"
+          className="py-20 px-4 text-center text-white"
+          style={{ background: "var(--color-background-solid)" }}>
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Portofolio Kami</h1>
+            <p className="opacity-70">Memuat portofolio...</p>
+          </div>
+        </section>
+      }>
+      <ProjectsContent />
+    </Suspense>
   );
 }
