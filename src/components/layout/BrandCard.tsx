@@ -30,7 +30,8 @@ export default function CardLink() {
             letterSpacing: "0.02em",
           }}>
           Inferno Photobooth <br />
-          <span className="text-[16px]">Wedding & Metatah Of Bayu & Cintya & Rai Budha</span>
+          <span className="text-[16px]">Wedding & Metatah Of </span>
+          <span className="text-[16px]">Bayu & Cintya & Rai Budha </span>
         </h1>
 
         <p
