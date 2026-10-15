@@ -10,12 +10,12 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "Widyana & Zeilani",
-    name: "Wedding Widyana & Zeilani",
+    slug: "Bayu & Cintya",
+    name: "Wedding and Metatah Widyana & Zeilani Rai Budha",
     frame:
-      "https://drive.google.com/drive/folders/17ZTQA6KYPbWvJhms4bXJDQ6kQft5t2Re?usp=drive_link",
+      "https://drive.google.com/drive/folders/1f2zUmm7dosXfRpCnBaWM6EKankjN0f6q",
     video:
-      "https://drive.google.com/drive/folders/1G9QWcm2duKbGtSmod79yiIcBvyeijk4u?usp=drive_link",
-    raw: "https://drive.google.com/drive/folders/1N0wL2gPZtJ_vL1kwYUq-oJlQfbB3-5b9?usp=drive_link",
+      "https://drive.google.com/drive/folders/1r2-ZwQGwEDgUn6y8Wmmkp3jZvph80yLg",
+    raw: "https://drive.google.com/drive/folders/1IDJNjWpd3-oRMHc62BbWvfdf2oSRnSb9",
   },
 ];
