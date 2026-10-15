@@ -10,8 +10,8 @@ export type Event = {
 export const events: Event[] = [
   {
     id: 1,
-    slug: "Bayu & Cintya",
-    name: "Wedding and Metatah \n Badi & Cintya & Rai Budha",
+    slug: "Budi & Cintya",
+    name: "Wedding and Metatah \n Budi & Cintya & Rai Budha",
     frame:
       "https://drive.google.com/drive/folders/1f2zUmm7dosXfRpCnBaWM6EKankjN0f6q",
     video:

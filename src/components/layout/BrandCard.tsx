@@ -31,7 +31,8 @@ export default function CardLink() {
           }}>
           Inferno Photobooth <br />
           <span className="text-[16px]">Wedding & Metatah Of </span>
-          <span className="text-[16px]">Badi & Cintya & Rai Budha </span>
+          <br />
+          <span className="text-[16px]">Budi & Cintya & Rai Budha </span>
         </h1>
 
         <p
