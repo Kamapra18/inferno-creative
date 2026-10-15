@@ -11,7 +11,7 @@ export const events: Event[] = [
   {
     id: 1,
     slug: "Budi & Cintya",
-    name: "Wedding and Metatah \n Budi & Cintya & Rai Budha",
+    name: "Wedding and Metatah \n Budi & Cintya & Rai Buda",
     frame:
       "https://drive.google.com/drive/folders/1f2zUmm7dosXfRpCnBaWM6EKankjN0f6q",
     video:
