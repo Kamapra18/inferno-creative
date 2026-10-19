@@ -166,7 +166,7 @@ const PaketSection = ({ category = "all" }: Props) => {
         </div>
 
         {/* PACKAGE CARDS GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${data.length === 4 ? "lg:grid-cols-4 md:grid-cols-2" : "md:grid-cols-3"} gap-6`}>
           {data.map((paket, index) => (
             <motion.div
               key={index}

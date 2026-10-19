@@ -199,6 +199,26 @@ export const paketAllInOne: Paket[] = [
 ];
 
 /* ========================= */
+/* TESTING (1 ITEM) */
+/* ========================= */
+export const paketTesting: Paket[] = [
+  {
+    title: "Paket Testing",
+    subtitle: "Khusus Uji Coba Transaksi Rp 1",
+    price: "Rp 1",
+    badge: "Testing",
+    category: "all",
+    features: [
+      "Uji Coba Booking System",
+      "Simulasi Pembayaran Rp 1",
+      "Verifikasi Sistem & Invoice",
+      "Khusus Keperluan Uji Coba",
+    ],
+    buttonText: "Booking Now",
+  },
+];
+
+/* ========================= */
 /* GABUNGAN */
 /* ========================= */
 const allPaket = [
@@ -206,12 +226,14 @@ const allPaket = [
   ...paketDokumentasi,
   ...paketPhotobooth,
   ...paketAllInOne,
+  ...paketTesting,
 ];
 
 export const paketUtamaTitles = [
   "Paket All In One",
   "Photobooth Unlimited Print",
   "Dokumentasi Wedding",
+  "Paket Testing",
 ];
 
 export const paketUtama: Paket[] = [

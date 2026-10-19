@@ -5,6 +5,7 @@ export type BookingTerdaftar = {
 };
 
 export const KATEGORI_BOOKING = [
+  { value: "Paket Testing", harga: "Rp 1" },
   { value: "Prewedding Foto", harga: "Rp 1.500.000" },
   { value: "Prewedding Video", harga: "Rp 1.500.000" },
   { value: "Prewedding Foto & Video", harga: "Rp 3.000.000" },
@@ -30,6 +31,7 @@ export const KATEGORI_BOOKING = [
 
 export function grupKategori(kategori: string) {
   const k = kategori.toLowerCase();
+  if (k.includes("testing")) return "all";
   if (k.includes("foto") || k.includes("video") || k.includes("dokumentasi")) return "fotovideo";
   if (k.includes("photobooth")) return "photobooth";
   if (k.includes("undangan")) return "undangan";

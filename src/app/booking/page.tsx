@@ -102,7 +102,7 @@ function formatHarga(hargaRaw: string, tipePembayaran: string = "Lunas") {
   const grossAmount = parseInt(amountStr, 10);
 
   if (tipePembayaran === "DP") {
-    const dpAmount = Math.floor(grossAmount / 2);
+    const dpAmount = grossAmount <= 1 ? grossAmount : Math.floor(grossAmount / 2);
     return `Rp ${dpAmount.toLocaleString("id-ID")}`;
   }
 
@@ -113,6 +113,7 @@ function getNumericHarga(hargaRaw: string, tipePembayaran: string = "Lunas"): nu
   const amountStr = (hargaRaw || "").replace(/[^0-9]/g, "");
   if (!amountStr) return 0;
   const base = parseInt(amountStr, 10);
+  if (base <= 1) return base;
   return tipePembayaran === "DP" ? Math.floor(base / 2) : base;
 }
 
