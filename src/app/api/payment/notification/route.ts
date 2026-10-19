@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyDokuSignature } from "@/lib/doku";
-
-const BOOKING_UPDATE_URL =
-  "https://n8n.imadegautama.com/webhook/update-pembayaran-status";
-const BOOKING_WEBHOOK_URL =
-  "https://n8n.imadegautama.com/webhook/booking-inferno";
+import { syncBookingPaymentStatus } from "@/lib/bookingSync";
 
 export async function POST(request: Request) {
   try {
@@ -61,81 +57,38 @@ export async function POST(request: Request) {
 
     // Jika pembayaran sukses, update status ke n8n sesuai pilihan (DP atau Lunas)
     if (transactionStatus === "SUCCESS" && orderId) {
-      const isDP = orderId.includes("-DP-");
+      const isDP =
+        orderId.toUpperCase().includes("-DP") ||
+        orderId.toUpperCase().includes("DP");
       const targetStatus = isDP ? "DP" : "Lunas";
       const formattedHarga = amount
         ? `Rp ${Number(amount).toLocaleString("id-ID")}`
         : "";
 
-      // 1. Kirim update status ke n8n webhook update-pembayaran-status (Webhook 3)
-      let updateSuccess = false;
-      try {
-        const updateFormData = new FormData();
-        // n8n property matches: Id-Order, Id_order, order_id
-        updateFormData.append("Id-Order", orderId);
-        updateFormData.append("Id_order", orderId);
-        updateFormData.append("order_id", orderId);
-        // n8n property matches: {{ $('Webhook').first().json.body.statusPembayaran }}
-        updateFormData.append("statusPembayaran", targetStatus);
-        updateFormData.append("statuspembayaran", targetStatus);
-        updateFormData.append("status_pembayaran", targetStatus);
-        updateFormData.append("payment_status", targetStatus);
-        updateFormData.append("tipePembayaran", targetStatus);
-        updateFormData.append("channel", channel);
-        updateFormData.append("metodePembayaran", `DOKU Checkout (${channel})`);
-        updateFormData.append("buktiTransfer", `DOKU Checkout (${channel} - ${targetStatus})`);
-        updateFormData.append("webViewLink", `DOKU Checkout (${channel} - ${targetStatus})`);
-        if (formattedHarga) {
-          updateFormData.append("harga", formattedHarga);
-        }
+      const customerName =
+        body?.customer?.name ||
+        body?.order?.customer_name ||
+        "";
+      const customerEmail =
+        body?.customer?.email ||
+        body?.order?.customer_email ||
+        "";
 
-        const res = await fetch(BOOKING_UPDATE_URL, {
-          method: "POST",
-          body: updateFormData,
-          signal: AbortSignal.timeout(10_000),
-        });
-        updateSuccess = res.ok;
-      } catch (err) {
-        console.error("Error sending update to n8n BOOKING_UPDATE_URL:", err);
-      }
-
-      // 2. Jika update gagal (misal data belum tercatat di spreadsheet), gunakan fallback
-      if (!updateSuccess) {
-        try {
-          const webhookFormData = new FormData();
-          webhookFormData.append("Id-Order", orderId);
-          webhookFormData.append("Id_order", orderId);
-          webhookFormData.append("order_id", orderId);
-          webhookFormData.append("statusPembayaran", targetStatus);
-          webhookFormData.append("statuspembayaran", targetStatus);
-          webhookFormData.append("status_pembayaran", targetStatus);
-          webhookFormData.append("payment_status", targetStatus);
-          webhookFormData.append("tipePembayaran", targetStatus);
-          webhookFormData.append("channel", channel);
-          webhookFormData.append("metodePembayaran", `DOKU Checkout (${channel})`);
-          webhookFormData.append("buktiTransfer", `DOKU Checkout (${channel} - ${targetStatus})`);
-          webhookFormData.append("webViewLink", `DOKU Checkout (${channel} - ${targetStatus})`);
-          if (formattedHarga) {
-            webhookFormData.append("harga", formattedHarga);
-          }
-
-          await fetch(BOOKING_WEBHOOK_URL, {
-            method: "POST",
-            body: webhookFormData,
-            signal: AbortSignal.timeout(10_000),
-          }).catch((err) => {
-            console.error("Gagal update status n8n via BOOKING_WEBHOOK_URL:", err);
-          });
-        } catch (webhookErr) {
-          console.error("Error sending update to n8n BOOKING_WEBHOOK_URL:", webhookErr);
-        }
-      }
+      await syncBookingPaymentStatus({
+        orderId,
+        statusPembayaran: targetStatus,
+        namaClient: customerName,
+        email: customerEmail,
+        harga: formattedHarga,
+        channel,
+        metodePembayaran: `DOKU Checkout (${channel})`,
+      });
     }
 
     // DOKU mengharapkan respon 200 OK dengan format JSON
     return NextResponse.json({
       status: "SUCCESS",
-      message: "DOKU notification received and synced with n8n as Lunas",
+      message: "DOKU notification received and synced successfully",
     });
   } catch (error: any) {
     console.error("Error processing DOKU notification:", error);
@@ -145,3 +98,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

@@ -18,9 +18,25 @@ export default function BookingSuccessPage() {
   useEffect(() => {
     let cachedData: any = {};
     try {
-      const raw =
-        sessionStorage.getItem("inferno_order_" + orderId) ||
-        localStorage.getItem("inferno_order_" + orderId);
+      const keys = [
+        "inferno_order_" + orderId,
+        "inferno_order_" + orderId.replace(/-(DP|LUNAS)$/i, ""),
+      ];
+      let raw: string | null = null;
+      for (const k of keys) {
+        raw = sessionStorage.getItem(k) || localStorage.getItem(k);
+        if (raw) break;
+      }
+      if (!raw) {
+        // Fallback: cari entri inferno_order_ terbaru di storage
+        for (let i = sessionStorage.length - 1; i >= 0; i--) {
+          const k = sessionStorage.key(i);
+          if (k && k.startsWith("inferno_order_")) {
+            raw = sessionStorage.getItem(k);
+            if (raw) break;
+          }
+        }
+      }
       if (raw) {
         cachedData = JSON.parse(raw);
         setOrderInfo(cachedData);
@@ -32,7 +48,8 @@ export default function BookingSuccessPage() {
     if (orderId && !hasSynced) {
       setHasSynced(true);
       const isDPOrder =
-        orderId.includes("-DP-") ||
+        orderId.toUpperCase().includes("-DP") ||
+        orderId.toUpperCase().includes("DP") ||
         cachedData.tipePembayaran === "DP" ||
         cachedData.statusPembayaran === "DP";
       const targetStatusToSend = isDPOrder ? "DP" : "Lunas";
@@ -53,7 +70,7 @@ export default function BookingSuccessPage() {
           harga: cachedData.harga || "",
           email: cachedData.email || "",
           keterangan: cachedData.keterangan || "",
-          statusPembayaran: targetStatusToSend, // Sesuai opsi: "DP" jika pilih DP, "Lunas" jika pilih Lunas
+          statusPembayaran: targetStatusToSend,
           statuspembayaran: targetStatusToSend,
           status: targetStatusToSend,
           buktiTransfer: `DOKU Checkout (${targetStatusToSend})`,

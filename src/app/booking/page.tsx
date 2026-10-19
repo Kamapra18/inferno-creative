@@ -181,7 +181,10 @@ function BookingFormContent() {
       const clientName = searchParams.get("name") || formData.namaClient;
       const service = searchParams.get("service") || formData.kategoriJasa;
       const amount = searchParams.get("amount") || formData.harga;
-      const isDP = orderId?.includes("-DP-") || formData.tipePembayaran === "DP";
+      const isDP =
+        orderId?.toUpperCase().includes("-DP") ||
+        orderId?.toUpperCase().includes("DP") ||
+        formData.tipePembayaran === "DP";
       const targetStatus = isDP ? "DP" : "Lunas";
 
       if (orderId) {
@@ -340,11 +343,45 @@ function BookingFormContent() {
           formDataToSend.append("tipePembayaran", formData.tipePembayaran);
           formDataToSend.append("metodePembayaran", "DOKU Checkout");
 
+          await fetch(BOOKING_WEBHOOK_URL, {
+            method: "POST",
+            body: formDataToSend,
+            signal: AbortSignal.timeout(15_000),
+          }).catch((err) => {
+            console.warn("Gagal simpan n8n, lanjut request pembayaran:", err);
+          });
+
+          // Ambil ID pesanan sebenarnya (BINF-YYYYMMDD-XXX) yang dihasilkan n8n di Google Sheets
+          let finalOrderId = orderId;
+          try {
+            const listRes = await fetch(BOOKING_LIST_URL, { signal: AbortSignal.timeout(6000) });
+            if (listRes.ok) {
+              const rows = await listRes.json();
+              if (Array.isArray(rows) && rows.length > 0) {
+                const cleanName = restData.namaClient.trim().toLowerCase();
+                const cleanDate = restData.tanggalEvent.trim();
+                const matched = rows.slice().reverse().find((r: any) => {
+                  const rName = String(r["Nama Client"] || r.namaClient || "").trim().toLowerCase();
+                  const rDate = String(r["TanggalEvent "] || r.TanggalEvent || r.tanggalEvent || "").trim();
+                  return (cleanName && cleanDate && rName === cleanName && rDate === cleanDate) ||
+                         (cleanName && rName === cleanName);
+                });
+                if (matched?.Id_order) {
+                  finalOrderId = `${matched.Id_order}-${isDP ? "DP" : "LUNAS"}`;
+                  console.log("Resolved n8n Sheet Order ID:", finalOrderId);
+                }
+              }
+            }
+          } catch (fetchErr) {
+            console.warn("Gagal mengambil BINF Order ID dari n8n, menggunakan fallback:", fetchErr);
+          }
+
           // Simpan data order lengkap di storage untuk dikirim kembali saat callback sukses
           const fullOrderData = {
-            orderId,
-            "Id-Order": orderId,
-            Id_order: orderId,
+            orderId: finalOrderId,
+            initialOrderId: orderId,
+            "Id-Order": finalOrderId,
+            Id_order: finalOrderId,
             namaClient: restData.namaClient,
             contact: restData.contact,
             kategoriJasa: restData.kategoriJasa,
@@ -353,7 +390,7 @@ function BookingFormContent() {
             lokasi: restData.lokasi,
             harga: formData.harga,
             email: restData.email,
-            statusPembayaran: targetStatus, // "DP" jika pilih DP, "Lunas" jika pilih Lunas
+            statusPembayaran: targetStatus,
             statuspembayaran: targetStatus,
             status: targetStatus,
             tipePembayaran: formData.tipePembayaran,
@@ -362,71 +399,70 @@ function BookingFormContent() {
             buktiTransfer: `DOKU Checkout (${targetStatus})`,
             webViewLink: `DOKU Checkout (${targetStatus})`,
           };
+
           try {
+            sessionStorage.setItem("inferno_order_" + finalOrderId, JSON.stringify(fullOrderData));
+            localStorage.setItem("inferno_order_" + finalOrderId, JSON.stringify(fullOrderData));
             sessionStorage.setItem("inferno_order_" + orderId, JSON.stringify(fullOrderData));
             localStorage.setItem("inferno_order_" + orderId, JSON.stringify(fullOrderData));
+            const baseId = finalOrderId.replace(/-(DP|LUNAS)$/i, "");
+            sessionStorage.setItem("inferno_order_" + baseId, JSON.stringify(fullOrderData));
+            localStorage.setItem("inferno_order_" + baseId, JSON.stringify(fullOrderData));
           } catch (e) {
             console.warn("Storage save error:", e);
           }
 
-          await fetch(BOOKING_WEBHOOK_URL, {
+          // Hitung nominal harga bersih untuk gateway
+          const grossAmount = getNumericHarga(formData.baseHarga, formData.tipePembayaran);
+          const origin =
+            typeof window !== "undefined"
+              ? window.location.origin
+              : "https://www.inferno-production.com";
+
+          // Clean Callback URL tanpa karakter '?' dan '&' (sesuai aturan ketat DOKU API)
+          const callbackUrl = `${origin}/booking/success/${encodeURIComponent(finalOrderId)}`;
+
+          // Request sesi DOKU Checkout ke backend
+          const paymentRes = await fetch("/api/payment", {
             method: "POST",
-            body: formDataToSend,
-            signal: AbortSignal.timeout(15_000),
-          }).catch((err) => {
-            console.warn("Gagal simpan n8n, lanjut request pembayaran:", err);
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId: finalOrderId,
+              grossAmount,
+              customerName: formData.namaClient,
+              customerEmail: formData.email,
+              customerPhone: formData.contact,
+              itemName: formData.kategoriJasa.replace(/&/g, "dan"),
+              tipePembayaran: formData.tipePembayaran,
+              callbackUrl,
+            }),
           });
+
+          const paymentData = await paymentRes.json();
+
+          if (!paymentRes.ok || !paymentData.payment_url) {
+            throw new Error(
+              paymentData.error ||
+                paymentData.details ||
+                "Gagal membuat sesi DOKU Checkout. Pastikan DOKU_CLIENT_ID & DOKU_SECRET_KEY telah diatur di .env.local."
+            );
+          }
+
+          setDokuPaymentUrl(paymentData.payment_url);
+          setStatus("idle");
+
+          // Buka modal pop-up DOKU Checkout menggunakan SDK
+          if (typeof window !== "undefined" && typeof window.loadJokulCheckout === "function") {
+            window.loadJokulCheckout(paymentData.payment_url);
+          } else {
+            // Fallback redirect jika SDK belum siap atau diblokir pop-up blocker
+            window.location.href = paymentData.payment_url;
+          }
+          return;
         } catch (webhookErr) {
           console.warn("Webhook n8n error:", webhookErr);
-        }
-
-        // Hitung nominal harga bersih untuk gateway
-        const grossAmount = getNumericHarga(formData.baseHarga, formData.tipePembayaran);
-        const origin =
-          typeof window !== "undefined"
-            ? window.location.origin
-            : "https://www.inferno-production.com";
-
-        // Clean Callback URL tanpa karakter '?' dan '&' (sesuai aturan ketat DOKU API)
-        const callbackUrl = `${origin}/booking/success/${encodeURIComponent(orderId)}`;
-
-        // Request sesi DOKU Checkout ke backend
-        const paymentRes = await fetch("/api/payment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId,
-            grossAmount,
-            customerName: formData.namaClient,
-            customerEmail: formData.email,
-            customerPhone: formData.contact,
-            itemName: formData.kategoriJasa.replace(/&/g, "dan"),
-            tipePembayaran: formData.tipePembayaran,
-            callbackUrl,
-          }),
-        });
-
-        const paymentData = await paymentRes.json();
-
-        if (!paymentRes.ok || !paymentData.payment_url) {
-          throw new Error(
-            paymentData.error ||
-              paymentData.details ||
-              "Gagal membuat sesi DOKU Checkout. Pastikan DOKU_CLIENT_ID & DOKU_SECRET_KEY telah diatur di .env.local."
-          );
-        }
-
-        setDokuPaymentUrl(paymentData.payment_url);
-        setStatus("idle");
-
-        // Buka modal pop-up DOKU Checkout menggunakan SDK
-        if (typeof window !== "undefined" && typeof window.loadJokulCheckout === "function") {
-          window.loadJokulCheckout(paymentData.payment_url);
-        } else {
-          // Fallback redirect jika SDK belum siap atau diblokir pop-up blocker
-          window.location.href = paymentData.payment_url;
         }
         return;
       }
