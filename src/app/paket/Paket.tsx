@@ -7,10 +7,8 @@ import {
   Printer,
   Mail,
   Sparkles,
-  MessageCircle,
 } from "lucide-react";
 import ButtonCard from "@/components/elements/ButtonCard";
-import Back from "@/components/elements/Back";
 import {
   paketUtama,
   paketDokumentasi,
@@ -238,33 +236,6 @@ const PaketSection = ({ category = "all" }: Props) => {
               </div>
             </motion.div>
           ))}
-        </div>
-
-        {/* BOTTOM HELP & BACK BUTTON */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div>
-            <p className="text-sm font-semibold text-white">Butuh konsultasi paket custom?</p>
-            <p className="text-xs text-[var(--color-text-muted)]">
-              Tim Inferno Creative siap membantu menyesuaikan paket sesuai konsep dan budget acara Anda.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a
-              href="https://wa.me/6285645150857?text=Halo%20Inferno%20Creative,%20saya%20ingin%20konsultasi%20paket%20layanan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-950/60 transition-all duration-200">
-              <MessageCircle size={15} />
-              <span>Chat WhatsApp</span>
-            </a>
-
-            {category !== "all" ? (
-              <Back href="/paket">Kembali ke Paket Unggulan</Back>
-            ) : (
-              <Back href="/">Kembali ke Beranda</Back>
-            )}
-          </div>
         </div>
       </div>
     </section>
