@@ -12,7 +12,10 @@ type HeroProps = {
     | "photobooth"
     | "undangan"
     | "paket"
-    | "porto";
+    | "porto"
+    | "paketFotoVideo"
+    | "paketPhotobooth"
+    | "paketUndangan";
 };
 
 export default function HeroSection({ variant = "home" }: HeroProps) {

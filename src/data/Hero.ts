@@ -75,4 +75,41 @@ export const heroData = {
       href: "#porto",
     },
   },
+  paketFotoVideo: {
+    title: "Paket Foto & Video Bali",
+    desc: "Dokumentasi foto & video prewedding, wedding, wisuda, dan event dengan harga terbaik dan hasil cinematic.",
+    primaryCTA: {
+      label: "Konsultasi Paket",
+      href: "https://wa.me/6285645150857",
+    },
+    secondaryCTA: {
+      label: "Lihat Detail Paket",
+      href: "#paket",
+    },
+  },
+  paketPhotobooth: {
+    title: "Paket Sewa Photobooth Bali",
+    desc: "Paket photobooth lengkap dengan cetak instan unlimited / limited & softcopy untuk segala jenis event.",
+    primaryCTA: {
+      label: "Konsultasi Paket",
+      href: "https://wa.me/6285645150857",
+    },
+    secondaryCTA: {
+      label: "Lihat Detail Paket",
+      href: "#paket",
+    },
+  },
+  paketUndangan: {
+    title: "Paket Undangan Digital Bali",
+    desc: "Pilihan paket website undangan online modern dengan fitur lengkap, cepat, dan siap pakai.",
+    primaryCTA: {
+      label: "Konsultasi Paket",
+      href: "https://wa.me/6285645150857",
+    },
+    secondaryCTA: {
+      label: "Lihat Detail Paket",
+      href: "#paket",
+    },
+  },
 };
+

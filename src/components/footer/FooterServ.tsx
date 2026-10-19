@@ -5,9 +5,10 @@ export default function FooterServices() {
       <ul className="mt-2 space-y-2 text-gray-400">
         {[
           { label: "Home", href: "/" },
-          { label: "Undangan", href: "/undangan-bali" },
+          { label: "Daftar Paket", href: "/paket" },
           { label: "Dokumentasi Foto & Video", href: "/jasa-foto-video-bali" },
           { label: "Photobooth", href: "/photobooth-bali" },
+          { label: "Undangan", href: "/undangan-bali" },
         ].map((item) => (
           <li
             key={item.label}

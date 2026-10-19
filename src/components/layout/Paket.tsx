@@ -9,6 +9,7 @@ import {
   paketUndangan,
   paketDokumentasi,
   paketPhotobooth,
+  paketUtama,
 } from "@/data/Paket";
 import { motion } from "framer-motion";
 
@@ -33,6 +34,19 @@ const getPortoHref = (category: string) => {
   }
 };
 
+const getCategoryHref = (category: Category) => {
+  switch (category) {
+    case "dokumentasi":
+      return "/paket/foto-video";
+    case "photobooth":
+      return "/paket/photobooth";
+    case "undangan":
+      return "/paket/undangan-digital";
+    default:
+      return "/paket";
+  }
+};
+
 const Katalog = ({ category = "all", limit }: Props) => {
   const getData = () => {
     switch (category) {
@@ -42,12 +56,9 @@ const Katalog = ({ category = "all", limit }: Props) => {
         return paketDokumentasi;
       case "photobooth":
         return paketPhotobooth;
-      case "all":
-        return paketList;
       case "home":
-        const homeTitles = ["Photobooth Unlimited Print", "Dokumentasi Wedding", "Prewedding Foto & Video"];
-        // Return them in the exact order specified
-        return paketList.filter(p => homeTitles.includes(p.title)).sort((a, b) => homeTitles.indexOf(a.title) - homeTitles.indexOf(b.title));
+        return paketUtama;
+      case "all":
       default:
         return paketList;
     }
@@ -144,7 +155,7 @@ const Katalog = ({ category = "all", limit }: Props) => {
       </div>
 
       <div className="text-center mt-10">
-        <Button href="/paket">
+        <Button href={getCategoryHref(category)}>
           Lihat Paket Lengkapnya
         </Button>
       </div>

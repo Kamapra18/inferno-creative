@@ -208,6 +208,18 @@ const allPaket = [
   ...paketAllInOne,
 ];
 
+export const paketUtamaTitles = [
+  "Paket All In One",
+  "Photobooth Unlimited Print",
+  "Dokumentasi Wedding",
+];
+
+export const paketUtama: Paket[] = [
+  ...allPaket
+    .filter((p) => paketUtamaTitles.includes(p.title))
+    .sort((a, b) => paketUtamaTitles.indexOf(a.title) - paketUtamaTitles.indexOf(b.title)),
+];
+
 const topTitles = [
   "Paket All In One",
   "Prewedding Foto & Video",
@@ -220,3 +232,5 @@ export const paketList: Paket[] = [
   ...allPaket.filter((p) => topTitles.includes(p.title)).sort((a, b) => topTitles.indexOf(a.title) - topTitles.indexOf(b.title)),
   ...allPaket.filter((p) => !topTitles.includes(p.title)),
 ];
+
+
