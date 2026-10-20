@@ -74,7 +74,6 @@ const PaketSection = ({ category = "all" }: Props) => {
           subtitle:
             "Abadikan setiap momen spesial dengan dokumentasi cinematic & profesional untuk prewedding, wedding, wisuda, dan event.",
           data: paketDokumentasi,
-          badge: "Kategori Foto & Video",
         };
       case "photobooth":
         return {
@@ -82,7 +81,6 @@ const PaketSection = ({ category = "all" }: Props) => {
           subtitle:
             "Photobooth interaktif dengan cetak instan kualitas studio, custom template frame, dan akses softcopy digital untuk semua jenis event.",
           data: paketPhotobooth,
-          badge: "Kategori Photobooth",
         };
       case "undangan-digital":
         return {
@@ -90,7 +88,6 @@ const PaketSection = ({ category = "all" }: Props) => {
           subtitle:
             "Website undangan pernikahan & event modern dengan fitur RSVP, amplop digital, musik, Google Maps, dan tema eksklusif.",
           data: paketUndangan,
-          badge: "Kategori Undangan Digital",
         };
       case "all":
       default:
@@ -99,12 +96,11 @@ const PaketSection = ({ category = "all" }: Props) => {
           subtitle:
             "Berikut paket unggulan yang ada di menu utama. Pilih kategori di atas untuk melihat pilihan paket lainnya.",
           data: paketUtama,
-          badge: "Paket Unggulan Menu Utama",
         };
     }
   };
 
-  const { title, subtitle, data, badge } = getCategoryMeta();
+  const { title, subtitle, data } = getCategoryMeta();
 
   return (
     <section
@@ -114,14 +110,6 @@ const PaketSection = ({ category = "all" }: Props) => {
       <div className="max-w-6xl mx-auto">
         {/* HEADING */}
         <div className="text-center mb-10 px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-white/90 backdrop-blur-md mb-4 shadow-sm">
-            <Sparkles size={14} className="text-amber-400" />
-            <span>{badge}</span>
-          </motion.div>
-
           <motion.h1
             className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight"
             style={{ color: "var(--color-foreground)" }}
